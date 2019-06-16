@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}AdInvest - Entrar{% endblock %}
 
 {% block body %}
 <form method="post">
@@ -9,14 +9,20 @@
     {% endif %}
 
     <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputIdentityDocumentNumber" class="sr-only">Identity Document Number</label>
-    <input type="text" value="{{ last_username }}" name="identityDocumentNumber" id="inputIdentityDocumentNumber" class="form-control" placeholder="Identity Document Number" required autofocus>
-    <label for="inputPassword" class="sr-only">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+    <div class="mdc-text-field">
+        <input type="text" class="mdc-text-field__input" value="{{ last_username }}"
+               name="identityDocumentNumber" id="inputIdentityDocumentNumber" required autofocus
+        >
+        <label class="mdc-floating-label" for="inputIdentityDocumentNumber">CPF</label>
+        <div class="mdc-line-ripple"></div>
+    </div>
 
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
+    <div class="mdc-text-field">
+        <input type="password" class="mdc-text-field__input" name="password" id="inputPassword" required>
+        <label class="mdc-floating-label" for="inputPassword">Password</label>
+    </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
     {#
         Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
