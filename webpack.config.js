@@ -54,7 +54,9 @@ Encore
     })
 
     // enables Sass/SCSS support
-    //.enableSassLoader()
+    .enableSassLoader(function (options) {
+        options.includePaths = ['./node_modules'];
+    })
 
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()
