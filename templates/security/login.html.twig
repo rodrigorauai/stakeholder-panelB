@@ -8,7 +8,10 @@
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
 
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+    <section class="header">
+        <img src="{{ asset('static/img/adinvest-logo.png') }}" alt="AdInvest">
+    </section>
+
     <div class="mdc-text-field">
         <input type="text" class="mdc-text-field__input" value="{{ last_username }}"
                name="identityDocumentNumber" id="inputIdentityDocumentNumber" required autofocus
