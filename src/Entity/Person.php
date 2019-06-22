@@ -18,9 +18,10 @@ class Person implements UserInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=180, unique=true, nullable=true)
+     * @var string
+     * @ORM\Column(type="string", length=11, unique=true, nullable=true)
      */
-    private $identityDocumentNumber;
+    private $cpf;
 
     /**
      * @ORM\Column(type="json")
@@ -38,14 +39,14 @@ class Person implements UserInterface
         return $this->id;
     }
 
-    public function getIdentityDocumentNumber(): ?string
+    public function getCpf(): ?string
     {
-        return $this->identityDocumentNumber;
+        return $this->cpf;
     }
 
-    public function setIdentityDocumentNumber(string $identityDocumentNumber): self
+    public function setCpf(string $cpf): self
     {
-        $this->identityDocumentNumber = $identityDocumentNumber;
+        $this->cpf = $cpf;
 
         return $this;
     }
@@ -57,7 +58,7 @@ class Person implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->identityDocumentNumber;
+        return (string) $this->cpf;
     }
 
     /**

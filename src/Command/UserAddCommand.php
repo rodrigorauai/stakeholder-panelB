@@ -45,7 +45,7 @@ class UserAddCommand extends Command
         $identity = $input->getArgument('identity');
 
         $user = new Person();
-        $user->setIdentityDocumentNumber($identity);
+        $user->setCpf($identity);
 
         if ($password = $input->getOption('password')) {
             $user->setPassword($this->encoder->encodePassword($user, $password));
@@ -54,6 +54,6 @@ class UserAddCommand extends Command
         $this->em->persist($user);
         $this->em->flush();
 
-        $io->success(sprintf('New user created: #%s - %s', $user->getId(), $user->getIdentityDocumentNumber()));
+        $io->success(sprintf('New user created: #%s - %s', $user->getId(), $user->getCpf()));
     }
 }
