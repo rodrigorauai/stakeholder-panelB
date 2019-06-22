@@ -1,5 +1,7 @@
 html, body {
   height: 100%;
+  overflow-y: auto;
+  overflow-x: auto;
 }
 
 body {
@@ -10,4 +12,8 @@ body {
 
 img {
   max-width: 100%;
+}
+
+button:focus {
+  outline: none;
 }

@@ -16,6 +16,10 @@ document.querySelectorAll('.mdc-button').forEach(function (element) {
     new MDCRipple(element);
 });
 
+document.querySelectorAll('.mdc-fab').forEach(function (element) {
+    new MDCRipple(element);
+});
+
 element = document.querySelector('.mdc-drawer');
 
 if (element) {

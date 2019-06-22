@@ -2,9 +2,26 @@ $mdc-theme-primary: #0575E6;
 
 @import "~@material/top-app-bar/mdc-top-app-bar";
 @import "~@material/drawer/mdc-drawer";
+@import "~@material/fab/mdc-fab";
 @import "~@material/list/mdc-list";
 @import "~@material/textfield/mdc-text-field";
 @import "~@material/button/mdc-button";
 
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/tables";
+@import "~bootstrap/scss/utilities";
+
 @import "common";
 @import "drawer";
+
+table {
+  border-collapse: collapse;
+}
+
+.app-page-end {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+}
