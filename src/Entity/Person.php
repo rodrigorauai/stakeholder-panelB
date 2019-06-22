@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -130,9 +131,9 @@ class Person implements UserInterface
     }
 
     /**
-     * @return Phone[]
+     * @return Phone[]|Collection
      */
-    public function getPhones(): array
+    public function getPhones()
     {
         return $this->phones;
     }

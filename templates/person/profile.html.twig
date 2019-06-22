@@ -1,0 +1,4 @@
+{% extends 'base.html.twig' %}
+{% set title = person.name|default(person.cpf) %}
+
+{% block title %}{{ title }}{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+{% set title = 'Pessoas' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+    <div class="container-fluid mt-4">
+        <div class="table-responsive">
+            <table class="table text-nowrap">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">CPF</th>
+                    <th scope="col">E-mail</th>
+                    <th scope="col">Telefone</th>
+                    <th scope="col">
+                        <span class="sr-only">{# TODO: Define a column label for "details-links" columns #}</span>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for person in people %}
+                    <tr>
+                        <td>{{ person.id }}</td>
+                        <td>{{ person.name }}</td>
+                        <td>{{ person.cpf }}</td>
+                        <td>{{ person.email|default('Not registered'|trans) }}</td>
+                        <td>
+                            {% if person.phones|length == 0 %}
+                                {{ 'Not registered'|trans }}
+                            {% else %}
+                                {{ person.phones[0].number }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ path('person_profile', { id: person.id }) }}">
+                                Detalhes
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
