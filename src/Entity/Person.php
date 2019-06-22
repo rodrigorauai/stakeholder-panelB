@@ -24,6 +24,30 @@ class Person implements UserInterface
     private $cpf;
 
     /**
+     * @var string
+     * @ORM\Column(type="string", length=32, unique=true, nullable=true)
+     */
+    private $rg;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=255, unique=true)
+     */
+    private $email;
+
+    /**
+     * @var Phone[]
+     * @ORM\OneToMany(targetEntity="Phone", mappedBy="person")
+     */
+    private $phones;
+
+    /**
+     * @var Address
+     * @ORM\OneToOne(targetEntity="Address", mappedBy="person")
+     */
+    private $address;
+
+    /**
      * @ORM\Column(type="json")
      */
     private $roles = [];
@@ -49,6 +73,70 @@ class Person implements UserInterface
         $this->cpf = $cpf;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRg(): string
+    {
+        return $this->rg;
+    }
+
+    /**
+     * @param string $rg
+     */
+    public function setRg(string $rg)
+    {
+        $this->rg = $rg;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string $email
+     */
+    public function setEmail(string $email)
+    {
+        $this->email = $email;
+    }
+
+    /**
+     * @return Phone[]
+     */
+    public function getPhones(): array
+    {
+        return $this->phones;
+    }
+
+    /**
+     * @param Phone[] $phones
+     */
+    public function setPhones(array $phones)
+    {
+        $this->phones = $phones;
+    }
+
+    /**
+     * @return Address
+     */
+    public function getAddress(): Address
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param Address $address
+     */
+    public function setAddress(Address $address)
+    {
+        $this->address = $address;
     }
 
     /**
