@@ -19,6 +19,12 @@ class Person implements UserInterface
 
     /**
      * @var string
+     * @ORM\Column(type="string", length=64)
+     */
+    private $name;
+
+    /**
+     * @var string
      * @ORM\Column(type="string", length=11, unique=true, nullable=true)
      */
     private $cpf;
@@ -61,6 +67,22 @@ class Person implements UserInterface
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName(string $name)
+    {
+        $this->name = $name;
     }
 
     public function getCpf(): ?string
