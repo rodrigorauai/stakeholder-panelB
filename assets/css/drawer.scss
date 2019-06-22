@@ -1,0 +1,19 @@
+.mdc-drawer.mdc-drawer--open {
+  box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.2), 0px 16px 24px 2px rgba(0, 0, 0, 0.14), 0px 6px 30px 5px rgba(0, 0, 0, 0.12);
+  border: none;
+}
+
+.mdc-drawer.mdc-drawer--open .mdc-drawer__header {
+  display: grid;
+  height: 171px;
+  background-image: url('/static/img/account-switcher-background.png');
+}
+
+.mdc-drawer__header__content {
+  margin: auto;
+}
+
+.mdc-drawer .mdc-drawer__title,
+.mdc-drawer .mdc-drawer__subtitle {
+  color: #fff;
+}

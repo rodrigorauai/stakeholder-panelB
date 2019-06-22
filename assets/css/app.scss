@@ -1,3 +1,10 @@
-@import "common";
+$mdc-theme-primary: #0575E6;
+
+@import "~@material/top-app-bar/mdc-top-app-bar";
+@import "~@material/drawer/mdc-drawer";
+@import "~@material/list/mdc-list";
 @import "~@material/textfield/mdc-text-field";
 @import "~@material/button/mdc-button";
+
+@import "common";
+@import "drawer";
