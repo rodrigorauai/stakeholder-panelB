@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\Security;
@@ -65,11 +64,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         }
 
         $user = $this->entityManager->getRepository(Person::class)->findOneBy(['cpf' => $credentials['cpf']]);
-
-        if (!$user) {
-            // fail authentication with a custom error
-            throw new CustomUserMessageAuthenticationException('Identity Document Number could not be found.');
-        }
 
         return $user;
     }
