@@ -4,7 +4,7 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-    <div class="container-fluid mt-4">
+    <div class="my-4 mx-2">
         <div class="table-responsive">
             <table class="table text-nowrap">
                 <thead>
@@ -14,16 +14,17 @@
                     <th scope="col">CPF</th>
                     <th scope="col">E-mail</th>
                     <th scope="col">Telefone</th>
-                    <th scope="col">
-                        <span class="sr-only">{# TODO: Define a column label for "details-links" columns #}</span>
-                    </th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for person in people %}
                     <tr>
                         <td>{{ person.id }}</td>
-                        <td>{{ person.name }}</td>
+                        <td>
+                            <a href="{{ path('person_profile', { id: person.id }) }}">
+                                {{ person.name }}
+                            </a>
+                        </td>
                         <td>{{ person.cpf }}</td>
                         <td>{{ person.email|default('Not registered'|trans) }}</td>
                         <td>
@@ -33,15 +34,19 @@
                                 {{ person.phones[0].number }}
                             {% endif %}
                         </td>
-                        <td>
-                            <a href="{{ path('person_profile', { id: person.id }) }}">
-                                Detalhes
-                            </a>
-                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
         </div>
+    </div>
+{% endblock %}
+
+{% block body_end %}
+    <div class="app-page-end">
+        <button class="mdc-fab mdc-fab--extended">
+            <span class="material-icons mdc-fab__icon">add</span>
+            <span class="mdc-fab__label">Create</span>
+        </button>
     </div>
 {% endblock %}
