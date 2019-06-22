@@ -22,7 +22,7 @@
                         <td>{{ person.id }}</td>
                         <td>
                             <a href="{{ path('person_profile', { id: person.id }) }}">
-                                {{ person.name }}
+                                {{ person.name|default('person.name__not_informed'|trans) }}
                             </a>
                         </td>
                         <td>{{ person.cpf }}</td>
