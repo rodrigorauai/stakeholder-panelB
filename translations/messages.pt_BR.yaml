@@ -1,4 +1,7 @@
 Not registered: Não registrado
 
 person:
+    name__label: Nome
     name__not_informed: Nome não informado
+
+    email__label: E-mail

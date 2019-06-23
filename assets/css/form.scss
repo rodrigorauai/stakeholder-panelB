@@ -1,0 +1,17 @@
+form {
+  max-width: 900px;
+  display: block;
+}
+
+.form-row {
+  margin: 20px 0;
+}
+
+.form-error {
+  margin: 10px 0;
+  padding-left: 8px;
+}
+
+form .mdc-text-field {
+  width: 100%;
+}

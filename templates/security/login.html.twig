@@ -22,7 +22,6 @@
                 </h1>
             </section>
 
-
             <div class="form-row">
                 <div class="mdc-text-field mdc-text-field--outlined">
                     <input type="text" class="mdc-text-field__input" value="{{ last_username }}"
@@ -70,11 +69,7 @@
                         Esqueci minha senha
                     </span>
                 </button>
-                <button type="submit" class="mdc-button mdc-button--raised">
-                    <span class="mdc-button__label">
-                        Entrar
-                    </span>
-                </button>
+                {% include '_components/button/button.html.twig' with { type: 'submit', label: 'Entrar' } only %}
             </div>
 
         </form>

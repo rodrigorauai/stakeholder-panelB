@@ -17,3 +17,12 @@ img {
 button:focus {
   outline: none;
 }
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.button-container .mdc-button {
+  margin: 3px;
+}

@@ -44,9 +44,9 @@
 
 {% block body_end %}
     <div class="app-page-end">
-        <button class="mdc-fab mdc-fab--extended">
+        <a class="mdc-fab mdc-fab--extended" href="{{ path('person_create') }}">
             <span class="material-icons mdc-fab__icon">add</span>
             <span class="mdc-fab__label">Create</span>
-        </button>
+        </a>
     </div>
 {% endblock %}
