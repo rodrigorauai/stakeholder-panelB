@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-{% set title = person.name|default(person.cpf) ~ ' - Dados Pessoais' %}
+{% set title = person.name|default(person.cpf|format_cpf) ~ ' - Dados Pessoais' %}
 
 {% block title %}Dados pessoais de {{ person.name }}{% endblock %}
 
@@ -18,6 +18,4 @@
             path: path('person_show__settings', { id: person.id }),
         }
     ]} %}
-
-
 {% endblock %}

@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-{% set title = person.name|default(person.cpf) ~ ' - Endereço' %}
+{% set title = person.name|default(person.cpf|format_cpf) ~ ' - Endereço' %}
 
 {% block title %}Endereço de {{ person.name }}{% endblock %}
 
@@ -19,5 +19,7 @@
         }
     ]} %}
 
-
+    <div class="container m-4">
+        <p>Endereço não informado.</p>
+    </div>
 {% endblock %}

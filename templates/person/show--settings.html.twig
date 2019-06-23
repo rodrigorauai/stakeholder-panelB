@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-{% set title = person.name|default(person.cpf) ~ ' - Configurações' %}
+{% set title = person.name|default(person.cpf|format_cpf) ~ ' - Configurações' %}
 
 {% block title %}Configurações de {{ person.name }}{% endblock %}
 
