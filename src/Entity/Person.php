@@ -116,17 +116,17 @@ class Person implements UserInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getRg(): string
+    public function getRg(): ?string
     {
         return $this->rg;
     }
 
     /**
-     * @param string $rg
+     * @param null|string $rg
      */
-    public function setRg(string $rg)
+    public function setRg(?string $rg)
     {
         $this->rg = $rg;
     }
