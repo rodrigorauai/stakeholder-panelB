@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Form\PersonData;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -64,6 +65,22 @@ class Person implements UserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+
+    /**
+     * Person constructor.
+     * @param string $name
+     * @param string $email
+     */
+    public function __construct(string $name, string $email)
+    {
+        $this->name = $name;
+        $this->email = $email;
+    }
+
+    public static function fromDataObject(PersonData $data)
+    {
+        return new Person($data->name, $data->email);
+    }
 
     public function getId(): ?int
     {
