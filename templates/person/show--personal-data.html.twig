@@ -18,4 +18,30 @@
             path: path('person_show__settings', { id: person.id }),
         }
     ]} %}
+
+    <div class="container m-4">
+        <dl class="d-table">
+            <div class="d-table-row">
+                <dt class="d-table-cell">Nome</dt>
+                <dd class="d-table-cell">{{ person.name|default('Não informado') }}</dd>
+            </div>
+            <div class="d-table-row">
+                <dt class="d-table-cell">E-mail</dt>
+                <dd class="d-table-cell">{{ person.email|default('Não informado') }}</dd>
+            </div>
+            <div class="d-table-row">
+                <dt class="d-table-cell">Telefone</dt>
+                <dd class="d-table-cell">{{ person.phones|length > 0 ? person.phones[0].number : 'Não informado' }}</dd>
+            </div>
+            <div class="d-table-row">
+                <dt class="d-table-cell">CPF</dt>
+                <dd class="d-table-cell">{{ person.cpf|default('Não informado')|format_cpf }}</dd>
+            </div>
+            <div class="d-table-row">
+                <dt class="d-table-cell">RG</dt>
+                <dd class="d-table-cell">{{ person.rg|default('Não informado') }}</dd>
+            </div>
+        </dl>
+    </div>
+
 {% endblock %}
