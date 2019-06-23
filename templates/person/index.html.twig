@@ -21,7 +21,7 @@
                     <tr>
                         <td>{{ person.id }}</td>
                         <td>
-                            <a href="{{ path('person_profile', { id: person.id }) }}">
+                            <a href="{{ path('person_show', { id: person.id }) }}">
                                 {{ person.name|default('person.name__not_informed'|trans) }}
                             </a>
                         </td>

@@ -66,12 +66,47 @@ class PersonController extends AbstractController
     /**
      * @param Person $person
      * @return Response
-     * @Route("/pessoas/{id}", name="person_profile")
+     * @Route("/pessoas/{id}", name="person_show")
      */
-    public function profile(Person $person)
+    public function show(Person $person)
     {
+        return $this->redirectToRoute('person_show__personal_data', [
+            'id' => $person->getId(),
+        ]);
+    }
 
-        return $this->render('person/profile.html.twig', [
+    /**
+     * @param Person $person
+     * @return Response
+     * @Route("/pessoas/{id}/dados-pessoais", name="person_show__personal_data")
+     */
+    public function showPersonalData(Person $person)
+    {
+        return $this->render('person/show--personal-data.html.twig', [
+            'person' => $person,
+        ]);
+    }
+
+    /**
+     * @param Person $person
+     * @return Response
+     * @Route("/pessoas/{id}/endereco", name="person_show__address")
+     */
+    public function showAddress(Person $person)
+    {
+        return $this->render('person/show--address.html.twig', [
+            'person' => $person,
+        ]);
+    }
+
+    /**
+     * @param Person $person
+     * @return Response
+     * @Route("/pessoas/{id}/configuracoes", name="person_show__settings")
+     */
+    public function showSettings(Person $person)
+    {
+        return $this->render('person/show--settings.html.twig', [
             'person' => $person,
         ]);
     }

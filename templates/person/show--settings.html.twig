@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+{% set title = person.name|default(person.cpf) ~ ' - Configurações' %}
+
+{% block title %}Configurações de {{ person.name }}{% endblock %}
+
+{% block content %}
+
+    {% include '_components/tab-bar/tab-bar.html.twig' with {tabs: [
+        {
+            label: 'Dados Pessoais',
+            path: path('person_show__personal_data', { id: person.id }),
+        }, {
+            label: 'Endereço',
+            path: path('person_show__address', { id: person.id }),
+        }, {
+            label: 'Configurações',
+            path: path('person_show__settings', { id: person.id }),
+            active: true,
+        }
+    ]} %}
+
+
+{% endblock %}
