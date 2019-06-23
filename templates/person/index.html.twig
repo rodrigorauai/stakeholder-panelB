@@ -25,7 +25,7 @@
                                 {{ person.name|default('person.name__not_informed'|trans) }}
                             </a>
                         </td>
-                        <td>{{ person.cpf }}</td>
+                        <td>{{ person.cpf|format_cpf }}</td>
                         <td>{{ person.email|default('Not registered'|trans) }}</td>
                         <td>
                             {% if person.phones|length == 0 %}
