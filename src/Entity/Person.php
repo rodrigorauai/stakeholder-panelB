@@ -20,6 +20,13 @@ class Person implements UserInterface
     private $id;
 
     /**
+     * @var null|Company
+     * @ORM\ManyToOne(targetEntity="Company", inversedBy="managers")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $company;
+
+    /**
      * @var string
      * @ORM\Column(type="string", length=64)
      */
@@ -85,6 +92,22 @@ class Person implements UserInterface
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * @return Company|null
+     */
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    /**
+     * @param Company|null $company
+     */
+    public function setCompany(?Company $company)
+    {
+        $this->company = $company;
     }
 
     /**
