@@ -10,27 +10,14 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PersonRepository")
  */
-class Person implements UserInterface
+class Person extends AbstractEntity implements UserInterface
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
-
     /**
      * @var null|Company
      * @ORM\ManyToOne(targetEntity="Company", inversedBy="managers")
      * @ORM\JoinColumn(nullable=true)
      */
     private $company;
-
-    /**
-     * @var string
-     * @ORM\Column(type="string", length=64)
-     */
-    private $name;
 
     /**
      * @var string
@@ -80,7 +67,8 @@ class Person implements UserInterface
      */
     public function __construct(string $name, string $email)
     {
-        $this->name = $name;
+        parent::__construct($name);
+
         $this->email = $email;
     }
 
@@ -261,5 +249,10 @@ class Person implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getDocumentNumber(): string
+    {
+        return $this->cpf;
     }
 }

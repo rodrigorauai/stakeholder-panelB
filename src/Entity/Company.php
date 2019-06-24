@@ -10,20 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CompanyRepository")
  */
-class Company
+class Company extends AbstractEntity
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $name;
-
     /**
      * @ORM\Column(type="string", length=14)
      */
@@ -37,7 +25,8 @@ class Company
 
     public function __construct(string $name, string $cnpj)
     {
-        $this->name = $name;
+        parent::__construct($name);
+
         $this->cnpj = $cnpj;
 
         $this->managers = new ArrayCollection();
@@ -56,28 +45,14 @@ class Company
         return $this->id;
     }
 
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
     public function getCnpj(): ?string
     {
         return $this->cnpj;
     }
 
-    public function setCnpj(string $cnpj): self
+    public function setCnpj(string $cnpj)
     {
         $this->cnpj = $cnpj;
-
-        return $this;
     }
 
     public function addManager(Person $manager)
@@ -91,5 +66,10 @@ class Company
     public function getManagers()
     {
         return $this->managers;
+    }
+
+    public function getDocumentNumber(): string
+    {
+        return $this->cnpj;
     }
 }

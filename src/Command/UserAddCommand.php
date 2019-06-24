@@ -34,17 +34,22 @@ class UserAddCommand extends Command
     {
         $this
             ->setDescription('Add a new user to the system')
-            ->addArgument('identity', InputArgument::REQUIRED, 'Number on the user\'s identity document')
-            ->addOption('password', 'p', InputOption::VALUE_REQUIRED, 'User\'s password')
+            ->addArgument('name', InputArgument::REQUIRED, "User's full name")
+            ->addArgument('email', InputArgument::REQUIRED, "User's e-mail address")
+            ->addArgument('identity', InputArgument::REQUIRED, "Number on the user's identity document")
+            ->addOption('password', 'p', InputOption::VALUE_REQUIRED, "User's password")
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
+
+        $name = $input->getArgument('name');
+        $email = $input->getArgument('email');
         $identity = $input->getArgument('identity');
 
-        $user = new Person();
+        $user = new Person($name, $email);
         $user->setCpf($identity);
 
         if ($password = $input->getOption('password')) {
