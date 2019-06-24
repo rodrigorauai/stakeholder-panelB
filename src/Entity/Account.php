@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -29,6 +31,12 @@ class Account
     private $owner;
 
     /**
+     * @var Contract[]|Collection
+     * @ORM\OneToMany(targetEntity="Contract", mappedBy="account")
+     */
+    private $contracts;
+
+    /**
      * Account constructor.
      * @param AbstractEntity $owner
      */
@@ -36,6 +44,8 @@ class Account
     {
         $this->balance = '0.00';
         $this->owner = $owner;
+
+        $this->contracts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -73,5 +83,18 @@ class Account
     public function setOwner(AbstractEntity $owner)
     {
         $this->owner = $owner;
+    }
+
+    public function addContract(Contract $contract)
+    {
+        $this->contracts->add($contract);
+    }
+
+    /**
+     * @return Contract[]|Collection
+     */
+    public function getContracts()
+    {
+        return $this->contracts;
     }
 }

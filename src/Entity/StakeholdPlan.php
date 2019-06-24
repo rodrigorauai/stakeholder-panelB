@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Form\StakeholdPlanData;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 
@@ -81,6 +83,11 @@ class StakeholdPlan
     private $monthlyYield;
 
     /**
+     * @var Contract[]|Collection
+     */
+    private $contracts;
+
+    /**
      * StakeholdingPlan constructor.
      * @param string $administrativeName
      * @param string $commercialName
@@ -126,6 +133,8 @@ class StakeholdPlan
         if ($yieldFixed && null === $monthlyYield) {
             throw new Exception('Monthly yield must be defined when yield is fixed');
         }
+
+        $this->contracts = new ArrayCollection();
     }
 
     /**
@@ -306,5 +315,18 @@ class StakeholdPlan
         $this->monthlyYield = $monthlyYield;
 
         return $this;
+    }
+
+    public function addContract(Contract $contract)
+    {
+        $this->contracts->add($contract);
+    }
+
+    /**
+     * @return Contract[]|Collection
+     */
+    public function getContracts()
+    {
+        return $this->contracts;
     }
 }
