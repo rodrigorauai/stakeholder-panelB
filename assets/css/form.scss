@@ -12,8 +12,30 @@ form {
   padding-left: 8px;
 }
 
-form .mdc-text-field {
+.mdc-text-field {
   width: 100%;
+}
+
+.mdc-text-field.field-type-number,
+.mdc-select {
+  width: 100%;
+
+  @media (min-width: 600px) {
+    width: auto;
+    min-width: 300px;
+  }
+}
+
+.mdc-select__native-control {
+  width: 100%;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: '';
+}
+
+.mdc-select__native-control::-ms-expand {
+  display: none;
 }
 
 th {

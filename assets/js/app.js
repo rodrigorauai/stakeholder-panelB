@@ -3,6 +3,7 @@ import {MDCTopAppBar} from "@material/top-app-bar/component";
 import {MDCTextField} from "@material/textfield/component";
 import {MDCRipple} from "@material/ripple/component";
 import {MDCTabBar} from "@material/tab-bar/component";
+import {MDCSelect} from "@material/select/component";
 
 require('../css/app.scss');
 
@@ -23,6 +24,10 @@ document.querySelectorAll('.mdc-fab').forEach(function (element) {
 
 document.querySelectorAll('.mdc-tab-bar').forEach(function (element) {
     new MDCTabBar(element);
+});
+
+document.querySelectorAll('.mdc-select').forEach(function (element) {
+    new MDCSelect(element);
 });
 
 element = document.querySelector('.mdc-drawer');

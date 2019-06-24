@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Form\StakeholdPlanData;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 
@@ -127,6 +128,28 @@ class StakeholdPlan
         }
     }
 
+    /**
+     * @param StakeholdPlanData $data
+     * @return StakeholdPlan
+     * @throws Exception
+     */
+    public static function fromDataObject(StakeholdPlanData $data)
+    {
+        return new StakeholdPlan(
+            $data->administrativeName,
+            $data->commercialName,
+            $data->minimumValue,
+            $data->valueMultiple,
+            $data->firstDayOfMonthlyPayment,
+            $data->lastDayOfMonthlyPayment,
+            $data->gracePeriod,
+            $data->bestAcquisitionDay,
+            $data->monthlyCommission,
+            $data->monthlyAdministrativeFee,
+            $data->yieldFixed,
+            $data->monthlyYield
+        );
+    }
 
     public function getId(): ?int
     {
@@ -261,7 +284,7 @@ class StakeholdPlan
         return $this;
     }
 
-    public function getYieldFixed(): ?bool
+    public function isYieldFixed(): ?bool
     {
         return $this->yieldFixed;
     }

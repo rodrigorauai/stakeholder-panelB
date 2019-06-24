@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% set title = 'Plano de Patrocínio' %}
+{% set title = 'Planos de Patrocínio' %}
 
 {% block title %}{{ title }}{% endblock %}
 
@@ -14,18 +14,24 @@
                     <th scope="col">ID</th>
                     <th scope="col">Nome Interno</th>
                     <th scope="col">Nome Comercial</th>
-                    <th scope="col">Valor Mínimo</th>
-                    <th scope="col">Múltiplos</th>
+                    <th scope="col" class="text-right">Valor Mínimo</th>
+                    <th scope="col" class="text-right">Múltiplo</th>
+                    <th scope="col" class="text-right">Rendimento</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for plan in plans %}
                     <tr>
-                        <th scope="row">{{ plans.id }}</th>
+                        <th scope="row">{{ plan.id }}</th>
                         <td>{{ plan.administrativeName }}</td>
                         <td>{{ plan.commercialName }}</td>
-                        <td>{{ plan.minimumValue }}</td>
-                        <td>{{ plan.valueMultiple }}</td>
+                        <td class="text-right">R$ {{ plan.minimumValue|number_format(2, ',', '.') }}</td>
+                        <td class="text-right">R$ {{ plan.valueMultiple|number_format(2, ',', '.') }}</td>
+                        {% if plan.yieldFixed %}
+                            <td class="text-right">{{ plan.monthlyYield|number_format(2, ',', '.') }} %</td>
+                        {% else %}
+                            <td class="text-right">Variável</td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -41,7 +47,7 @@
 
 {% block body_end %}
     <div class="app-page-end">
-        <a class="mdc-fab mdc-fab--extended" href="#">
+        <a class="mdc-fab mdc-fab--extended" href="{{ path('stakehold_plan__create') }}">
             <span class="material-icons mdc-fab__icon">add</span>
             <span class="mdc-fab__label">Criar Plano</span>
         </a>

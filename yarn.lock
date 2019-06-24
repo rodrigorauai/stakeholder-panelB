@@ -741,6 +741,33 @@
     "@material/typography" "^2.3.0"
     tslib "^1.9.3"
 
+"@material/menu-surface@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@material/menu-surface/-/menu-surface-2.3.0.tgz#5d82b4ed7b7124000a2e1fe76034e94f0a433b83"
+  integrity sha512-jJ1MyeJnEJUO0Z7kNxvqN0xruWbTT2XKHCiApQcJHHkeibWfbWJdhXcx5aO4FMf/TVcy3ADSxDTdvc6AYrBX0g==
+  dependencies:
+    "@material/animation" "^1.0.0"
+    "@material/base" "^1.0.0"
+    "@material/elevation" "^1.1.0"
+    "@material/feature-targeting" "^0.44.1"
+    "@material/rtl" "^0.42.0"
+    "@material/shape" "^1.1.1"
+    "@material/theme" "^1.1.0"
+    tslib "^1.9.3"
+
+"@material/menu@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@material/menu/-/menu-2.3.0.tgz#29d7b3557efcf627796cfaf532754f5c6f2d120b"
+  integrity sha512-XPI6w4x5c9ACwKBdujcTskBlisWlEgrb09Sa+s0vjhqBJVZVAUJT1j0OpG8tArNUqQiFssXBa/JuJIe6sMAK1A==
+  dependencies:
+    "@material/base" "^1.0.0"
+    "@material/feature-targeting" "^0.44.1"
+    "@material/list" "^2.3.0"
+    "@material/menu-surface" "^2.3.0"
+    "@material/ripple" "^2.3.0"
+    "@material/rtl" "^0.42.0"
+    tslib "^1.9.3"
+
 "@material/notched-outline@^2.3.0":
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/@material/notched-outline/-/notched-outline-2.3.0.tgz#707c7329a01fe80b269a1c4689769b812d825eb1"
@@ -770,6 +797,25 @@
   version "0.42.0"
   resolved "https://registry.yarnpkg.com/@material/rtl/-/rtl-0.42.0.tgz#1836e78186c2d8b996f6fbf97adab203535335bc"
   integrity sha512-VrnrKJzhmspsN8WXHuxxBZ69yM5IwhCUqWr1t1eNfw3ZEvEj7i1g3P31HGowKThIN1dc1Wh4LE14rCISWCtv5w==
+
+"@material/select@^2.3.1":
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/@material/select/-/select-2.3.1.tgz#25d23a554a6d04f3873cf857e37ea509c6b7f33b"
+  integrity sha512-0NLXp0G0eEFcXpO8VaqfBPBu8yUcXcgiWQwsusT2/ek9bA8eT/rzkwvcK++K9i9V3wTPcWPLz5tnZbPASHfGOw==
+  dependencies:
+    "@material/animation" "^1.0.0"
+    "@material/base" "^1.0.0"
+    "@material/floating-label" "^2.3.0"
+    "@material/line-ripple" "^2.3.0"
+    "@material/menu" "^2.3.0"
+    "@material/menu-surface" "^2.3.0"
+    "@material/notched-outline" "^2.3.0"
+    "@material/ripple" "^2.3.0"
+    "@material/rtl" "^0.42.0"
+    "@material/shape" "^1.1.1"
+    "@material/theme" "^1.1.0"
+    "@material/typography" "^2.3.0"
+    tslib "^1.9.3"
 
 "@material/shape@^1.1.1":
   version "1.1.1"
