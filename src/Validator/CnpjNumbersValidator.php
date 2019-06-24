@@ -21,6 +21,8 @@ class CnpjNumbersValidator extends ConstraintValidator
             $this->context->buildViolation($constraint->message)
                 ->setParameter('{{ value }}', $value)
                 ->addViolation();
+
+            return;
         }
 
         $v1 = 5 * $digits[0] + 4 * $digits[1] + 3 * $digits[2] + 2 * $digits[3];
