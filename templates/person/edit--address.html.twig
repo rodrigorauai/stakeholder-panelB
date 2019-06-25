@@ -11,12 +11,23 @@
             path: path('person__edit', { id: person.id }),
         }, {
             label: 'Endereço',
-            path: path('person_show__address', { id: person.id }),
+            path: path('person_address__edit', { id: person.id }),
             active: true,
         }
     ]} %}
 
     <div class="container m-4">
-        <p>Endereço não informado.</p>
+        {% if person.address is null %}
+            <p>Endereço não informado.</p>
+        {% endif %}
+
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <div class="form-row button-container">
+            {% include '_components/button/button.html.twig' with { label: 'Salvar Alterações', type: 'submit', style: 'outlined'} only %}
+        </div>
+        {{ form_rest(form) }}
+        {{ form_end(form) }}
+
     </div>
 {% endblock %}

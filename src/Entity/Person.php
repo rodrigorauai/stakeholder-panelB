@@ -44,12 +44,6 @@ class Person extends Entity implements UserInterface
     private $phone;
 
     /**
-     * @var Address
-     * @ORM\OneToOne(targetEntity="Address", mappedBy="person")
-     */
-    private $address;
-
-    /**
      * @ORM\Column(type="json")
      */
     private $roles = [];
@@ -198,22 +192,6 @@ class Person extends Entity implements UserInterface
     public function setPhone(?string $phone)
     {
         $this->phone = $phone;
-    }
-
-    /**
-     * @return Address
-     */
-    public function getAddress(): Address
-    {
-        return $this->address;
-    }
-
-    /**
-     * @param Address $address
-     */
-    public function setAddress(Address $address)
-    {
-        $this->address = $address;
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AddressEntityRepository")
@@ -18,45 +19,81 @@ class Address
     private $id;
 
     /**
-     * @var Person
-     * @ORM\OneToOne(targetEntity="Person", inversedBy="address")
+     * @var Entity
+     * @ORM\OneToOne(targetEntity="Entity", inversedBy="address")
      */
-    private $person;
+    private $entity;
 
     /**
      * @ORM\Column(type="string", length=32)
+     * @Assert\NotBlank()
+     * @Assert\Regex(pattern="/^\d{8}$/", message="CEP inválido.")
      */
     private $postalCode;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255", maxMessage="O logradouro não pode ter mais de 255 caracteres.")
      */
     private $street;
 
     /**
      * @ORM\Column(type="string", length=15)
+     * @Assert\NotNull()
+     * @Assert\Length(max="15", maxMessage="O número não pode ter mais de 15 caracteres")
      */
     private $number;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255", maxMessage="O nome do bairro não pode ter mais de 255 caracteres.")
      */
     private $district;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(max="255", maxMessage="A nome da cidade não pode ter mais de 255 caracteres.")
      */
     private $city;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Choice(choices={"AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA",
+     *                         "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"},
+     *                message="Estado inválido")
      */
     private $state;
 
     /**
+     *
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(max="255", maxMessage="O nome do país não pode ter mais de 255 caracteres")
+     * @Assert\Choice(choices={"Brazil"})
      */
     private $country;
+
+    /**
+     * Address constructor.
+     * @param $postalCode
+     * @param $street
+     * @param $number
+     * @param $district
+     * @param $city
+     * @param $state
+     * @param $country
+     */
+    public function __construct($postalCode, $street, $number, $district, $city, $state, $country)
+    {
+        $this->postalCode = $postalCode;
+        $this->street = $street;
+        $this->number = $number;
+        $this->district = $district;
+        $this->city = $city;
+        $this->state = $state;
+        $this->country = $country;
+    }
 
     public function getId(): ?int
     {
@@ -64,24 +101,21 @@ class Address
     }
 
     /**
-     * @param Person $person
+     * @param Person $entity
      * @throws Exception
      */
-    public function setPerson(Person $person)
+    public function setEntity(Person $entity)
     {
-        if ($this->person) {
+        if ($this->entity) {
             throw new Exception('This address already belongs to a person');
         }
 
-        $this->person = $person;
+        $this->entity = $entity;
     }
 
-    /**
-     * @return Person
-     */
-    public function getPerson(): Person
+    public function getEntity(): ?Entity
     {
-        return $this->person;
+        return $this->entity;
     }
 
     public function getPostalCode(): ?string

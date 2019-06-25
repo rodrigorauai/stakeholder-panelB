@@ -2,12 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\Address;
 use App\Entity\Person;
+use App\Form\AddressType;
 use App\Form\PersonData;
 use App\Form\PersonType;
 use App\Repository\PersonRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -105,13 +109,33 @@ class PersonController extends AbstractController
 
     /**
      * @param Person $person
-     * @return Response
-     * @Route("/pessoas/{id}/endereco", name="person_show__address")
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return RedirectResponse|Response
+     * @throws Exception
+     * @Route("/pessoas/{id}/endereco", name="person_address__edit")
      */
-    public function showAddress(Person $person)
+    public function editAddress(Person $person, Request $request, EntityManagerInterface $entityManager)
     {
-        return $this->render('person/show--address.html.twig', [
+        $address = $person->getAddress();
+
+        $form = $this->createForm(AddressType::class, $address);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Address $address */
+            $address = $form->getData();
+            $address->setEntity($person);
+
+            $entityManager->persist($address);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('person_address__edit', ['id' => $person->getId()], 303);
+        }
+
+        return $this->render('person/edit--address.html.twig', [
             'person' => $person,
+            'form' => $form->createView(),
         ]);
     }
 }

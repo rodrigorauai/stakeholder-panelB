@@ -36,6 +36,12 @@ abstract class Entity
     protected $bankAccount;
 
     /**
+     * @var null|Address
+     * @ORM\OneToOne(targetEntity="Address", mappedBy="entity", cascade={"persist"})
+     */
+    private $address;
+
+    /**
      * AbstractEntity constructor.
      * @param string $name
      */
@@ -97,5 +103,21 @@ abstract class Entity
     public function setBankAccount(?BankAccount $bankAccount)
     {
         $this->bankAccount = $bankAccount;
+    }
+
+    /**
+     * @return null|Address
+     */
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param null|Address $address
+     */
+    public function setAddress(?Address $address)
+    {
+        $this->address = $address;
     }
 }
