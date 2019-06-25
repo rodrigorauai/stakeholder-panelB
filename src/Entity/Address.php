@@ -41,9 +41,16 @@ class Address
     /**
      * @ORM\Column(type="string", length=15)
      * @Assert\NotNull()
-     * @Assert\Length(max="15", maxMessage="O número não pode ter mais de 15 caracteres")
+     * @Assert\Length(max="15", maxMessage="O número não pode ter mais de 15 caracteres.")
      */
     private $number;
+
+    /**
+     * @var null|string
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Length(max="255", maxMessage="O complemento não pode ter mais de 255 caracteres.")
+     */
+    private $complement;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -74,17 +81,7 @@ class Address
      */
     private $country;
 
-    /**
-     * Address constructor.
-     * @param $postalCode
-     * @param $street
-     * @param $number
-     * @param $district
-     * @param $city
-     * @param $state
-     * @param $country
-     */
-    public function __construct($postalCode, $street, $number, $district, $city, $state, $country)
+    public function __construct($postalCode, $street, $number, $district, $city, $state, $country, $complement)
     {
         $this->postalCode = $postalCode;
         $this->street = $street;
@@ -93,6 +90,7 @@ class Address
         $this->city = $city;
         $this->state = $state;
         $this->country = $country;
+        $this->complement = $complement;
     }
 
     public function getId(): ?int
@@ -100,11 +98,16 @@ class Address
         return $this->id;
     }
 
+    public function hasEntity(): bool
+    {
+        return null !== $this->entity;
+    }
+
     /**
-     * @param Person $entity
+     * @param Entity $entity
      * @throws Exception
      */
-    public function setEntity(Person $entity)
+    public function setEntity(Entity $entity)
     {
         if ($this->entity) {
             throw new Exception('This address already belongs to a person');
@@ -200,5 +203,21 @@ class Address
         $this->country = $country;
 
         return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getComplement(): ?string
+    {
+        return $this->complement;
+    }
+
+    /**
+     * @param string|null $complement
+     */
+    public function setComplement(?string $complement)
+    {
+        $this->complement = $complement;
     }
 }

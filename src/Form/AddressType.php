@@ -24,6 +24,10 @@ class AddressType extends AbstractType
             ->add('number', TextType::class, [
                 'label' => 'Número',
             ])
+            ->add('complement', TextType::class, [
+                'label' => 'Complemento',
+                'required' => false,
+            ])
             ->add('district', TextType::class, [
                 'label' => 'Bairro',
             ])
