@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -66,6 +67,28 @@ class BankAccount
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $notes;
+
+    public function __construct(
+        AbstractEntity $owner,
+        string $bank,
+        string $bankCode,
+        string $agency,
+        string $number,
+        string $type,
+        bool $naturalPerson,
+        string $holderName,
+        string $holderDocumentNumber
+    ) {
+        $this->owner = $owner;
+        $this->bank = $bank;
+        $this->bankCode = $bankCode;
+        $this->agency = $agency;
+        $this->number = $number;
+        $this->type = $type;
+        $this->naturalPerson = $naturalPerson;
+        $this->holderName = $holderName;
+        $this->holderDocumentNumber = $holderDocumentNumber;
+    }
 
     public function getId(): ?int
     {
