@@ -14,12 +14,21 @@ class PersonType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'required' => true,
                 'label' => 'person.name__label',
             ])
+            ->add('cpf', TextType::class, [
+                'label' => 'CPF',
+            ])
             ->add('email', EmailType::class, [
-                'required' => true,
                 'label' => 'person.email__label',
+            ])
+            ->add('rg', TextType::class, [
+                'label' => 'RG',
+                'required' => false,
+            ])
+            ->add('phone', TextType::class, [
+                'label' => 'Telefone',
+                'required' => false,
             ])
         ;
     }

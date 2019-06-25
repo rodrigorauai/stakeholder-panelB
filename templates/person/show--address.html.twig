@@ -8,14 +8,11 @@
     {% include '_components/tab-bar/tab-bar.html.twig' with {tabs: [
         {
             label: 'Dados Pessoais',
-            path: path('person_show__personal_data', { id: person.id }),
+            path: path('person__edit', { id: person.id }),
         }, {
             label: 'Endereço',
             path: path('person_show__address', { id: person.id }),
             active: true,
-        }, {
-            label: 'Configurações',
-            path: path('person_show__settings', { id: person.id }),
         }
     ]} %}
 

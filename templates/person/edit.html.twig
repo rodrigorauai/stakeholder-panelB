@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+{% set title = person.name|default(person.cpf|format_cpf) ~ ' - Dados Pessoais' %}
+
+{% block title %}Dados pessoais de {{ person.name }}{% endblock %}
+
+{% block content %}
+
+    {% include '_components/tab-bar/tab-bar.html.twig' with {tabs: [
+        {
+            label: 'Dados Pessoais',
+            path: path('person__edit', { id: person.id }),
+            active: true,
+        }, {
+            label: 'Endereço',
+            path: path('person_show__address', { id: person.id }),
+        }
+    ]} %}
+
+    <div class="container m-4">
+
+        {{ form_start(form) }}
+        {{ form_row(form.name, {
+            attr: {
+                autofocus: ''
+            }
+        }) }}
+        {{ form_widget(form) }}
+        <div class="form-row button-container">
+            {% include '_components/button/button.html.twig' with { label: 'Salvar Alterações', type: 'submit', style: 'outlined'} only %}
+        </div>
+        {{ form_rest(form) }}
+        {{ form_end(form) }}
+
+    </div>
+
+{% endblock %}

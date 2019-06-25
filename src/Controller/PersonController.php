@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Person;
+use App\Form\PersonData;
 use App\Form\PersonType;
 use App\Repository\PersonRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -70,20 +71,35 @@ class PersonController extends AbstractController
      */
     public function show(Person $person)
     {
-        return $this->redirectToRoute('person_show__personal_data', [
+        return $this->redirectToRoute('person__edit', [
             'id' => $person->getId(),
         ]);
     }
 
     /**
      * @param Person $person
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
      * @return Response
-     * @Route("/pessoas/{id}/dados-pessoais", name="person_show__personal_data")
+     * @Route("/pessoas/{id}/dados-pessoais", name="person__edit")
      */
-    public function showPersonalData(Person $person)
+    public function edit(Person $person, Request $request, EntityManagerInterface $entityManager)
     {
-        return $this->render('person/show--personal-data.html.twig', [
+        $form = $this->createForm(PersonType::class, PersonData::fromEntity($person));
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isSubmitted()) {
+            $person->updateFromDataObject($form->getData());
+
+            $entityManager->persist($person);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('person__edit', ['id' => $person->getId()], 303);
+        }
+
+        return $this->render('person/edit.html.twig', [
             'person' => $person,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -95,18 +111,6 @@ class PersonController extends AbstractController
     public function showAddress(Person $person)
     {
         return $this->render('person/show--address.html.twig', [
-            'person' => $person,
-        ]);
-    }
-
-    /**
-     * @param Person $person
-     * @return Response
-     * @Route("/pessoas/{id}/configuracoes", name="person_show__settings")
-     */
-    public function showSettings(Person $person)
-    {
-        return $this->render('person/show--settings.html.twig', [
             'person' => $person,
         ]);
     }

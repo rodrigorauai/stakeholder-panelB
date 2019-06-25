@@ -38,10 +38,10 @@ class Person extends Entity implements UserInterface
     private $email;
 
     /**
-     * @var Phone[]
-     * @ORM\OneToMany(targetEntity="Phone", mappedBy="person")
+     * @var string
+     * @ORM\Column(type="string", length=16)
      */
-    private $phones;
+    private $phone;
 
     /**
      * @var Address
@@ -71,16 +71,36 @@ class Person extends Entity implements UserInterface
      * @param string $name
      * @param string $email
      */
-    public function __construct(string $name, string $email)
+    public function __construct(string $name, string $email, string $cpf)
     {
         parent::__construct($name);
 
+        $this->cpf = $cpf;
         $this->email = $email;
     }
 
     public static function fromDataObject(PersonData $data)
     {
-        return new Person($data->name, $data->email);
+        $person = new Person($data->name, $data->email, $data->cpf);
+
+        if ($data->rg) {
+            $person->setRg($data->rg);
+        }
+
+        if ($data->phone) {
+            $person->setPhone($data->phone);
+        }
+
+        return $person;
+    }
+
+    public function updateFromDataObject(PersonData $data)
+    {
+        $this->setName($data->name);
+        $this->setCpf($data->cpf);
+        $this->setRg($data->rg);
+        $this->setEmail($data->email);
+        $this->setPhone($data->phone);
     }
 
     public function getId(): ?int
@@ -165,19 +185,19 @@ class Person extends Entity implements UserInterface
     }
 
     /**
-     * @return Phone[]|Collection
+     * @return null|string
      */
-    public function getPhones()
+    public function getPhone(): ?string
     {
-        return $this->phones;
+        return $this->phone;
     }
 
     /**
-     * @param Phone[] $phones
+     * @param string $phone
      */
-    public function setPhones(array $phones)
+    public function setPhone(?string $phone)
     {
-        $this->phones = $phones;
+        $this->phone = $phone;
     }
 
     /**

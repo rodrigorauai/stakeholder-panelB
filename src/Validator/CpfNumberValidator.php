@@ -15,9 +15,9 @@ class CpfNumberValidator extends ConstraintValidator
             return;
         }
 
-        $digits = preg_replace('/[^\d]/g', '', $value);
+        $digits = preg_replace('/[^\d]/', '', $value);
 
-        if (11 !== count($digits)) {
+        if (11 !== strlen($digits)) {
             $this->context->buildViolation($constraint->message)
                 ->setParameter('{{ value }}', $value)
                 ->addViolation();
