@@ -19,7 +19,7 @@
                     <tr>
                         <td>{{ company.id }}</td>
                         <td>
-                            <a href="#">
+                            <a href="{{ path('company__edit', { id: company.id }) }}">
                                 {{ company.name|default('Não informado') }}
                             </a>
                         </td>

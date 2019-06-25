@@ -101,7 +101,12 @@
 {% block choice_widget %}
     <div class="mdc-select mdc-select--outlined">
         <i class="mdc-select__dropdown-icon"></i>
-        <select id="outlined" class="mdc-select__native-control" name="{{ full_name }}">
+        <select id="outlined"
+                class="mdc-select__native-control"
+                name="{{ full_name }}"
+                {% if required %}required{% endif %}
+        >
+            <option value="" disabled selected></option>
             {% for choice in choices %}
                 <option value="{{ choice.value }}" {{ choice.value == value ? 'selected' : '' }}>{{ choice.label }}</option>
             {% endfor %}

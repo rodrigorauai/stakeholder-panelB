@@ -9,6 +9,7 @@
 namespace App\Form;
 
 
+use App\Entity\Company;
 use App\Validator\CnpjFormat;
 use App\Validator\CnpjNumbers;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -33,4 +34,17 @@ class CompanyData
      * @Assert\Type(type="\App\Entity\Person")
      */
     public $manager;
+
+    public static function fromEntity(Company $company): CompanyData
+    {
+        $data = new CompanyData();
+        $data->name = $company->getName();
+        $data->cnpj = $company->getCnpj();
+
+        if ($company->getManagers()->count() !== 0) {
+            $data->manager = $company->getManagers()->get(0);
+        }
+
+        return $data;
+    }
 }

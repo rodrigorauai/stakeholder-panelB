@@ -44,6 +44,17 @@ class Company extends Entity
         return $company;
     }
 
+    public function updateFromDataObject(CompanyData $data)
+    {
+        $this->setName($data->name);
+        $this->setCnpj($data->cnpj);
+
+        if (false === $this->getManagers()->contains($data->manager)) {
+            $this->getManagers()->remove(0);
+            $this->addManager($data->manager);
+        }
+    }
+
     public function getId(): ?int
     {
         return $this->id;

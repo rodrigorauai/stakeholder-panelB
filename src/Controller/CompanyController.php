@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Company;
+use App\Form\CompanyData;
 use App\Form\CompanyType;
 use App\Repository\CompanyRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -48,6 +49,33 @@ class CompanyController extends AbstractController
         }
 
         return $this->render('company/form.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Company $company
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     * @Route("/empresas/{id}/editar", name="company__edit")
+     */
+    public function edit(Company $company, Request $request, EntityManagerInterface $entityManager)
+    {
+        $form = $this->createForm(CompanyType::class, CompanyData::fromEntity($company));
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $company->updateFromDataObject($form->getData());
+
+            $entityManager->persist($company);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('company__edit', ['id' => $company->getId()], 303);
+        }
+
+        return $this->render('company/edit.html.twig', [
+            'company' => $company,
             'form' => $form->createView(),
         ]);
     }
