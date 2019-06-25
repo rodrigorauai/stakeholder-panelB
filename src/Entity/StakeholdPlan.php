@@ -73,14 +73,9 @@ class StakeholdPlan
     private $monthlyAdministrativeFee;
 
     /**
-     * @ORM\Column(type="boolean")
-     */
-    private $yieldFixed;
-
-    /**
      * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
      */
-    private $monthlyYield;
+    private $monthlyRewardRate;
 
     /**
      * @var Contract[]|Collection
@@ -99,8 +94,7 @@ class StakeholdPlan
      * @param int $bestAcquisitionDay
      * @param string $monthlyCommission
      * @param string $monthlyAdministrativeFee
-     * @param bool $yieldFixed
-     * @param string|null $monthlyYield
+     * @param string|null $monthlyRewardRate
      * @throws Exception
      */
     public function __construct(
@@ -114,8 +108,7 @@ class StakeholdPlan
         int $bestAcquisitionDay,
         string $monthlyCommission,
         string $monthlyAdministrativeFee,
-        bool $yieldFixed,
-        ?string $monthlyYield
+        ?string $monthlyRewardRate
     ) {
         $this->administrativeName = $administrativeName;
         $this->commercialName = $commercialName;
@@ -127,12 +120,7 @@ class StakeholdPlan
         $this->bestAcquisitionDay = $bestAcquisitionDay;
         $this->monthlyCommission = $monthlyCommission;
         $this->monthlyAdministrativeFee = $monthlyAdministrativeFee;
-        $this->yieldFixed = $yieldFixed;
-        $this->monthlyYield = $monthlyYield;
-
-        if ($yieldFixed && null === $monthlyYield) {
-            throw new Exception('Monthly yield must be defined when yield is fixed');
-        }
+        $this->monthlyRewardRate = $monthlyRewardRate;
 
         $this->contracts = new ArrayCollection();
     }
@@ -155,8 +143,7 @@ class StakeholdPlan
             $data->bestAcquisitionDay,
             $data->monthlyCommission,
             $data->monthlyAdministrativeFee,
-            $data->yieldFixed,
-            $data->monthlyYield
+            $data->monthlyRewardRate
         );
     }
 
@@ -293,26 +280,19 @@ class StakeholdPlan
         return $this;
     }
 
-    public function isYieldFixed(): ?bool
+    public function hasFixedMonthlyRewardRate(): ?bool
     {
-        return $this->yieldFixed;
+        return is_null($this->monthlyRewardRate);
     }
 
-    public function setYieldFixed(bool $yieldFixed): self
+    public function getMonthlyRewardRate()
     {
-        $this->yieldFixed = $yieldFixed;
-
-        return $this;
+        return $this->monthlyRewardRate;
     }
 
-    public function getMonthlyYield()
+    public function setMonthlyRewardRate($monthlyRewardRate): self
     {
-        return $this->monthlyYield;
-    }
-
-    public function setMonthlyYield($monthlyYield): self
-    {
-        $this->monthlyYield = $monthlyYield;
+        $this->monthlyRewardRate = $monthlyRewardRate;
 
         return $this;
     }

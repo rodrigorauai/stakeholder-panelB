@@ -99,14 +99,9 @@ class StakeholdPlanData
     public $monthlyAdministrativeFee;
 
     /**
-     * @Assert\Type(type="boolean")
-     */
-    public $yieldFixed;
-
-    /**
      * @Assert\Type(type="numeric")
      * @Assert\Length(max="11", maxMessage="Utilize até 2 inteiros e 2 decimais")
      * @Assert\Range(min="0.01", max="99,99")
      */
-    public $monthlyYield;
+    public $monthlyRewardRate;
 }

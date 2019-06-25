@@ -76,14 +76,15 @@ class StakeholdPlanType extends AbstractType
                 ],
                 'html5' => true,
             ])
-            ->add('yieldFixed', ChoiceType::class, [
+            ->add('hasFixedMonthlyRewardRate', ChoiceType::class, [
                 'label' => 'Tipo de rendimento',
                 'choices' => [
                     'Variável' => false,
                     'Fixo' => true,
                 ],
+                'mapped' => false,
             ])
-            ->add('monthlyYield', NumberType::class, [
+            ->add('monthlyRewardRate', NumberType::class, [
                 'label' => 'Rendimento mensal',
                 'required' => false,
                 'scale' => 2,
