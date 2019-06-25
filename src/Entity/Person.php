@@ -9,6 +9,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PersonRepository")
+ * @ORM\InheritanceType(value="SINGLE_TABLE")
  */
 class Person extends AbstractEntity implements UserInterface
 {
@@ -59,6 +60,12 @@ class Person extends AbstractEntity implements UserInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $password;
+
+    /**
+     * @var Withdraw[]|Collection
+     * @ORM\OneToMany(targetEntity="Withdraw", mappedBy="requester")
+     */
+    private $withdrawRequests;
 
     /**
      * Person constructor.
@@ -254,5 +261,13 @@ class Person extends AbstractEntity implements UserInterface
     public function getDocumentNumber(): string
     {
         return $this->cpf;
+    }
+
+    /**
+     * @return Withdraw[]|Collection
+     */
+    public function getWithdrawRequests()
+    {
+        return $this->withdrawRequests;
     }
 }

@@ -37,6 +37,12 @@ class Account
     private $contracts;
 
     /**
+     * @var AccountFinancialMovement|Collection
+     * @ORM\OneToMany(targetEntity="AccountFinancialMovement", mappedBy="account")
+     */
+    private $financialMovements;
+
+    /**
      * Account constructor.
      * @param AbstractEntity $owner
      */
@@ -46,6 +52,7 @@ class Account
         $this->owner = $owner;
 
         $this->contracts = new ArrayCollection();
+        $this->financialMovements = new ArrayCollection();
     }
 
     public function getId(): ?int

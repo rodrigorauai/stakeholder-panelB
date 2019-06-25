@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -68,6 +69,12 @@ class BankAccount
      */
     private $notes;
 
+    /**
+     * @var Withdraw[]|Collection
+     * @ORM\OneToMany(targetEntity="Withdraw", mappedBy="bankAccount")
+     */
+    private $withdraws;
+
     public function __construct(
         AbstractEntity $owner,
         string $bank,
@@ -88,6 +95,8 @@ class BankAccount
         $this->naturalPerson = $naturalPerson;
         $this->holderName = $holderName;
         $this->holderDocumentNumber = $holderDocumentNumber;
+
+        $this->withdraws = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -217,5 +226,13 @@ class BankAccount
         $this->notes = $notes;
 
         return $this;
+    }
+
+    /**
+     * @return Withdraw[]|Collection
+     */
+    public function getWithdraws()
+    {
+        return $this->withdraws;
     }
 }
