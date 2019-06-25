@@ -2,21 +2,21 @@
 
 namespace App\Repository;
 
-use App\Entity\AbstractEntity;
+use App\Entity\Entity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method AbstractEntity|null find($id, $lockMode = null, $lockVersion = null)
- * @method AbstractEntity|null findOneBy(array $criteria, array $orderBy = null)
- * @method AbstractEntity[]    findAll()
- * @method AbstractEntity[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Entity|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Entity|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Entity[]    findAll()
+ * @method Entity[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class EntityRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, AbstractEntity::class);
+        parent::__construct($registry, Entity::class);
     }
 
     // /**

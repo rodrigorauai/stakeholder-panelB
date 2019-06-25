@@ -19,8 +19,8 @@ class BankAccount
     private $id;
 
     /**
-     * @var AbstractEntity
-     * @ORM\OneToOne(targetEntity="AbstractEntity", inversedBy="account")
+     * @var Entity
+     * @ORM\OneToOne(targetEntity="Entity", inversedBy="account")
      */
     private $owner;
 
@@ -76,7 +76,7 @@ class BankAccount
     private $withdraws;
 
     public function __construct(
-        AbstractEntity $owner,
+        Entity $owner,
         string $bank,
         string $bankCode,
         string $agency,
@@ -105,17 +105,17 @@ class BankAccount
     }
 
     /**
-     * @return AbstractEntity
+     * @return Entity
      */
-    public function getOwner(): AbstractEntity
+    public function getOwner(): Entity
     {
         return $this->owner;
     }
 
     /**
-     * @param AbstractEntity $owner
+     * @param Entity $owner
      */
-    public function setOwner(AbstractEntity $owner)
+    public function setOwner(Entity $owner)
     {
         $this->owner = $owner;
     }

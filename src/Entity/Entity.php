@@ -7,9 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\EntityRepository")
  * @ORM\InheritanceType(value="SINGLE_TABLE")
- * @ORM\DiscriminatorColumn(name="type", type="string")
  */
-abstract class AbstractEntity
+abstract class Entity
 {
     /**
      * @ORM\Id()

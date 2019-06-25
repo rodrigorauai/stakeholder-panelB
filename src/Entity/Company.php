@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CompanyRepository")
  */
-class Company extends AbstractEntity
+class Company extends Entity
 {
     /**
      * @ORM\Column(type="string", length=14)

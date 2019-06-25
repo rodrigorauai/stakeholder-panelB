@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Entity(repositoryClass="App\Repository\PersonRepository")
  * @ORM\InheritanceType(value="SINGLE_TABLE")
  */
-class Person extends AbstractEntity implements UserInterface
+class Person extends Entity implements UserInterface
 {
     /**
      * @var null|Company
