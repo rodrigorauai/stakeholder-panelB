@@ -15,10 +15,9 @@ class Person extends Entity implements UserInterface
 {
     /**
      * @var null|Company
-     * @ORM\ManyToOne(targetEntity="Company", inversedBy="managers")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\ManyToMany(targetEntity="Company", mappedBy="managers")
      */
-    private $company;
+    private $companies;
 
     /**
      * @var string
@@ -92,17 +91,17 @@ class Person extends Entity implements UserInterface
     /**
      * @return Company|null
      */
-    public function getCompany(): ?Company
+    public function getCompanies(): ?Company
     {
-        return $this->company;
+        return $this->companies;
     }
 
     /**
-     * @param Company|null $company
+     * @param Company|null $companies
      */
-    public function setCompany(?Company $company)
+    public function setCompanies(?Company $companies)
     {
-        $this->company = $company;
+        $this->companies = $companies;
     }
 
     /**

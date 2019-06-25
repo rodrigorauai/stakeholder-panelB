@@ -2,6 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\Person;
+use App\Repository\PersonRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -17,6 +20,17 @@ class CompanyType extends AbstractType
             ])
             ->add('cnpj', TextType::class, [
                 'label' => 'CNPJ',
+            ])
+            ->add('manager', EntityType::class, [
+                'label' => 'Administrador',
+                'class' => Person::class,
+                'query_builder' =>  function (PersonRepository $repository) {
+                    $qb = $repository->createQueryBuilder('p');
+                    $qb->orderBy('p.name', 'ASC');
+
+                    return $qb;
+                },
+                'choice_label' => 'name',
             ])
         ;
     }

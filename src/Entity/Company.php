@@ -19,7 +19,7 @@ class Company extends Entity
 
     /**
      * @var Person[]|Collection
-     * @ORM\OneToMany(targetEntity="Person", mappedBy="company")
+     * @ORM\ManyToMany(targetEntity="Person", inversedBy="companies", cascade={"persist"})
      */
     private $managers;
 
@@ -34,10 +34,14 @@ class Company extends Entity
 
     public static function fromDataObject(CompanyData $data)
     {
-        return new Company(
+        $company = new Company(
             $data->name,
             preg_replace('/[^\d]/', '', $data->cnpj)
         );
+
+        $company->addManager($data->manager);
+
+        return $company;
     }
 
     public function getId(): ?int

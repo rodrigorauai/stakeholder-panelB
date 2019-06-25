@@ -27,4 +27,10 @@ class CompanyData
      * @CnpjNumbers()
      */
     public $cnpj;
+
+    /**
+     * @Assert\NotBlank()
+     * @Assert\Type(type="\App\Entity\Person")
+     */
+    public $manager;
 }
