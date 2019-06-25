@@ -27,8 +27,8 @@
                         <td>{{ plan.commercialName }}</td>
                         <td class="text-right">R$ {{ plan.minimumValue|number_format(2, ',', '.') }}</td>
                         <td class="text-right">R$ {{ plan.valueMultiple|number_format(2, ',', '.') }}</td>
-                        {% if plan.yieldFixed %}
-                            <td class="text-right">{{ plan.monthlyYield|number_format(2, ',', '.') }} %</td>
+                        {% if plan.fixedMonthlyRewardRate %}
+                            <td class="text-right">{{ plan.monthlyRewardRate|number_format(2, ',', '.') }} %</td>
                         {% else %}
                             <td class="text-right">Variável</td>
                         {% endif %}
