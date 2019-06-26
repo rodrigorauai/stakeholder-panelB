@@ -5,16 +5,7 @@
 
 {% block content %}
 
-    {% include '_components/tab-bar/tab-bar.html.twig' with {tabs: [
-        {
-            label: 'Dados Pessoais',
-            path: path('person__edit', { id: person.id }),
-        }, {
-            label: 'Endereço',
-            path: path('person_address__edit', { id: person.id }),
-            active: true,
-        }
-    ]} %}
+    {% include 'person/_tab-bar.html.twig' with { active_tab: 'person_address__edit' } %}
 
     <div class="container m-4">
         {% if person.address is null %}

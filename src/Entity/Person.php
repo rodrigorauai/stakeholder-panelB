@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class Person extends Entity implements UserInterface
 {
     /**
-     * @var null|Company
+     * @var null|Company[]
      * @ORM\ManyToMany(targetEntity="Company", mappedBy="managers")
      */
     private $companies;
@@ -103,9 +103,9 @@ class Person extends Entity implements UserInterface
     }
 
     /**
-     * @return Company|null
+     * @return Company[]|null
      */
-    public function getCompanies(): ?Company
+    public function getCompanies()
     {
         return $this->companies;
     }

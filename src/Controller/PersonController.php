@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Account;
 use App\Entity\Address;
 use App\Entity\Person;
 use App\Form\AddressType;
@@ -56,8 +57,10 @@ class PersonController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $person = Person::fromDataObject($form->getData());
+            $account = new Account($person);
 
             $this->em->persist($person);
+            $this->em->persist($account);
             $this->em->flush();
 
             return $this->redirectToRoute('person_list', [], 303);
@@ -136,6 +139,18 @@ class PersonController extends AbstractController
         return $this->render('person/edit--address.html.twig', [
             'person' => $person,
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Person $person
+     * @return Response
+     * @Route("/pessoas/{id}/contas-de-patrocinio", name="person_account__index")
+     */
+    public function showAccounts(Person $person)
+    {
+        return $this->render('person/show--accounts.html.twig', [
+            'person' => $person,
         ]);
     }
 }

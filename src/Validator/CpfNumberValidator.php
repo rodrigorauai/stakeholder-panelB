@@ -64,7 +64,7 @@ class CpfNumberValidator extends ConstraintValidator
         $v1 = substr($digits, 9, 1);
         $v2 = substr($digits, 10, 1);
 
-        if ($v1 === $r1 && $v2 === $r2) {
+        if ((string) $v1 === (string) $r1 && (string) $v2 === (string) $r2) {
             return;
         }
 

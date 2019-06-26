@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+{% set title = person.name|default(person.cpf|format_cpf) ~ ' - Contas de Patrocínio' %}
+
+{% block title %}Contas de patrocínio de {{ person.name }}{% endblock %}
+
+{% block content %}
+
+    {% include 'person/_tab-bar.html.twig' with { active_tab: 'person_account__index' } %}
+
+    <div class="container m-4">
+
+        <ul class="mdc-list mdc-list--two-line mdc-list--avatar-list">
+            <li class="mdc-list-item">
+                <span class="mdc-list-item__graphic material-icons">account_balance_wallet</span>
+                <span class="mdc-list-item__text">
+                    <span class="mdc-list-item__primary-text">Conta Pessoal</span>
+                    <span class="mdc-list-item__secondary-text">{# Workaround for space issue
+                      #}Balanço: R$ {{ person.account.balance|number_format(2, ',', '.') }} -
+                        {{ person.account.contracts.count }} contratos
+                    </span>
+                </span>
+            </li>
+
+            {% if person.companies|length > 0 %}
+
+                <li role="separator" class="mdc-list-divider"></li>
+
+                {% for company in person.companies %}
+                    <li class="mdc-list-item">
+                        <span class="mdc-list-item__graphic material-icons">account_balance_wallet</span>
+                        <span class="mdc-list-item__text">
+                            <span class="mdc-list-item__primary-text">Conta Pessoal</span>
+                            <span class="mdc-list-item__secondary-text">
+                                Saldo: R$ {{ person.account.balance|number_format(2, ',', '.') }},
+                                {{ person.account.contracts.count }} contratos
+                            </span>
+                        </span>
+                    </li>
+                {% endfor %}
+
+            {% endif %}
+        </ul>
+
+    </div>
+
+{% endblock %}

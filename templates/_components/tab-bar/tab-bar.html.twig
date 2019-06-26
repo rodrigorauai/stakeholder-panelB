@@ -6,7 +6,7 @@
                 {% for tab in tabs %}
 
                     {% set icon = tab.icon|default(null) %}
-                    {% set active = tab.active|default(false) %}
+                    {% set active = tab.id|default(null) == active_tab %}
 
                     <a class="mdc-tab mdc-tab--active" role="tab" href="{{ tab.path }}" aria-selected="true" tabindex="0">
                         <span class="mdc-tab__content">

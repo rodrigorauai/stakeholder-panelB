@@ -25,7 +25,7 @@ abstract class Entity
 
     /**
      * @var null|Account
-     * @ORM\OneToOne(targetEntity="Account", mappedBy="owner")
+     * @ORM\OneToOne(targetEntity="Account", mappedBy="owner", cascade={"persist"})
      */
     protected $account;
 
