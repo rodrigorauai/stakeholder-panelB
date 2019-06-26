@@ -16,7 +16,7 @@
                 <span class="mdc-list-item__text">
                     <span class="mdc-list-item__primary-text">Conta Pessoal</span>
                     <span class="mdc-list-item__secondary-text">{# TODO: Solve spacing issue
-                      #}Balanço: R$ {{ person.account.balance|number_format(2, ',', '.') }} -
+                      #}Saldo: R$ {{ person.account.balance|number_format(2, ',', '.') }} -
                         {{ person.account.contracts.count }} contratos
                     </span>
                 </span>
@@ -31,8 +31,8 @@
                         <span class="mdc-list-item__graphic material-icons">account_balance_wallet</span>
                         <span class="mdc-list-item__text">
                             <span class="mdc-list-item__primary-text">Conta da empresa {{ company.name }}</span>
-                            <span class="mdc-list-item__secondary-text">
-                                Saldo: R$ {{ company.account.balance|number_format(2, ',', '.') }},
+                            <span class="mdc-list-item__secondary-text">{# TODO: Solve spacing issue
+                                #}Saldo: R$ {{ company.account.balance|number_format(2, ',', '.') }},
                                 {{ company.account.contracts.count }} contratos
                             </span>
                         </span>
