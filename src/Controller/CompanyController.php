@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Account;
 use App\Entity\Address;
+use App\Entity\BankAccount;
 use App\Entity\Company;
 use App\Form\AddressType;
+use App\Form\BankAccountType;
 use App\Form\CompanyData;
 use App\Form\CompanyType;
 use App\Repository\CompanyRepository;
@@ -129,6 +131,38 @@ class CompanyController extends AbstractController
     {
         return $this->render('company/show--accounts.html.twig', [
             'company' => $company,
+        ]);
+    }
+
+    /**
+     * @param Company $company
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return RedirectResponse|Response
+     * @Route("/empresas/{id}/conta-bancaria", name="company__bank_account__edit")
+     */
+    public function editBankAccount(Company $company, Request $request, EntityManagerInterface $entityManager)
+    {
+        $account = $company->getBankAccount();
+
+        $form = $this->createForm(BankAccountType::class, $account);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var BankAccount $account */
+            $account = $form->getData();
+            $account->setOwner($company);
+
+            $entityManager->persist($account);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('company__bank_account__edit', ['id' => $company->getId()], 303);
+        }
+
+        return $this->render('company/bank-account/edit.html.twig', [
+            'company' => $company,
+            'account' => $account,
+            'form' => $form->createView(),
         ]);
     }
 }

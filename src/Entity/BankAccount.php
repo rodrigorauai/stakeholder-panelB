@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\BankAccountRepository")
@@ -26,21 +27,25 @@ class BankAccount
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $bank;
 
     /**
      * @ORM\Column(type="string", length=32, nullable=true)
+     * @Assert\NotBlank()
      */
     private $bankCode;
 
     /**
      * @ORM\Column(type="string", length=16)
+     * @Assert\NotBlank()
      */
     private $agency;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $number;
 
@@ -51,16 +56,20 @@ class BankAccount
 
     /**
      * @ORM\Column(type="boolean")
+     * @Assert\NotNull()
+     * @Assert\Choice(choices={true, false})
      */
     private $naturalPerson;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $holderName;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $holderDocumentNumber;
 
@@ -76,17 +85,15 @@ class BankAccount
     private $withdraws;
 
     public function __construct(
-        Entity $owner,
-        string $bank,
-        string $bankCode,
-        string $agency,
-        string $number,
-        string $type,
-        bool $naturalPerson,
-        string $holderName,
-        string $holderDocumentNumber
+        ?string $bank,
+        ?string $bankCode,
+        ?string $agency,
+        ?string $number,
+        ?string $type,
+        ?bool $naturalPerson,
+        ?string $holderName,
+        ?string $holderDocumentNumber
     ) {
-        $this->owner = $owner;
         $this->bank = $bank;
         $this->bankCode = $bankCode;
         $this->agency = $agency;
