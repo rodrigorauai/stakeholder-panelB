@@ -50,6 +50,11 @@ class PersonData
      */
     public $phone;
 
+    /**
+     * @var null|Person
+     */
+    public $tradeRepresentative;
+
     public static function fromEntity(Person $person): PersonData
     {
         $data = new PersonData();
@@ -58,6 +63,7 @@ class PersonData
         $data->rg = $person->getRg();
         $data->email = $person->getEmail();
         $data->phone = $person->getPhone();
+        $data->tradeRepresentative = $person->getTradeRepresentative();
 
         return $data;
     }

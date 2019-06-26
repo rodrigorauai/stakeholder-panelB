@@ -42,6 +42,12 @@ abstract class Entity
     private $address;
 
     /**
+     * @var null|Person
+     * @ORM\ManyToOne(targetEntity="Person")
+     */
+    protected $tradeRepresentative;
+
+    /**
      * AbstractEntity constructor.
      * @param string $name
      */
@@ -119,5 +125,21 @@ abstract class Entity
     public function setAddress(?Address $address)
     {
         $this->address = $address;
+    }
+
+    /**
+     * @return Person|null
+     */
+    public function getTradeRepresentative(): ?Person
+    {
+        return $this->tradeRepresentative;
+    }
+
+    /**
+     * @param Person|null $tradeRepresentative
+     */
+    public function setTradeRepresentative(?Person $tradeRepresentative)
+    {
+        $this->tradeRepresentative = $tradeRepresentative;
     }
 }

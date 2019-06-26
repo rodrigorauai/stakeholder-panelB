@@ -41,6 +41,8 @@ class Company extends Entity
 
         $company->addManager($data->manager);
 
+        $company->setTradeRepresentative($data->tradeRepresentative);
+
         return $company;
     }
 
@@ -53,6 +55,8 @@ class Company extends Entity
             $this->getManagers()->remove(0);
             $this->addManager($data->manager);
         }
+
+        $this->tradeRepresentative = $data->tradeRepresentative;
     }
 
     public function getId(): ?int

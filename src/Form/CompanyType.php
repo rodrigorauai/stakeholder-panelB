@@ -32,6 +32,12 @@ class CompanyType extends AbstractType
                 },
                 'choice_label' => 'name',
             ])
+            ->add('tradeRepresentative', EntityType::class, [
+                'label' => 'Representante Responsável',
+                'required' => false,
+                'class' => Person::class,
+                'choice_label' => 'name',
+            ])
         ;
     }
 

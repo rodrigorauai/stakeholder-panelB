@@ -85,6 +85,10 @@ class Person extends Entity implements UserInterface
             $person->setPhone($data->phone);
         }
 
+        if ($data->tradeRepresentative) {
+            $person->setTradeRepresentative($data->tradeRepresentative);
+        }
+
         return $person;
     }
 
@@ -95,6 +99,7 @@ class Person extends Entity implements UserInterface
         $this->setRg($data->rg);
         $this->setEmail($data->email);
         $this->setPhone($data->phone);
+        $this->setTradeRepresentative($data->tradeRepresentative);
     }
 
     public function getId(): ?int
