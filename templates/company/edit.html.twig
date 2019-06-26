@@ -6,16 +6,7 @@
 
 {% block content %}
 
-    {% include '_components/tab-bar/tab-bar.html.twig' with {tabs: [
-        {
-            label: 'Dados da Empresa',
-            path: path('company__edit', { id: company.id }),
-            active: true,
-        }, {
-            label: 'Endereço',
-            path: path('company_address__edit', { id: company.id }),
-        }
-    ]} %}
+    {% include 'company/_tab-bar.html.twig' with { active_tab: 'company__edit' } %}
 
     <div class="container m-4">
         {{ form_start(form) }}

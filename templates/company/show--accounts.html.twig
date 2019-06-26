@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% set title = company.name ~ ' - Contas de Patrocínio' %}
+
+{% block title %}Conta de patrocínio de {{ company.name }}{% endblock %}
+
+{% block content %}
+
+    {% include 'company/_tab-bar.html.twig' with { active_tab: 'company_account__index' } %}
+
+    <div class="container m-4">
+
+        <ul class="mdc-list mdc-list--two-line mdc-list--avatar-list">
+            <li class="mdc-list-item">
+                <span class="mdc-list-item__graphic material-icons">account_balance_wallet</span>
+                <span class="mdc-list-item__text">
+                    <span class="mdc-list-item__primary-text">Conta da empresa {{ company.name }}</span>
+                    <span class="mdc-list-item__secondary-text">{# TODO: Solve spacing issue
+                      #}Balanço: R$ {{ company.account.balance|number_format(2, ',', '.') }} -
+                        {{ company.account.contracts.count }} contratos
+                    </span>
+                </span>
+            </li>
+        </ul>
+
+    </div>
+
+{% endblock %}

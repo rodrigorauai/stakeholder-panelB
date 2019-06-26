@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Account;
 use App\Entity\Address;
 use App\Entity\Company;
 use App\Form\AddressType;
@@ -45,7 +46,9 @@ class CompanyController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $company = Company::fromDataObject($form->getData());
+            $account = new Account($company);
 
+            $entityManager->persist($account);
             $entityManager->persist($company);
             $entityManager->flush();
 
@@ -114,6 +117,18 @@ class CompanyController extends AbstractController
         return $this->render('company/edit--address.html.twig', [
             'company' => $company,
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Company $company
+     * @return Response
+     * @Route("/company/{id}/contas-de-patrocinio", name="company_account__index")
+     */
+    public function showAccounts(Company $company)
+    {
+        return $this->render('company/show--accounts.html.twig', [
+            'company' => $company,
         ]);
     }
 }
