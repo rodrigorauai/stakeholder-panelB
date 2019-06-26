@@ -6,6 +6,7 @@ use App\Entity\Account;
 use App\Entity\Address;
 use App\Entity\Person;
 use App\Form\AddressType;
+use App\Form\BankAccountType;
 use App\Form\PersonData;
 use App\Form\PersonType;
 use App\Repository\PersonRepository;
@@ -151,6 +152,35 @@ class PersonController extends AbstractController
     {
         return $this->render('person/show--accounts.html.twig', [
             'person' => $person,
+        ]);
+    }
+
+    /**
+     * @param Person $person
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return RedirectResponse|Response
+     * @Route("/pessoas/{id}/conta-bancaria", name="person__bank_account__edit")
+     */
+    public function editBankAccount(Person $person, Request $request, EntityManagerInterface $entityManager)
+    {
+        $form = $this->createForm(BankAccountType::class, $person->getBankAccount());
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Account $account */
+            $account = $form->getData();
+            $account->setOwner($person);
+
+            $entityManager->persist($account);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('person__bank_account__edit', ['id' => $person->getId()]);
+        }
+
+        return $this->render('person/bank-account/edit.html.twig', [
+            'person' => $person,
+            'form' => $form->createView(),
         ]);
     }
 }

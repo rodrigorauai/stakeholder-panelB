@@ -14,7 +14,11 @@
                 id: 'person_account__index',
                 label: 'Contas de Patrocínio',
                 path: path('person_account__index', { id: person.id }),
-            }
+            }, {
+                id: 'person__bank_account__edit',
+                label: 'Conta Bancária',
+                path: path('person__bank_account__edit', { id: person.id }),
+            },
         ],
         active_tab: active_tab|default('person__edit'),
     }
