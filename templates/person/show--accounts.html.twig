@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+
 {% set title = person.name|default(person.cpf|format_cpf) ~ ' - Contas de Patrocínio' %}
 
 {% block title %}Contas de patrocínio de {{ person.name }}{% endblock %}
@@ -14,7 +15,7 @@
                 <span class="mdc-list-item__graphic material-icons">account_balance_wallet</span>
                 <span class="mdc-list-item__text">
                     <span class="mdc-list-item__primary-text">Conta Pessoal</span>
-                    <span class="mdc-list-item__secondary-text">{# Workaround for space issue
+                    <span class="mdc-list-item__secondary-text">{# TODO: Solve spacing issue
                       #}Balanço: R$ {{ person.account.balance|number_format(2, ',', '.') }} -
                         {{ person.account.contracts.count }} contratos
                     </span>
@@ -29,10 +30,10 @@
                     <li class="mdc-list-item">
                         <span class="mdc-list-item__graphic material-icons">account_balance_wallet</span>
                         <span class="mdc-list-item__text">
-                            <span class="mdc-list-item__primary-text">Conta Pessoal</span>
+                            <span class="mdc-list-item__primary-text">Conta da empresa {{ company.name }}</span>
                             <span class="mdc-list-item__secondary-text">
-                                Saldo: R$ {{ person.account.balance|number_format(2, ',', '.') }},
-                                {{ person.account.contracts.count }} contratos
+                                Saldo: R$ {{ company.account.balance|number_format(2, ',', '.') }},
+                                {{ company.account.contracts.count }} contratos
                             </span>
                         </span>
                     </li>
