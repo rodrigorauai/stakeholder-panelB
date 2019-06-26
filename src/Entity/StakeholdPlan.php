@@ -118,6 +118,12 @@ class StakeholdPlan
     private $contracts;
 
     /**
+     * @var StakeholdPlanReward[]|Collection
+     * @ORM\OneToMany(targetEntity="StakeholdPlanReward", mappedBy="plan")
+     */
+    private $rewards;
+
+    /**
      * StakeholdingPlan constructor.
      * @param string $administrativeName
      * @param string $commercialName
@@ -158,6 +164,7 @@ class StakeholdPlan
         $this->monthlyRewardRate = $monthlyRewardRate;
 
         $this->contracts = new ArrayCollection();
+        $this->rewards = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -321,5 +328,13 @@ class StakeholdPlan
     public function getContracts()
     {
         return $this->contracts;
+    }
+
+    /**
+     * @return StakeholdPlanReward[]|Collection
+     */
+    public function getRewards()
+    {
+        return $this->rewards;
     }
 }

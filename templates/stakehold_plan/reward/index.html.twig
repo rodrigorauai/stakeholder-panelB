@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% set title = 'Rendimentos de ' ~ plan.administrativeName %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+
+    {% include 'stakehold_plan/_tab-bar.html.twig' with { active_tab: 'stakehold_plan__reward__index' } %}
+
+    <div class="m-4">
+
+        {% if plan.rewards.count == 0 %}
+            <p>Nenhum rendimento registrado.</p>
+        {% endif %}
+
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Data de Divulgação</th>
+                    <th>Rendimento</th>
+                    <th>Data de Início dos Pagamentos</th>
+                    <th>Data de Conclusão dos Pagamentos</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for reward in plan.rewards %}
+                    <tr>
+                        <td>{{ reward.disclosureDate.format('d/m/Y') }}</td>
+                        <td>{{ reward.rate|number_format(2, ',', '.') }} %</td>
+                        <td>{{ reward.firstPaymentDate.format('d/m/Y') }}</td>
+                        <td>{{ reward.lastPaymentDate.format('d/m/Y') }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block body_end %}
+    <div class="app-page-end">
+        <a class="mdc-fab mdc-fab--extended" href="{{ path('stakehold_plan__reward__create', { id: plan.id }) }}">
+            <span class="material-icons mdc-fab__icon">add</span>
+            <span class="mdc-fab__label">Adicionar Rendimento</span>
+        </a>
+    </div>
+{% endblock %}

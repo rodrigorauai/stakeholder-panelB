@@ -33,6 +33,12 @@ class StakeholdPlanReward
      * @var DateTime
      * @ORM\Column(type="date")
      */
+    private $disclosureDate;
+
+    /**
+     * @var DateTime
+     * @ORM\Column(type="date")
+     */
     private $firstPaymentDate;
 
     /**
@@ -41,32 +47,33 @@ class StakeholdPlanReward
      */
     private $lastPaymentDate;
 
-    /**
-     * @var string
-     * @ORM\Column(type="string", length=6, unique=true, nullable=false)
-     */
-    private $reference;
-
-    /**
-     * StakeholdPlanReward constructor.
-     * @param StakeholdPlan $plan
-     * @param string $rate
-     * @param DateTime $firstPaymentDate
-     * @param DateTime $lastPaymentDate
-     */
-    public function __construct(StakeholdPlan $plan, string $rate, DateTime $firstPaymentDate, DateTime $lastPaymentDate)
+    public function __construct(string $rate, DateTime $disclosureDate, DateTime $firstPaymentDate, DateTime $lastPaymentDate)
     {
-        $this->plan = $plan;
         $this->rate = $rate;
+        $this->disclosureDate = $disclosureDate;
         $this->setFirstPaymentDate($firstPaymentDate);
         $this->lastPaymentDate = $lastPaymentDate;
-
-        $this->reference = $firstPaymentDate->format('Ym');
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * @return StakeholdPlan
+     */
+    public function getPlan(): StakeholdPlan
+    {
+        return $this->plan;
+    }
+
+    /**
+     * @param StakeholdPlan $plan
+     */
+    public function setPlan(StakeholdPlan $plan)
+    {
+        $this->plan = $plan;
     }
 
     /**
@@ -83,6 +90,22 @@ class StakeholdPlanReward
     public function setRate(string $rate)
     {
         $this->rate = $rate;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getDisclosureDate(): DateTime
+    {
+        return $this->disclosureDate;
+    }
+
+    /**
+     * @param DateTime $disclosureDate
+     */
+    public function setDisclosureDate(DateTime $disclosureDate)
+    {
+        $this->disclosureDate = $disclosureDate;
     }
 
     /**
@@ -117,5 +140,6 @@ class StakeholdPlanReward
     {
         $this->lastPaymentDate = $lastPaymentDate;
     }
+
 
 }
