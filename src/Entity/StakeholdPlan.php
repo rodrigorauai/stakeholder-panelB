@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Form\StakeholdPlanData;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\StakeholdPlanRepository")
@@ -23,62 +23,97 @@ class StakeholdPlan
     /**
      * @var string
      * @ORM\Column(type="string", length=255, nullable=false)
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255", maxMessage="O nome privado não pode ter mais de 255 caracteres.")
      */
     private $administrativeName;
 
     /**
      * @var string
      * @ORM\Column(type="string", length=255, nullable=false)
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255", maxMessage="O nome comercial não pode ter mais de 255 caracteres.")
      */
     private $commercialName;
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2)
+     * @Assert\NotBlank()
+     * @Assert\Type(type="numeric")
+     * @Assert\Length(max="11", maxMessage="Utilize até 7 inteiros e 2 decimais")
+     * @Assert\Range(min="0.01", max="9999999.99")
      */
     private $minimumValue;
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2)
+     * @Assert\NotBlank()
+     * @Assert\Type(type="numeric")
+     * @Assert\Length(max="11", maxMessage="Utilize até 7 inteiros e 2 decimais")
+     * @Assert\Range(min="0.01", max="9999999.99")
      */
     private $valueMultiple;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank()
+     * @Assert\Regex(pattern="/\d+/", message="Utilize apenas números")
+     * @Assert\Range(min="1", max="28")
      */
     private $firstDayOfMonthlyPayment;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank()
+     * @Assert\Regex(pattern="/\d+/", message="Utilize apenas números")
+     * @Assert\Range(min="1", max="28")
      */
     private $lastDayOfMonthlyPayment;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank()
+     * @Assert\Regex(pattern="/\d+/", message="Utilize apenas números")
      */
     private $gracePeriod;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank()
+     * @Assert\Regex(pattern="/\d+/", message="Utilize apenas números")
+     * @Assert\Range(min="1", max="28")
      */
     private $bestAcquisitionDay;
 
     /**
      * @ORM\Column(type="decimal", precision=4, scale=2)
+     * @Assert\NotBlank()
+     * @Assert\Type(type="numeric")
+     * @Assert\Length(max="11", maxMessage="Utilize até 2 inteiros e 2 decimais")
+     * @Assert\Range(min="0.00", max="99,99")
      */
     private $monthlyCommission;
 
     /**
      * @ORM\Column(type="decimal", precision=4, scale=2)
+     * @Assert\NotBlank()
+     * @Assert\Type(type="numeric")
+     * @Assert\Length(max="11", maxMessage="Utilize até 2 inteiros e 2 decimais")
+     * @Assert\Range(min="0.00", max="99,99")
      */
     private $monthlyAdministrativeFee;
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
+     * @Assert\Type(type="numeric")
+     * @Assert\Length(max="11", maxMessage="Utilize até 2 inteiros e 2 decimais")
+     * @Assert\Range(min="0.01", max="99,99")
      */
     private $monthlyRewardRate;
 
     /**
      * @var Contract[]|Collection
+     * @ORM\OneToMany(targetEntity="Contract", mappedBy="plan")
      */
     private $contracts;
 
@@ -98,16 +133,16 @@ class StakeholdPlan
      * @throws Exception
      */
     public function __construct(
-        string $administrativeName,
-        string $commercialName,
-        string $minimumValue,
-        string $valueMultiple,
-        int $firstDayOfMonthlyPayment,
-        int $lastDayOfMonthlyPayment,
-        int $gracePeriod,
-        int $bestAcquisitionDay,
-        string $monthlyCommission,
-        string $monthlyAdministrativeFee,
+        ?string $administrativeName,
+        ?string $commercialName,
+        ?string $minimumValue,
+        ?string $valueMultiple,
+        ?int $firstDayOfMonthlyPayment,
+        ?int $lastDayOfMonthlyPayment,
+        ?int $gracePeriod,
+        ?int $bestAcquisitionDay,
+        ?string $monthlyCommission,
+        ?string $monthlyAdministrativeFee,
         ?string $monthlyRewardRate
     ) {
         $this->administrativeName = $administrativeName;
@@ -123,28 +158,6 @@ class StakeholdPlan
         $this->monthlyRewardRate = $monthlyRewardRate;
 
         $this->contracts = new ArrayCollection();
-    }
-
-    /**
-     * @param StakeholdPlanData $data
-     * @return StakeholdPlan
-     * @throws Exception
-     */
-    public static function fromDataObject(StakeholdPlanData $data)
-    {
-        return new StakeholdPlan(
-            $data->administrativeName,
-            $data->commercialName,
-            $data->minimumValue,
-            $data->valueMultiple,
-            $data->firstDayOfMonthlyPayment,
-            $data->lastDayOfMonthlyPayment,
-            $data->gracePeriod,
-            $data->bestAcquisitionDay,
-            $data->monthlyCommission,
-            $data->monthlyAdministrativeFee,
-            $data->monthlyRewardRate
-        );
     }
 
     public function getId(): ?int

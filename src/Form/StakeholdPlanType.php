@@ -2,12 +2,14 @@
 
 namespace App\Form;
 
+use App\Entity\StakeholdPlan;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class StakeholdPlanType extends AbstractType
@@ -57,7 +59,7 @@ class StakeholdPlanType extends AbstractType
                 ],
             ])
             ->add('monthlyCommission', NumberType::class, [
-                'label' => 'Comissão mensal',
+                'label' => 'Porcentagem de comissão mensal',
                 'scale' => 2,
                 'attr' => [
                     'step' => 0.01,
@@ -67,7 +69,7 @@ class StakeholdPlanType extends AbstractType
                 'html5' => true,
             ])
             ->add('monthlyAdministrativeFee', NumberType::class, [
-                'label' => 'Taxa administrativa mensal',
+                'label' => 'Porcentagem de taxa administrativa mensal',
                 'scale' => 2,
                 'attr' => [
                     'step' => 0.01,
@@ -101,7 +103,24 @@ class StakeholdPlanType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => StakeholdPlanData::class,
+            'data_class' => StakeholdPlan::class,
+            'empty_data' => function (FormInterface $form) {
+                $plan = new StakeholdPlan(
+                    $form->get('administrativeName')->getData(),
+                    $form->get('commercialName')->getData(),
+                    $form->get('minimumValue')->getData(),
+                    $form->get('valueMultiple')->getData(),
+                    $form->get('firstDayOfMonthlyPayment')->getData(),
+                    $form->get('lastDayOfMonthPayment')->getData(),
+                    $form->get('gracePeriod')->getData(),
+                    $form->get('bestAcquisitionDay')->getData(),
+                    $form->get('monthlyCommission')->getData(),
+                    $form->get('monthlyAdministrativeFee')->getData(),
+                    $form->get('monthlyRewardRate')->getData()
+                );
+
+                return $plan;
+            }
         ]);
     }
 }

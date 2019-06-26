@@ -23,7 +23,11 @@
                 {% for plan in plans %}
                     <tr>
                         <th scope="row">{{ plan.id }}</th>
-                        <td>{{ plan.administrativeName }}</td>
+                        <td>
+                            <a href="{{ path('stakehold_plan__edit', { id: plan.id }) }}">
+                                {{ plan.administrativeName }}
+                            </a>
+                        </td>
                         <td>{{ plan.commercialName }}</td>
                         <td class="text-right">R$ {{ plan.minimumValue|number_format(2, ',', '.') }}</td>
                         <td class="text-right">R$ {{ plan.valueMultiple|number_format(2, ',', '.') }}</td>

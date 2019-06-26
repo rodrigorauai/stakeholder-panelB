@@ -43,7 +43,7 @@ class StakeholdPlanController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $plan = StakeholdPlan::fromDataObject($form->getData());
+            $plan = $form->getData();
 
             $entityManager->persist($plan);
             $entityManager->flush();
@@ -52,6 +52,34 @@ class StakeholdPlanController extends AbstractController
         }
 
         return $this->render('stakehold_plan/form.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param StakeholdPlan $plan
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return RedirectResponse|Response
+     * @Route("planos-de-patrocinio/{id}/dados-do-plano", name="stakehold_plan__edit")
+     */
+    public function edit(StakeholdPlan $plan, Request $request, EntityManagerInterface $entityManager)
+    {
+        $form = $this->createForm(StakeholdPlanType::class, $plan);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var StakeholdPlan $plan */
+            $plan = $form->getData();
+
+            $entityManager->persist($plan);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('stakehold_plan__edit', ['id' => $plan->getId()], 303);
+        }
+
+        return $this->render('stakehold_plan/edit.html.twig', [
+            'plan' => $plan,
             'form' => $form->createView(),
         ]);
     }
