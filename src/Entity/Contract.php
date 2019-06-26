@@ -64,7 +64,6 @@ class Contract
 
     /**
      * Contract constructor.
-     * @param Account $account
      * @param StakeholdPlan $plan
      * @param string $value
      * @param DateTime $executionDate
@@ -73,14 +72,12 @@ class Contract
      * @throws Exception
      */
     public function __construct(
-        Account $account,
-        StakeholdPlan $plan,
-        string $value,
-        DateTime $executionDate,
+        ?StakeholdPlan $plan,
+        ?string $value,
+        ?DateTime $executionDate,
         ?DateTime $firstReturnDate,
-        DateTime $expirationDate
+        ?DateTime $expirationDate
     ) {
-        $this->account = $account;
         $this->plan = $plan;
         $this->value = $value;
         $this->executionDate = $executionDate;
@@ -95,50 +92,32 @@ class Contract
         return $this->id;
     }
 
-    /**
-     * @return Account
-     */
-    public function getAccount(): Account
+    public function getAccount(): ?Account
     {
         return $this->account;
     }
 
-    /**
-     * @param Account $account
-     */
-    public function setAccount(Account $account)
+    public function setAccount(?Account $account)
     {
         $this->account = $account;
     }
 
-    /**
-     * @return StakeholdPlan
-     */
-    public function getPlan(): StakeholdPlan
+    public function getPlan(): ?StakeholdPlan
     {
         return $this->plan;
     }
 
-    /**
-     * @param StakeholdPlan $plan
-     */
-    public function setPlan(StakeholdPlan $plan)
+    public function setPlan(?StakeholdPlan $plan)
     {
         $this->plan = $plan;
     }
 
-    /**
-     * @return string
-     */
-    public function getValue(): string
+    public function getValue(): ?string
     {
         return $this->value;
     }
 
-    /**
-     * @param string $value
-     */
-    public function setValue(string $value)
+    public function setValue(?string $value)
     {
         $this->value = $value;
     }
@@ -146,79 +125,45 @@ class Contract
     /**
      * @return DateTime
      */
-    public function getFirstReturnDate(): DateTime
+    public function getExecutionDate(): DateTime
+    {
+        return $this->executionDate;
+    }
+
+    /**
+     * @param DateTime $executionDate
+     */
+    public function setExecutionDate(DateTime $executionDate)
+    {
+        $this->executionDate = $executionDate;
+    }
+
+    public function getFirstReturnDate(): ?DateTime
     {
         return $this->firstReturnDate;
     }
 
-    /**
-     * @param DateTime $firstReturnDate
-     */
-    public function setFirstReturnDate(DateTime $firstReturnDate)
+    public function setFirstReturnDate(?DateTime $firstReturnDate)
     {
         $this->firstReturnDate = $firstReturnDate;
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getExpirationDate(): DateTime
+    public function getExpirationDate(): ?DateTime
     {
         return $this->expirationDate;
     }
 
-    /**
-     * @param DateTime $expirationDate
-     */
-    public function setExpirationDate(DateTime $expirationDate)
+    public function setExpirationDate(?DateTime $expirationDate)
     {
         $this->expirationDate = $expirationDate;
     }
 
-    /**
-     * @return Person
-     */
-    public function getRequester(): Person
-    {
-        return $this->requester;
-    }
-
-    /**
-     * @param Person $requester
-     */
-    public function setRequester(Person $requester)
-    {
-        $this->requester = $requester;
-    }
-
-    /**
-     * @return Person
-     */
-    public function getApprover(): Person
-    {
-        return $this->approver;
-    }
-
-    /**
-     * @param Person $approver
-     */
-    public function setApprover(Person $approver)
-    {
-        $this->approver = $approver;
-    }
-
-    /**
-     * @return DateTime
-     */
-    public function getCreationTimestamp(): DateTime
+    public function getCreationTimestamp(): ?DateTime
     {
         return $this->creationTimestamp;
     }
 
-    /**
-     * @param DateTime $creationTimestamp
-     */
-    public function setCreationTimestamp(DateTime $creationTimestamp)
+    public function setCreationTimestamp(?DateTime $creationTimestamp)
     {
         $this->creationTimestamp = $creationTimestamp;
     }

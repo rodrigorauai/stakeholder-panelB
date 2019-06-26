@@ -10,8 +10,8 @@
 
     <div class="container m-4">
 
-        <ul class="mdc-list mdc-list--two-line mdc-list--avatar-list">
-            <li class="mdc-list-item">
+        <div class="mdc-list mdc-list--two-line mdc-list--avatar-list">
+            <a class="mdc-list-item" href="{{ path('account__show', { id: company.account.id }) }}">
                 <span class="mdc-list-item__graphic material-icons">account_balance_wallet</span>
                 <span class="mdc-list-item__text">
                     <span class="mdc-list-item__primary-text">Conta da empresa {{ company.name }}</span>
@@ -20,8 +20,8 @@
                         {{ company.account.contracts.count }} contratos
                     </span>
                 </span>
-            </li>
-        </ul>
+            </a>
+        </div>
 
     </div>
 
