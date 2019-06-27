@@ -13,6 +13,7 @@
                     <th scope="col">Status</th>
                     <th scope="col" class="text-right">Valor</th>
                     <th class="col">Proveniência</th>
+                    <th class="col">Nota Fiscal</th>
                     <th scope="col">Beneficiário</th>
                     <th scope="col">Data de Realização</th>
                     <th scope="col">Data de Divulgação</th>
@@ -26,6 +27,11 @@
                         <td>{{ payment.status|trans }}</td>
                         <td class="text-right">R$ {{ payment.value|number_format(2, ',', '.') }}</td>
                         <td>{{ payment.provenance|trans }}</td>
+                        <td>
+                            {% if payment.hasInvoice %}
+                                <a href="{{ payment.invoiceUrl }}">Nota Fiscal</a>
+                            {% endif %}
+                        </td>
                         <td>
                             <a href="{{ path('person_show', { id: payment.beneficiary.owner.id }) }}">
                                 {{ payment.beneficiary.owner.name}}

@@ -109,7 +109,7 @@ class Payment extends AccountFinancialMovement
 
     public function hasInvoice(): bool
     {
-        return null === $this->invoiceUrl;
+        return null !== $this->invoiceUrl;
     }
 
     /**
