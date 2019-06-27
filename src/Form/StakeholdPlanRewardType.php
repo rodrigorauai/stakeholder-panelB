@@ -29,13 +29,8 @@ class StakeholdPlanRewardType extends AbstractType
                 'html5' => true,
                 'widget' => 'single_text',
             ])
-            ->add('firstPaymentDate', DateType::class, [
-                'label' => 'Data de Início dos Pagamentos',
-                'html5' => true,
-                'widget' => 'single_text',
-            ])
-            ->add('lastPaymentDate', DateType::class, [
-                'label' => 'Data de Conclusão dos Pagamentos',
+            ->add('paymentDueDate', DateType::class, [
+                'label' => 'Prazo de Realização',
                 'html5' => true,
                 'widget' => 'single_text',
             ])
@@ -50,8 +45,7 @@ class StakeholdPlanRewardType extends AbstractType
                 $reward = new StakeholdPlanReward(
                     $form->get('rate')->getData(),
                     $form->get('disclosureDate')->getData(),
-                    $form->get('firstPaymentDate')->getData(),
-                    $form->get('lastPaymentDate')->getData()
+                    $form->get('paymentDueDate')->getData()
                 );
 
                 return $reward;

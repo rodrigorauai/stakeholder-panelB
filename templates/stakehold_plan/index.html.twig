@@ -16,7 +16,6 @@
                     <th scope="col">Nome Comercial</th>
                     <th scope="col" class="text-right">Valor Mínimo</th>
                     <th scope="col" class="text-right">Múltiplo</th>
-                    <th scope="col" class="text-right">Rendimento</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -31,11 +30,6 @@
                         <td>{{ plan.commercialName }}</td>
                         <td class="text-right">R$ {{ plan.minimumValue|number_format(2, ',', '.') }}</td>
                         <td class="text-right">R$ {{ plan.valueMultiple|number_format(2, ',', '.') }}</td>
-                        {% if plan.fixedMonthlyRewardRate %}
-                            <td class="text-right">{{ plan.monthlyRewardRate|number_format(2, ',', '.') }} %</td>
-                        {% else %}
-                            <td class="text-right">Variável</td>
-                        {% endif %}
                     </tr>
                 {% endfor %}
                 </tbody>

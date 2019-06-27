@@ -39,20 +39,13 @@ class StakeholdPlanReward
      * @var DateTime
      * @ORM\Column(type="date")
      */
-    private $firstPaymentDate;
+    private $paymentDueDate;
 
-    /**
-     * @var DateTime
-     * @ORM\Column(type="date")
-     */
-    private $lastPaymentDate;
-
-    public function __construct(string $rate, DateTime $disclosureDate, DateTime $firstPaymentDate, DateTime $lastPaymentDate)
+    public function __construct(string $rate, DateTime $disclosureDate, DateTime $paymentDueDate)
     {
         $this->rate = $rate;
         $this->disclosureDate = $disclosureDate;
-        $this->setFirstPaymentDate($firstPaymentDate);
-        $this->lastPaymentDate = $lastPaymentDate;
+        $this->paymentDueDate = $paymentDueDate;
     }
 
     public function getId(): ?int
@@ -111,35 +104,16 @@ class StakeholdPlanReward
     /**
      * @return DateTime
      */
-    public function getFirstPaymentDate(): DateTime
+    public function getPaymentDueDate(): DateTime
     {
-        return $this->firstPaymentDate;
+        return $this->paymentDueDate;
     }
 
     /**
-     * @param DateTime $firstPaymentDate
+     * @param DateTime $paymentDueDate
      */
-    public function setFirstPaymentDate(DateTime $firstPaymentDate)
+    public function setPaymentDueDate(DateTime $paymentDueDate)
     {
-        $this->firstPaymentDate = $firstPaymentDate;
-        $this->reference = $firstPaymentDate->format('Ym');
+        $this->paymentDueDate = $paymentDueDate;
     }
-
-    /**
-     * @return DateTime
-     */
-    public function getLastPaymentDate(): DateTime
-    {
-        return $this->lastPaymentDate;
-    }
-
-    /**
-     * @param DateTime $lastPaymentDate
-     */
-    public function setLastPaymentDate(DateTime $lastPaymentDate)
-    {
-        $this->lastPaymentDate = $lastPaymentDate;
-    }
-
-
 }

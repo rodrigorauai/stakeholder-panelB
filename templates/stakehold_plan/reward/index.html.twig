@@ -20,8 +20,7 @@
                 <tr>
                     <th>Data de Divulgação</th>
                     <th>Rendimento</th>
-                    <th>Data de Início dos Pagamentos</th>
-                    <th>Data de Conclusão dos Pagamentos</th>
+                    <th>Data de Realização</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -29,8 +28,7 @@
                     <tr>
                         <td>{{ reward.disclosureDate.format('d/m/Y') }}</td>
                         <td>{{ reward.rate|number_format(2, ',', '.') }} %</td>
-                        <td>{{ reward.firstPaymentDate.format('d/m/Y') }}</td>
-                        <td>{{ reward.lastPaymentDate.format('d/m/Y') }}</td>
+                        <td>{{ reward.paymentDueDate.format('d/m/Y') }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

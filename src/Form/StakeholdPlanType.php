@@ -4,7 +4,6 @@ namespace App\Form;
 
 use App\Entity\StakeholdPlan;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -33,29 +32,12 @@ class StakeholdPlanType extends AbstractType
                 'scale' => 2,
                 'html5' => true,
             ])
-            ->add('firstDayOfMonthlyPayment', IntegerType::class, [
-                'label' => 'Dia de início dos pagamentos',
+            ->add('rewardDay', IntegerType::class, [
+                'label' => 'Dia de Rendimento',
                 'scale' => 0,
                 'attr' => [
                     'min' => 1,
                     'max' => 28
-                ],
-            ])
-            ->add('lastDayOfMonthlyPayment', IntegerType::class, [
-                'label' => 'Dia limite de pagamento',
-                'attr' => [
-                    'min' => 1,
-                    'max' => 28
-                ]
-            ])
-            ->add('gracePeriod', IntegerType::class, [
-                'label' => 'Carência em meses',
-            ])
-            ->add('bestAcquisitionDay', IntegerType::class, [
-                'label' => 'Melhor dia de adesão',
-                'attr' => [
-                    'min' => 1,
-                    'max' => 28,
                 ],
             ])
             ->add('monthlyCommission', NumberType::class, [
@@ -68,27 +50,18 @@ class StakeholdPlanType extends AbstractType
                 ],
                 'html5' => true,
             ])
+            ->add('gracePeriod', IntegerType::class, [
+                'label' => 'Carência em meses',
+            ])
+            ->add('bestAcquisitionDay', IntegerType::class, [
+                'label' => 'Melhor dia de adesão',
+                'attr' => [
+                    'min' => 1,
+                    'max' => 28,
+                ],
+            ])
             ->add('monthlyAdministrativeFee', NumberType::class, [
                 'label' => 'Porcentagem de taxa administrativa mensal',
-                'scale' => 2,
-                'attr' => [
-                    'step' => 0.01,
-                    'min' => 0.00,
-                    'max' => 99.99,
-                ],
-                'html5' => true,
-            ])
-            ->add('hasFixedMonthlyRewardRate', ChoiceType::class, [
-                'label' => 'Tipo de rendimento',
-                'choices' => [
-                    'Variável' => false,
-                    'Fixo' => true,
-                ],
-                'mapped' => false,
-            ])
-            ->add('monthlyRewardRate', NumberType::class, [
-                'label' => 'Rendimento mensal',
-                'required' => false,
                 'scale' => 2,
                 'attr' => [
                     'step' => 0.01,
@@ -110,13 +83,11 @@ class StakeholdPlanType extends AbstractType
                     $form->get('commercialName')->getData(),
                     $form->get('minimumValue')->getData(),
                     $form->get('valueMultiple')->getData(),
-                    $form->get('firstDayOfMonthlyPayment')->getData(),
-                    $form->get('lastDayOfMonthPayment')->getData(),
+                    $form->get('rewardDay')->getData(),
+                    $form->get('monthlyCommission')->getData(),
                     $form->get('gracePeriod')->getData(),
                     $form->get('bestAcquisitionDay')->getData(),
-                    $form->get('monthlyCommission')->getData(),
-                    $form->get('monthlyAdministrativeFee')->getData(),
-                    $form->get('monthlyRewardRate')->getData()
+                    $form->get('monthlyAdministrativeFee')->getData()
                 );
 
                 return $plan;

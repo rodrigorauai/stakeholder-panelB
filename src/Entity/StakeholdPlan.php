@@ -60,15 +60,7 @@ class StakeholdPlan
      * @Assert\Regex(pattern="/\d+/", message="Utilize apenas números")
      * @Assert\Range(min="1", max="28")
      */
-    private $firstDayOfMonthlyPayment;
-
-    /**
-     * @ORM\Column(type="integer")
-     * @Assert\NotBlank()
-     * @Assert\Regex(pattern="/\d+/", message="Utilize apenas números")
-     * @Assert\Range(min="1", max="28")
-     */
-    private $lastDayOfMonthlyPayment;
+    private $rewardDay;
 
     /**
      * @ORM\Column(type="integer")
@@ -104,14 +96,6 @@ class StakeholdPlan
     private $monthlyAdministrativeFee;
 
     /**
-     * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
-     * @Assert\Type(type="numeric")
-     * @Assert\Length(max="11", maxMessage="Utilize até 2 inteiros e 2 decimais")
-     * @Assert\Range(min="0.01", max="99,99")
-     */
-    private $monthlyRewardRate;
-
-    /**
      * @var Contract[]|Collection
      * @ORM\OneToMany(targetEntity="Contract", mappedBy="plan")
      */
@@ -129,13 +113,11 @@ class StakeholdPlan
      * @param string $commercialName
      * @param string $minimumValue
      * @param string $valueMultiple
-     * @param int $firstDayOfMonthlyPayment
-     * @param int $lastDayOfMonthlyPayment
+     * @param int $rewardDay
      * @param int $gracePeriod
      * @param int $bestAcquisitionDay
      * @param string $monthlyCommission
      * @param string $monthlyAdministrativeFee
-     * @param string|null $monthlyRewardRate
      * @throws Exception
      */
     public function __construct(
@@ -143,25 +125,21 @@ class StakeholdPlan
         ?string $commercialName,
         ?string $minimumValue,
         ?string $valueMultiple,
-        ?int $firstDayOfMonthlyPayment,
-        ?int $lastDayOfMonthlyPayment,
+        ?int $rewardDay,
         ?int $gracePeriod,
         ?int $bestAcquisitionDay,
         ?string $monthlyCommission,
-        ?string $monthlyAdministrativeFee,
-        ?string $monthlyRewardRate
+        ?string $monthlyAdministrativeFee
     ) {
         $this->administrativeName = $administrativeName;
         $this->commercialName = $commercialName;
         $this->minimumValue = $minimumValue;
         $this->valueMultiple = $valueMultiple;
-        $this->firstDayOfMonthlyPayment = $firstDayOfMonthlyPayment;
-        $this->lastDayOfMonthlyPayment = $lastDayOfMonthlyPayment;
+        $this->rewardDay = $rewardDay;
         $this->gracePeriod = $gracePeriod;
         $this->bestAcquisitionDay = $bestAcquisitionDay;
         $this->monthlyCommission = $monthlyCommission;
         $this->monthlyAdministrativeFee = $monthlyAdministrativeFee;
-        $this->monthlyRewardRate = $monthlyRewardRate;
 
         $this->contracts = new ArrayCollection();
         $this->rewards = new ArrayCollection();
@@ -228,26 +206,14 @@ class StakeholdPlan
         return $this;
     }
 
-    public function getFirstDayOfMonthlyPayment(): ?int
+    public function getRewardDay(): ?int
     {
-        return $this->firstDayOfMonthlyPayment;
+        return $this->rewardDay;
     }
 
-    public function setFirstDayOfMonthlyPayment(int $firstDayOfMonthlyPayment): self
+    public function setRewardDay(int $rewardDay): self
     {
-        $this->firstDayOfMonthlyPayment = $firstDayOfMonthlyPayment;
-
-        return $this;
-    }
-
-    public function getLastDayOfMonthlyPayment(): ?int
-    {
-        return $this->lastDayOfMonthlyPayment;
-    }
-
-    public function setLastDayOfMonthlyPayment(int $lastDayOfMonthlyPayment): self
-    {
-        $this->lastDayOfMonthlyPayment = $lastDayOfMonthlyPayment;
+        $this->rewardDay = $rewardDay;
 
         return $this;
     }
@@ -296,23 +262,6 @@ class StakeholdPlan
     public function setMonthlyAdministrativeFee($monthlyAdministrativeFee): self
     {
         $this->monthlyAdministrativeFee = $monthlyAdministrativeFee;
-
-        return $this;
-    }
-
-    public function hasFixedMonthlyRewardRate(): ?bool
-    {
-        return is_null($this->monthlyRewardRate);
-    }
-
-    public function getMonthlyRewardRate()
-    {
-        return $this->monthlyRewardRate;
-    }
-
-    public function setMonthlyRewardRate($monthlyRewardRate): self
-    {
-        $this->monthlyRewardRate = $monthlyRewardRate;
 
         return $this;
     }
