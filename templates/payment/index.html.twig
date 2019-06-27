@@ -12,6 +12,7 @@
                     <th scope="col">ID</th>
                     <th scope="col">Beneficiário</th>
                     <th scope="col" class="text-right">Valor</th>
+                    <th class="col">Proveniência</th>
                     <th scope="col">Data de Realização</th>
                     <th scope="col">Data de Divulgação</th>
                     <th scope="col">Contrato</th>
@@ -27,6 +28,7 @@
                             </a>
                         </td>
                         <td class="text-right">R$ {{ payment.value|number_format(2, ',', '.') }}</td>
+                        <td>{{ payment.provenance|trans }}</td>
                         <td>{{ payment.reward.paymentDueDate.format('d/m/Y') }}</td>
                         <td>{{ payment.reward.disclosureDate.format('d/m/Y') }}</td>
                         <td>
