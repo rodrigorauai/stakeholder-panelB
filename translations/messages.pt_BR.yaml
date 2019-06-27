@@ -3,6 +3,10 @@ Not registered: Não registrado
 commission: Comissão
 co-participation: Co-participação
 
+Scheduled: Agendado
+Made: Realizado
+Waiting Invoice: Aguardando Nota Fiscal
+
 person:
     name__label: Nome
     name__not_informed: Nome não informado

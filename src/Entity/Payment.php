@@ -42,7 +42,13 @@ class Payment extends AccountFinancialMovement
      * @var bool
      * @ORM\Column(type="boolean", nullable=false)
      */
-    private $isRealized;
+    private $wasMade;
+
+    const STATUS_MADE = 'Made';
+
+    const STATUS_SCHEDULED = 'Scheduled';
+
+    const STATUS_WAITING_INVOICE = 'Waiting Invoice';
 
     public function __construct(
         Account $account,
@@ -57,7 +63,7 @@ class Payment extends AccountFinancialMovement
         $this->contract = $contract;
         $this->provenance = $provenance;
 
-        $this->isRealized = false;
+        $this->wasMade = false;
     }
 
     /**
@@ -101,6 +107,11 @@ class Payment extends AccountFinancialMovement
         return false;
     }
 
+    public function hasInvoice(): bool
+    {
+        return null === $this->invoiceUrl;
+    }
+
     /**
      * @return string|null
      */
@@ -120,21 +131,32 @@ class Payment extends AccountFinancialMovement
     /**
      * @return bool
      */
-    public function isRealized(): bool
+    public function wasMade(): bool
     {
-        return $this->isRealized;
+        return $this->wasMade;
     }
 
     /**
-     * @param bool $isRealized
+     * @param bool $wasMade
      * @throws Exception
      */
-    public function setIsRealized(bool $isRealized)
+    public function setWasMade(bool $wasMade)
     {
-        if ($this->needsInvoice() && null === $this->getInvoiceUrl()) {
+        if ($this->needsInvoice() && !$this->hasInvoice()) {
             throw new Exception('This payment needs a invoice before being set as paid');
         }
 
-        $this->isRealized = $isRealized;
+        $this->wasMade = $wasMade;
+    }
+
+    public function getStatus(): string
+    {
+        if ($this->needsInvoice() && !$this->hasInvoice()) {
+            return self::STATUS_WAITING_INVOICE;
+        } elseif (!$this->wasMade()) {
+            return self::STATUS_SCHEDULED;
+        } else {
+            return self::STATUS_MADE;
+        }
     }
 }
