@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+{% set title = person.name|default(person.cpf|format_cpf) ~ ' - Dados Pessoais' %}
+
+{% block title %}Dados pessoais de {{ person.name }}{% endblock %}
+
+{% block content %}
+
+    {% include 'person/_tab-bar.html.twig' with { active_tab: 'person__edit' } %}
+
+    <div class="container m-4">
+
+        {{ form_start(form) }}
+        {{ form_row(form.name, {
+            attr: {
+                autofocus: ''
+            }
+        }) }}
+        {{ form_widget(form) }}
+        <div class="form-row button-container">
+            {% include '_components/button/button.html.twig' with { label: 'Salvar Alterações', type: 'submit', style: 'outlined'} only %}
+        </div>
+        {{ form_rest(form) }}
+        {{ form_end(form) }}
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,31 @@
+<div class="mdc-tab-bar" role="tablist">
+    <div class="mdc-tab-scroller">
+        <div class="mdc-tab-scroller__scroll-area">
+            <div class="mdc-tab-scroller__scroll-content">
+
+                {% for tab in tabs %}
+
+                    {% set icon = tab.icon|default(null) %}
+                    {% set active = tab.id|default(null) == active_tab %}
+
+                    <a class="mdc-tab mdc-tab--active" role="tab" href="{{ tab.path }}" aria-selected="true" tabindex="0">
+                        <span class="mdc-tab__content">
+
+                            {% if icon %}
+                                <span class="mdc-tab__icon material-icons" aria-hidden="true">{{ icon }}</span>
+                            {% endif %}
+
+                            <span class="mdc-tab__text-label">{{ tab.label }}</span>
+                        </span>
+                        <span class="mdc-tab-indicator{% if active %} mdc-tab-indicator--active{% endif %}">
+                            <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                        </span>
+                        <span class="mdc-tab__ripple"></span>
+                    </a>
+
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+</div>

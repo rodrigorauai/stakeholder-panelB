@@ -1,0 +1,17 @@
+{%
+    include '_components/tab-bar/tab-bar.html.twig' with
+    {
+        tabs: [
+        {
+            id: 'stakehold_plan__edit',
+            label: 'Dados do Plano',
+            path: path('stakehold_plan__edit', { id: plan.id }),
+        }, {
+            id: 'stakehold_plan__reward__index',
+            label: 'Rendimentos',
+            path: path('stakehold_plan__reward__index', { id: plan.id }),
+        },
+    ],
+        active_tab: active_tab|default('stakehold_plan__edit'),
+    }
+%}

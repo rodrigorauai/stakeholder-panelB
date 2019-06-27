@@ -2,25 +2,46 @@
 
 namespace App\Entity;
 
+use App\Form\PersonData;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PersonRepository")
+ * @ORM\InheritanceType(value="SINGLE_TABLE")
  */
-class Person implements UserInterface
+class Person extends Entity implements UserInterface
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @var null|Company[]
+     * @ORM\ManyToMany(targetEntity="Company", mappedBy="managers")
      */
-    private $id;
+    private $companies;
 
     /**
-     * @ORM\Column(type="string", length=180, unique=true, nullable=true)
+     * @var string
+     * @ORM\Column(type="string", length=11, unique=true, nullable=true)
      */
-    private $identityDocumentNumber;
+    private $cpf;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=32, unique=true, nullable=true)
+     */
+    private $rg;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=255, unique=true, nullable=true)
+     */
+    private $email;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=16)
+     */
+    private $phone;
 
     /**
      * @ORM\Column(type="json")
@@ -29,25 +50,153 @@ class Person implements UserInterface
 
     /**
      * @var string The hashed password
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $password;
+
+    /**
+     * @var Withdraw[]|Collection
+     * @ORM\OneToMany(targetEntity="Withdraw", mappedBy="requester")
+     */
+    private $withdrawRequests;
+
+    /**
+     * Person constructor.
+     * @param string $name
+     * @param string $email
+     */
+    public function __construct(string $name, string $email, string $cpf)
+    {
+        parent::__construct($name);
+
+        $this->cpf = $cpf;
+        $this->email = $email;
+    }
+
+    public static function fromDataObject(PersonData $data)
+    {
+        $person = new Person($data->name, $data->email, $data->cpf);
+
+        if ($data->rg) {
+            $person->setRg($data->rg);
+        }
+
+        if ($data->phone) {
+            $person->setPhone($data->phone);
+        }
+
+        if ($data->tradeRepresentative) {
+            $person->setTradeRepresentative($data->tradeRepresentative);
+        }
+
+        return $person;
+    }
+
+    public function updateFromDataObject(PersonData $data)
+    {
+        $this->setName($data->name);
+        $this->setCpf($data->cpf);
+        $this->setRg($data->rg);
+        $this->setEmail($data->email);
+        $this->setPhone($data->phone);
+        $this->setTradeRepresentative($data->tradeRepresentative);
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getIdentityDocumentNumber(): ?string
+    /**
+     * @return Company[]|null
+     */
+    public function getCompanies()
     {
-        return $this->identityDocumentNumber;
+        return $this->companies;
     }
 
-    public function setIdentityDocumentNumber(string $identityDocumentNumber): self
+    /**
+     * @param Company|null $companies
+     */
+    public function setCompanies(?Company $companies)
     {
-        $this->identityDocumentNumber = $identityDocumentNumber;
+        $this->companies = $companies;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName(string $name)
+    {
+        $this->name = $name;
+    }
+
+    public function getCpf(): ?string
+    {
+        return $this->cpf;
+    }
+
+    public function setCpf(string $cpf): self
+    {
+        $this->cpf = $cpf;
 
         return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getRg(): ?string
+    {
+        return $this->rg;
+    }
+
+    /**
+     * @param null|string $rg
+     */
+    public function setRg(?string $rg)
+    {
+        $this->rg = $rg;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string $email
+     */
+    public function setEmail(string $email)
+    {
+        $this->email = $email;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @param string $phone
+     */
+    public function setPhone(?string $phone)
+    {
+        $this->phone = $phone;
     }
 
     /**
@@ -57,7 +206,7 @@ class Person implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->identityDocumentNumber;
+        return (string) $this->cpf;
     }
 
     /**
@@ -109,5 +258,18 @@ class Person implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getDocumentNumber(): string
+    {
+        return $this->cpf;
+    }
+
+    /**
+     * @return Withdraw[]|Collection
+     */
+    public function getWithdrawRequests()
+    {
+        return $this->withdrawRequests;
     }
 }

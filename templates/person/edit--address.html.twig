@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+{% set title = person.name|default(person.cpf|format_cpf) ~ ' - Endereço' %}
+
+{% block title %}Endereço de {{ person.name }}{% endblock %}
+
+{% block content %}
+
+    {% include 'person/_tab-bar.html.twig' with { active_tab: 'person_address__edit' } %}
+
+    <div class="container m-4">
+        {% if person.address is null %}
+            <p>Endereço não informado.</p>
+        {% endif %}
+
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <div class="form-row button-container">
+            {% include '_components/button/button.html.twig' with { label: 'Salvar Alterações', type: 'submit', style: 'outlined'} only %}
+        </div>
+        {{ form_rest(form) }}
+        {{ form_end(form) }}
+
+    </div>
+{% endblock %}

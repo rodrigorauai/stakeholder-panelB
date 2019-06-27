@@ -1,36 +1,77 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}AdInvest - Entrar{% endblock %}
 
-{% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('security-login') }}
+{% endblock %}
 
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputIdentityDocumentNumber" class="sr-only">Identity Document Number</label>
-    <input type="text" value="{{ last_username }}" name="identityDocumentNumber" id="inputIdentityDocumentNumber" class="form-control" placeholder="Identity Document Number" required autofocus>
-    <label for="inputPassword" class="sr-only">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+{% block content %}
 
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
+    <div class="login-container">
 
-    {#
-        Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-        See https://symfony.com/doc/current/security/remember_me.html
+        <form method="post">
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
 
-        <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" name="_remember_me"> Remember me
-            </label>
-        </div>
-    #}
+            <section class="header">
+                <h1>
+                    <img src="{{ asset('static/img/adinvest-logo.png') }}" alt="AdInvest">
+                </h1>
+            </section>
 
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-</form>
+            <div class="form-row">
+                <div class="mdc-text-field mdc-text-field--outlined">
+                    <input type="text" class="mdc-text-field__input" value="{{ last_username }}"
+                           name="cpf" id="inputCpf" required autofocus
+                    >
+                    <div class="mdc-notched-outline">
+                        <div class="mdc-notched-outline__leading"></div>
+                        <div class="mdc-notched-outline__notch">
+                            <label class="mdc-floating-label" for="inputCpf">CPF</label>
+                        </div>
+                        <div class="mdc-notched-outline__trailing"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="mdc-text-field mdc-text-field--outlined">
+                    <input type="password" class="mdc-text-field__input" name="password" id="inputPassword" required>
+                    <div class="mdc-notched-outline">
+                        <div class="mdc-notched-outline__leading"></div>
+                        <div class="mdc-notched-outline__notch">
+                            <label class="mdc-floating-label" for="inputPassword">Senha</label>
+                        </div>
+                        <div class="mdc-notched-outline__trailing"></div>
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            {#
+                Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+                See https://symfony.com/doc/current/security/remember_me.html
+
+                <div class="checkbox mb-3">
+                    <label>
+                        <input type="checkbox" name="_remember_me"> Remember me
+                    </label>
+                </div>
+            #}
+
+            <div class="form-row button-container">
+                <button type="button" class="mdc-button">
+                    <span class="mdc-button__label">
+                        Esqueci minha senha
+                    </span>
+                </button>
+                {% include '_components/button/button.html.twig' with { type: 'submit', label: 'Entrar' } only %}
+            </div>
+
+        </form>
+    </div>
 {% endblock %}

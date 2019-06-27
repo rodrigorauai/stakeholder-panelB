@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+{% set title = 'Empresas' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <div class="my-4 mx-2">
+        <div class="table-responsive">
+            <table class="table text-nowrap">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">CNPJ</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for company in companies %}
+                    <tr>
+                        <td>{{ company.id }}</td>
+                        <td>
+                            <a href="{{ path('company__edit', { id: company.id }) }}">
+                                {{ company.name|default('Não informado') }}
+                            </a>
+                        </td>
+                        <td>{{ company.cnpj|format_cnpj }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if companies|length == 0 %}
+            <p class="ml-4">Nenhuma empresa encontrada.</p>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block body_end %}
+    <div class="app-page-end">
+        <a class="mdc-fab mdc-fab--extended" href="{{ path('company__create') }}">
+            <span class="material-icons mdc-fab__icon">add</span>
+            <span class="mdc-fab__label">Adicionar Empresa</span>
+        </a>
+    </div>
+{% endblock %}

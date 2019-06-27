@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+{% set title = 'Pessoas' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <div class="my-4 mx-2">
+        <div class="table-responsive">
+            <table class="table text-nowrap">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">CPF</th>
+                    <th scope="col">E-mail</th>
+                    <th scope="col">Telefone</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for person in people %}
+                    <tr>
+                        <td>{{ person.id }}</td>
+                        <td>
+                            <a href="{{ path('person_show', { id: person.id }) }}">
+                                {{ person.name|default('person.name__not_informed'|trans) }}
+                            </a>
+                        </td>
+                        <td>{{ person.cpf|format_cpf }}</td>
+                        <td>{{ person.email|default('Not registered'|trans) }}</td>
+                        <td>{{ person.phone|default('Not registered'|trans) }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body_end %}
+    <div class="app-page-end">
+        <a class="mdc-fab mdc-fab--extended" href="{{ path('person_create') }}">
+            <span class="material-icons mdc-fab__icon">add</span>
+            <span class="mdc-fab__label">Adicionar Pessoa</span>
+        </a>
+    </div>
+{% endblock %}

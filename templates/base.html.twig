@@ -1,12 +1,42 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Você é simplesmente incrível!{% endblock %} - AdInvest</title>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/normalize/6.0.0/normalize.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="shortcut icon" href="{{ asset('static/img/favicon.png') }}">
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+</head>
+<body>
+
+{% if is_granted('ROLE_USER') %}
+
+{% include '_components/drawer/drawer.html.twig' %}
+
+<div class="mdc-drawer-app-content">
+    {% include '_components/top-app-bar/top-app-bar.html.twig' %}
+    {% endif %}
+
+    <main class="main-content" id="main-content">
+        <div class="mdc-top-app-bar--fixed-adjust">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    {% if is_granted('ROLE_USER') %}
+</div>
+{% endif %}
+
+{% block body_end %}{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+</body>
 </html>

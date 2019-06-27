@@ -1,0 +1,32 @@
+html, body {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding-top: 0.1px; // Prevent header h1 margin from pushing body down
+}
+
+img {
+  max-width: 100%;
+}
+
+button:focus {
+  outline: none;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.button-container .mdc-button {
+  margin: 3px;
+}
+
+a {
+  color: #0575E6;
+}

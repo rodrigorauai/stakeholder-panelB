@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% set title = 'Endereço de ' ~ company.name %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+
+    {% include 'company/_tab-bar.html.twig' with { active_tab: 'company_address__edit' } %}
+
+    <div class="container m-4">
+
+        {% if company.address is null %}
+            <p>Endereço não informado</p>
+        {% endif %}
+
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <div class="form-row button-container">
+            {% include '_components/button/button.html.twig' with { label: 'Salvar Alterações', type: 'submit', style: 'outlined'} only %}
+        </div>
+        {{ form_rest(form) }}
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}
+

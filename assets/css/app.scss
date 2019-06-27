@@ -1,0 +1,36 @@
+$mdc-theme-primary: #0575E6;
+
+@import "~@material/top-app-bar/mdc-top-app-bar";
+@import "~@material/drawer/mdc-drawer";
+@import "~@material/fab/mdc-fab";
+@import "~@material/list/mdc-list";
+@import "~@material/textfield/mdc-text-field";
+@import "~@material/button/mdc-button";
+@import "~@material/typography/mdc-typography";
+@import "~@material/tab-bar/mdc-tab-bar";
+@import "~@material/tab-scroller/mdc-tab-scroller";
+@import "~@material/tab-indicator/mdc-tab-indicator";
+@import "~@material/tab/mdc-tab";
+@import "~@material/select/mdc-select";
+
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/tables";
+@import "~bootstrap/scss/utilities";
+
+@import "common";
+@import "drawer";
+
+@import "lists";
+@import "form";
+
+table {
+  border-collapse: collapse;
+}
+
+.app-page-end {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+}

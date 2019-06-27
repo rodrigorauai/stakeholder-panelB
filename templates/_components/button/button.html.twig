@@ -1,0 +1,9 @@
+{% set style = style|default('raised') %}
+
+{% if style != 'text' %}
+    {% set class = 'mdc-button--' ~ style %}
+{% endif %}
+
+<button type="{{ type|default('button') }}" class="mdc-button {{ class|default('') }}">
+    <span class="mdc-button__label">{{ label }}</span>
+</button>
