@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\StakeholdPlanRewardRepository")
+ * @ORM\EntityListeners(value={"App\EntityListener\StakeholdPlanRewardListener"})
  */
 class StakeholdPlanReward
 {

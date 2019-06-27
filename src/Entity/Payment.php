@@ -13,19 +13,13 @@ class Payment extends AccountFinancialMovement
      * @var StakeholdPlanReward
      * @ORM\ManyToOne(targetEntity="StakeholdPlanReward")
      */
-    private $interest;
+    private $reward;
 
     /**
      * @var Contract
      * @ORM\ManyToOne(targetEntity="Contract")
      */
     private $contract;
-
-    /**
-     * @var Account
-     * @ORM\ManyToOne(targetEntity="Account")
-     */
-    private $beneficiary;
 
     /**
      * @var string
@@ -40,25 +34,23 @@ class Payment extends AccountFinancialMovement
     public function __construct(
         Account $account,
         string $value,
-        StakeholdPlanReward $interest,
+        StakeholdPlanReward $reward,
         Contract $contract,
-        Account $beneficiary,
         string $provenance
     ) {
         parent::__construct($account, $value);
 
-        $this->interest = $interest;
+        $this->reward = $reward;
         $this->contract = $contract;
-        $this->beneficiary = $beneficiary;
         $this->provenance = $provenance;
     }
 
     /**
      * @return StakeholdPlanReward
      */
-    public function getInterest(): StakeholdPlanReward
+    public function getReward(): StakeholdPlanReward
     {
-        return $this->interest;
+        return $this->reward;
     }
 
     /**
@@ -74,7 +66,7 @@ class Payment extends AccountFinancialMovement
      */
     public function getBeneficiary(): Account
     {
-        return $this->beneficiary;
+        return $this->getAccount();
     }
 
     /**
