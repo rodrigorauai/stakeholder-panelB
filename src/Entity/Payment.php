@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PaymentRepository")
@@ -31,6 +32,18 @@ class Payment extends AccountFinancialMovement
 
     const PROVENANCE_COMMISSION = 'commission';
 
+    /**
+     * @var null|string
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $invoiceUrl;
+
+    /**
+     * @var bool
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    private $isRealized;
+
     public function __construct(
         Account $account,
         string $value,
@@ -43,6 +56,8 @@ class Payment extends AccountFinancialMovement
         $this->reward = $reward;
         $this->contract = $contract;
         $this->provenance = $provenance;
+
+        $this->isRealized = false;
     }
 
     /**
@@ -75,5 +90,51 @@ class Payment extends AccountFinancialMovement
     public function getProvenance(): string
     {
         return $this->provenance;
+    }
+
+    public function needsInvoice(): bool
+    {
+        if ($this->getBeneficiary()->getOwner() instanceof Company) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getInvoiceUrl(): ?string
+    {
+        return $this->invoiceUrl;
+    }
+
+    /**
+     * @param string|null $invoiceUrl
+     */
+    public function setInvoiceUrl(?string $invoiceUrl)
+    {
+        $this->invoiceUrl = $invoiceUrl;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRealized(): bool
+    {
+        return $this->isRealized;
+    }
+
+    /**
+     * @param bool $isRealized
+     * @throws Exception
+     */
+    public function setIsRealized(bool $isRealized)
+    {
+        if ($this->needsInvoice() && null === $this->getInvoiceUrl()) {
+            throw new Exception('This payment needs a invoice before being set as paid');
+        }
+
+        $this->isRealized = $isRealized;
     }
 }
