@@ -24,12 +24,25 @@
                 {% for payment in payments %}
                     <tr>
                         <td>{{ payment.id }}</td>
-                        <td>{{ payment.status|trans }}</td>
+                        <td>
+                            {% if payment.status == constant('STATUS_WAITING_INVOICE', payment) %}
+                                <a href="{{ path('payment__invoice__edit', { id: payment.id }) }}">
+                                    {{ payment.status|trans }}
+                                </a>
+                            {% else %}
+                                {{ payment.status|trans }}
+                            {% endif %}
+                        </td>
                         <td class="text-right">R$ {{ payment.value|number_format(2, ',', '.') }}</td>
                         <td>{{ payment.provenance|trans }}</td>
                         <td>
                             {% if payment.hasInvoice %}
-                                <a href="{{ payment.invoiceUrl }}">Nota Fiscal</a>
+                                <a href="{{ payment.invoiceUrl }}" target="_blank">
+                                    Nota Fiscal
+                                    <span class="material-icons icon-small align-supper">open_in_new</span></a>
+                                <a class="mdc-icon-button ml-2" href="{{ path('payment__invoice__edit', { id: payment.id }) }}">
+                                    <span class="material-icons align-text-bottom">edit</span>
+                                </a>
                             {% endif %}
                         </td>
                         <td>

@@ -742,6 +742,17 @@
     "@material/typography" "^2.3.0"
     tslib "^1.9.3"
 
+"@material/icon-button@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@material/icon-button/-/icon-button-3.0.0.tgz#41069c75a06eb848729f43452e17af6556cf2028"
+  integrity sha512-vgRZepu9MiTl+KDTpatysiM39EBNi8aearDwIaXQHI8OK/z4ac/je1ysv2NP0dY5m5dUPFVrHcFx7oVX9xV1+w==
+  dependencies:
+    "@material/base" "^3.0.0"
+    "@material/feature-targeting" "^3.0.0"
+    "@material/ripple" "^3.0.0"
+    "@material/theme" "^3.0.0"
+    tslib "^1.9.3"
+
 "@material/line-ripple@^2.3.0":
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/@material/line-ripple/-/line-ripple-2.3.0.tgz#e7d876f1dad0a7e418ccfefed875443fc1f303a0"

@@ -29,8 +29,16 @@ table {
   border-collapse: collapse;
 }
 
+table tbody td {
+  line-height: 36px;
+}
+
 .app-page-end {
   position: absolute;
   right: 20px;
   bottom: 20px;
+}
+
+.icon-small {
+  font-size: 14px;
 }
