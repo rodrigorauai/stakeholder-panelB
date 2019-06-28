@@ -20,26 +20,26 @@ class Person extends Entity implements UserInterface
     private $companies;
 
     /**
-     * @var string
+     * @var null|string
      * @ORM\Column(type="string", length=11, unique=true, nullable=true)
      */
     private $cpf;
 
     /**
-     * @var string
+     * @var null|string
      * @ORM\Column(type="string", length=32, unique=true, nullable=true)
      */
     private $rg;
 
     /**
-     * @var string
-     * @ORM\Column(type="string", length=255, unique=true, nullable=true)
+     * @var null|string
+     * @ORM\Column(type="string", length=255, unique=true, nullable=false)
      */
     private $email;
 
     /**
-     * @var string
-     * @ORM\Column(type="string", length=16)
+     * @var null|string
+     * @ORM\Column(type="string", length=16, nullable=true)
      */
     private $phone;
 
@@ -65,17 +65,20 @@ class Person extends Entity implements UserInterface
      * @param string $name
      * @param string $email
      */
-    public function __construct(string $name, string $email, string $cpf)
+    public function __construct(string $name, string $email)
     {
         parent::__construct($name);
 
-        $this->cpf = $cpf;
         $this->email = $email;
     }
 
     public static function fromDataObject(PersonData $data)
     {
-        $person = new Person($data->name, $data->email, $data->cpf);
+        $person = new Person($data->name, $data->email);
+
+        if ($data->cpf) {
+            $person->setCpf($data->cpf);
+        }
 
         if ($data->rg) {
             $person->setRg($data->rg);
@@ -115,28 +118,9 @@ class Person extends Entity implements UserInterface
         return $this->companies;
     }
 
-    /**
-     * @param Company|null $companies
-     */
     public function setCompanies(?Company $companies)
     {
         $this->companies = $companies;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param string $name
-     */
-    public function setName(string $name)
-    {
-        $this->name = $name;
     }
 
     public function getCpf(): ?string
@@ -144,56 +128,38 @@ class Person extends Entity implements UserInterface
         return $this->cpf;
     }
 
-    public function setCpf(string $cpf): self
+    public function setCpf(?string $cpf): self
     {
         $this->cpf = $cpf;
 
         return $this;
     }
 
-    /**
-     * @return null|string
-     */
     public function getRg(): ?string
     {
         return $this->rg;
     }
 
-    /**
-     * @param null|string $rg
-     */
     public function setRg(?string $rg)
     {
         $this->rg = $rg;
     }
 
-    /**
-     * @return string
-     */
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    /**
-     * @param string $email
-     */
-    public function setEmail(string $email)
+    public function setEmail(?string $email)
     {
         $this->email = $email;
     }
 
-    /**
-     * @return null|string
-     */
     public function getPhone(): ?string
     {
         return $this->phone;
     }
 
-    /**
-     * @param string $phone
-     */
     public function setPhone(?string $phone)
     {
         $this->phone = $phone;
@@ -206,7 +172,7 @@ class Person extends Entity implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->cpf;
+        return (string) $this->email;
     }
 
     /**

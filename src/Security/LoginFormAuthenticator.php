@@ -44,13 +44,13 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     public function getCredentials(Request $request)
     {
         $credentials = [
-            'cpf' => $request->request->get('cpf'),
+            'email' => $request->request->get('email'),
             'password' => $request->request->get('password'),
             'csrf_token' => $request->request->get('_csrf_token'),
         ];
         $request->getSession()->set(
             Security::LAST_USERNAME,
-            $credentials['cpf']
+            $credentials['email']
         );
 
         return $credentials;
@@ -63,7 +63,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             throw new InvalidCsrfTokenException();
         }
 
-        $user = $this->entityManager->getRepository(Person::class)->findOneBy(['cpf' => $credentials['cpf']]);
+        $user = $this->entityManager->getRepository(Person::class)->findOneBy(['email' => $credentials['email']]);
 
         return $user;
     }
