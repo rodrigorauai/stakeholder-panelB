@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 
@@ -146,6 +147,7 @@ class Payment extends AccountFinancialMovement
             throw new Exception('This payment needs a invoice before being set as paid');
         }
 
+        $this->setExecutionTimestamp(new DateTime());
         $this->wasMade = $wasMade;
     }
 
@@ -158,5 +160,18 @@ class Payment extends AccountFinancialMovement
         } else {
             return self::STATUS_MADE;
         }
+    }
+
+    public function canBeMade(): bool
+    {
+        if ($this->wasMade) {
+            return false;
+        }
+
+        if ($this->getStatus() === self::STATUS_WAITING_INVOICE) {
+            return false;
+        }
+
+        return true;
     }
 }

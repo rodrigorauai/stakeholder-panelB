@@ -76,6 +76,16 @@ class Account
         $this->balance = $balance;
     }
 
+    public function addBalance(string $value)
+    {
+        $this->balance = bcadd($this->balance, $value, 2);
+    }
+
+    public function subtractBalance(string $value)
+    {
+        $this->balance = bcsub($this->balance, $value, 2);
+    }
+
     /**
      * @return Entity
      */

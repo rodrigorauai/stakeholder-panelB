@@ -21,7 +21,7 @@ abstract class AccountFinancialMovement
 
     /**
      * @var Account
-     * @ORM\ManyToOne(targetEntity="Account", inversedBy="financialMovements")
+     * @ORM\ManyToOne(targetEntity="Account", inversedBy="financialMovements", cascade={"persist"})
      */
     private $account;
 
@@ -36,6 +36,12 @@ abstract class AccountFinancialMovement
      * @ORM\Column(type="datetime")
      */
     private $timestamp;
+
+    /**
+     * @var DateTime
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $executionTimestamp;
 
     public function __construct(Account $account, string $value)
     {
@@ -73,5 +79,21 @@ abstract class AccountFinancialMovement
     public function getTimestamp(): DateTime
     {
         return $this->timestamp;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getExecutionTimestamp(): DateTime
+    {
+        return $this->executionTimestamp;
+    }
+
+    /**
+     * @param DateTime $executionTimestamp
+     */
+    protected function setExecutionTimestamp(DateTime $executionTimestamp)
+    {
+        $this->executionTimestamp = $executionTimestamp;
     }
 }
