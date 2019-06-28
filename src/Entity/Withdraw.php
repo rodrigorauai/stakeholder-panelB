@@ -17,8 +17,9 @@ class Withdraw extends AccountFinancialMovement
     private $bankAccount;
 
     /**
-     * @var Person
-     * @ORM\ManyToOne(targetEntity="Person", inversedBy="withdrawRequests")
+     * @var null|Person
+     * @ORM\ManyToOne(targetEntity="Person", inversedBy="withdrawRequests", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
      */
     private $requester;
 
@@ -43,12 +44,12 @@ class Withdraw extends AccountFinancialMovement
     private $operator;
 
     /**
-     * @var DateTime
-     * @ORM\Column(type="datetime")
+     * @var null|DateTime
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $operationTimestamp;
 
-    public function __construct(Account $account, string $value, BankAccount $bankAccount, Person $requester)
+    public function __construct(Account $account, string $value, BankAccount $bankAccount, ?Person $requester)
     {
         parent::__construct($account, $value);
 
@@ -56,6 +57,8 @@ class Withdraw extends AccountFinancialMovement
         $this->requester = $requester;
 
         $this->status = self::STATUS_WAITING;
+
+        $this->getAccount()->subtractBalance($value);
 
         $this->requestTimestamp = new DateTime();
     }
@@ -68,10 +71,7 @@ class Withdraw extends AccountFinancialMovement
         return $this->bankAccount;
     }
 
-    /**
-     * @return Person
-     */
-    public function getRequester(): Person
+    public function getRequester(): ?Person
     {
         return $this->requester;
     }
@@ -116,10 +116,7 @@ class Withdraw extends AccountFinancialMovement
         $this->operator = $operator;
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getOperationTimestamp(): DateTime
+    public function getOperationTimestamp(): ?DateTime
     {
         return $this->operationTimestamp;
     }
