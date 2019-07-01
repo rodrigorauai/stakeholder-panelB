@@ -12,8 +12,6 @@ class DashboardController extends AbstractController
      */
     public function index()
     {
-        return $this->render('dashboard/index.html.twig', [
-            'controller_name' => 'DashboardController',
-        ]);
+        return $this->redirectToRoute('withdraw__index', [], 307);
     }
 }
