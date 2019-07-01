@@ -126,4 +126,30 @@ class StakeholdPlanController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    /**
+     * @param StakeholdPlanReward $reward
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return RedirectResponse|Response
+     * @throws Exception
+     * @Route("/planos-de-patrocinio/rendimentos/{id}", name="stakehold_plan__reward__edit")
+     */
+    public function editReward(StakeholdPlanReward $reward, Request $request, EntityManagerInterface $entityManager)
+    {
+        $form = $this->createForm(StakeholdPlanRewardType::class, $reward);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($reward);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('stakehold_plan__reward__edit', ['id' => $reward->getId()], 303);
+        }
+
+        return $this->render('stakehold_plan/reward/form.html.twig', [
+            'form' => $form->createView(),
+            'plan' => $reward->getPlan(),
+        ]);
+    }
 }

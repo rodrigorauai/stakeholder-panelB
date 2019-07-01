@@ -13,7 +13,7 @@ class Payment extends AccountFinancialMovement
 {
     /**
      * @var StakeholdPlanReward
-     * @ORM\ManyToOne(targetEntity="StakeholdPlanReward")
+     * @ORM\ManyToOne(targetEntity="StakeholdPlanReward", inversedBy="payments")
      */
     private $reward;
 
@@ -173,5 +173,10 @@ class Payment extends AccountFinancialMovement
         }
 
         return true;
+    }
+
+    public function setValue(string $value)
+    {
+        parent::setValue($value);
     }
 }

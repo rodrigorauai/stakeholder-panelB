@@ -38,10 +38,10 @@ abstract class AccountFinancialMovement
     private $timestamp;
 
     /**
-     * @var DateTime
+     * @var null|DateTime
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $executionTimestamp;
+    protected $executionTimestamp;
 
     public function __construct(Account $account, string $value)
     {
@@ -65,6 +65,11 @@ abstract class AccountFinancialMovement
         return $this->account;
     }
 
+    protected function setValue(string $value)
+    {
+        $this->value = $value;
+    }
+
     /**
      * @return string
      */
@@ -82,9 +87,9 @@ abstract class AccountFinancialMovement
     }
 
     /**
-     * @return DateTime
+     * @return null|DateTime
      */
-    public function getExecutionTimestamp(): DateTime
+    public function getExecutionTimestamp(): ?DateTime
     {
         return $this->executionTimestamp;
     }

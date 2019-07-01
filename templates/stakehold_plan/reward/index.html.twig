@@ -21,6 +21,7 @@
                     <th>Data de Divulgação</th>
                     <th>Rendimento</th>
                     <th>Data de Realização</th>
+                    <th><span class="sr-only">Opções</span></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -29,6 +30,14 @@
                         <td>{{ reward.disclosureDate.format('d/m/Y') }}</td>
                         <td>{{ reward.rate|number_format(2, ',', '.') }} %</td>
                         <td>{{ reward.paymentDueDate.format('d/m/Y') }}</td>
+                        <td class="align-middle">
+
+                            {% if reward.paymentDueDate|date('Ymd') >= "tomorrow"|date('Ymd') %}
+                                <a class="mdc-button"
+                                   href="{{ path('stakehold_plan__reward__edit', {id: reward.id}) }}">Editar</a>
+                            {% endif %}
+
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>

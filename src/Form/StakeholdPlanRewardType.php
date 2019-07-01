@@ -18,6 +18,7 @@ class StakeholdPlanRewardType extends AbstractType
             ->add('rate', NumberType::class, [
                 'label' => 'Porcentagem de Rendimento',
                 'scale' => 2,
+                'html5' => true,
                 'attr' => [
                     'min' => 0.00,
                     'max' => 99.99,

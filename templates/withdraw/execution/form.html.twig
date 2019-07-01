@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+{% set title = 'Retirada #' ~ withdraw.id ~ ' de ' ~ withdraw.account.owner.name %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+
+    <div class="container m-4">
+        <h3>Solicitação</h3>
+
+        <dl class="d-table">
+            <div class="d-table-row">
+                <dt class="d-table-cell">Status</dt>
+                <dd class="d-table-cell">{{ withdraw.status|trans }}</dd>
+            </div>
+
+            <div class="d-table-row">
+                <dt class="d-table-cell">Valor</dt>
+                <dd class="d-table-cell">R$ {{ withdraw.value|number_format(2, ',', '.') }}</dd>
+            </div>
+
+            <div class="d-table-row">
+                <dt class="d-table-cell">Proprietário da Conta</dt>
+                <dd class="d-table-cell">{{ withdraw.account.owner.name }}</dd>
+            </div>
+
+            <div class="d-table-row">
+                <dt class="d-table-cell">Data de Solicitação</dt>
+                <dd class="d-table-cell">{{ withdraw.requestTimestamp.format('d/m/Y H:i') }}</dd>
+            </div>
+        </dl>
+    </div>
+
+    <div class="container m-4">
+
+        <h3>Dados Bancários</h3>
+
+        {% set bankAccount = withdraw.account.owner.bankAccount %}
+
+        <dl class="d-table">
+
+            <div class="d-table-row">
+                <dt class="d-table-cell">Banco</dt>
+                <dd class="d-table-cell">{{ bankAccount.bankCode }} - {{ bankAccount.bank }}</dd>
+            </div>
+
+            <div class="d-table-row">
+                <dt class="d-table-cell">Agência</dt>
+                <dd class="d-table-cell">{{ bankAccount.agency }}</dd>
+            </div>
+
+            <div class="d-table-row">
+                <dt class="d-table-cell">Conta</dt>
+                <dd class="d-table-cell">{{ bankAccount.number }}</dd>
+            </div>
+
+            <div class="d-table-row">
+                <dt class="d-table-cell">Nome do Títular</dt>
+                <dd class="d-table-cell">{{ bankAccount.holderName }}</dd>
+            </div>
+
+            <div class="d-table-row">
+                <dt class="d-table-cell">Documento do Titular</dt>
+                <dd class="d-table-cell">{{ bankAccount.holderDocumentNumber }}</dd>
+            </div>
+        </dl>
+    </div>
+
+    <div class="container m-4">
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <div class="form-row button-container">
+            {% include '_components/button/button.html.twig' with { label: 'Registrar Execução', type: 'submit', style: 'outlined'} only %}
+        </div>
+        {{ form_rest(form) }}
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}

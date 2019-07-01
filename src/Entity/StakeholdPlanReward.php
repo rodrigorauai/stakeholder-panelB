@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -42,11 +44,19 @@ class StakeholdPlanReward
      */
     private $paymentDueDate;
 
+    /**
+     * @var Payment[]|Collection
+     * @ORM\OneToMany(targetEntity="Payment", mappedBy="reward")
+     */
+    private $payments;
+
     public function __construct(string $rate, DateTime $disclosureDate, DateTime $paymentDueDate)
     {
         $this->rate = $rate;
         $this->disclosureDate = $disclosureDate;
         $this->paymentDueDate = $paymentDueDate;
+
+        $this->payments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -116,5 +126,13 @@ class StakeholdPlanReward
     public function setPaymentDueDate(DateTime $paymentDueDate)
     {
         $this->paymentDueDate = $paymentDueDate;
+    }
+
+    /**
+     * @return Payment[]|Collection
+     */
+    public function getPayments()
+    {
+        return $this->payments;
     }
 }

@@ -13,7 +13,9 @@ use App\Entity\Contract;
 use App\Entity\Payment;
 use App\Entity\StakeholdPlanReward;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PreFlushEventArgs;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\ORMException;
 
 class StakeholdPlanRewardListener
 {
@@ -53,6 +55,32 @@ class StakeholdPlanRewardListener
 
             $args->getObjectManager()->persist($payment);
             $args->getObjectManager()->persist($commission);
+        }
+    }
+
+    /**
+     * @ORM\PreFlush()
+     * @param StakeholdPlanReward $reward
+     * @param PreFlushEventArgs $args
+     * @throws ORMException
+     */
+    public function preFlush(StakeholdPlanReward $reward, PreFlushEventArgs $args)
+    {
+        foreach ($reward->getPayments() as $payment) {
+
+            if ($payment->getProvenance() !== Payment::PROVENANCE_CO_PARTICIPATION) {
+                continue;
+            }
+
+            $value = bcmul(bcdiv($reward->getRate(), '100', 2), $payment->getContract()->getValue(), 2);
+
+            $payment->setValue($value);
+
+            $args->getEntityManager()->persist($payment);
+            $args->getEntityManager()->getUnitOfWork()->recomputeSingleEntityChangeSet(
+                $args->getEntityManager()->getClassMetadata(Payment::class),
+                $payment
+            );
         }
     }
 }
