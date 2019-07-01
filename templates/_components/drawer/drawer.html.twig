@@ -1,3 +1,29 @@
+{% set active = drawer_active_route|default('withdraw__index') %}
+
+{% set items = [
+    {
+        route: 'withdraw__index',
+        icon: 'attach_money',
+        label: 'Retiradas',
+    }, {
+        route: 'payment__index',
+        icon: 'rotate_left',
+        label: 'Rendimentos',
+    }, {
+        route: 'stakehold_plan__index',
+        icon: 'assignment',
+        label: 'Planos de Patrocínio',
+    }, {
+        route: 'person__index',
+        icon: 'people',
+        label: 'Pessoas',
+    }, {
+        route: 'company__index',
+        icon: 'store_mall_directory',
+        label: 'Empresas',
+    },
+] %}
+
 <aside class="mdc-drawer mdc-drawer--dismissible">
     <div class="mdc-drawer__header">
         <div class="mdc-drawer__header__content">
@@ -8,42 +34,14 @@
     </div>
     <div class="mdc-drawer__content">
         <div class="mdc-list">
-            {#
-            <a class="mdc-list-item mdc-list-item--activated" href="#" aria-current="page">
-                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">dashboard</i>
-                <span class="mdc-list-item__text">Dashboard</span>
-            </a>
-            #}
-            <a class="mdc-list-item" href="{{ path('withdraw__index') }}">
-                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">attach_money</i>
-                <span class="mdc-list-item__text">Retiradas</span>
-            </a>
-            <a class="mdc-list-item" href="{{ path('payment__index') }}">
-                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">rotate_left</i>
-                <span class="mdc-list-item__text">Rendimentos</span>
-            </a>
-            <a class="mdc-list-item" href="{{ path('stakehold_plan__index') }}">
-                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">assignment</i>
-                <span class="mdc-list-item__text">Planos</span>
-            </a>
-            <a class="mdc-list-item" href="{{ path('person_list') }}">
-                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">people</i>
-                <span class="mdc-list-item__text">Pessoas</span>
-            </a>
-            <a class="mdc-list-item" href="{{ path('company__index') }}">
-                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">store_mall_directory</i>
-                <span class="mdc-list-item__text">Empresas</span>
-            </a>
-            {#
-            <a class="mdc-list-item" href="#">
-                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">insert_drive_file</i>
-                <span class="mdc-list-item__text">Contratos</span>
-            </a>
-            <a class="mdc-list-item" href="#">
-                <i class="material-icons mdc-list-item__graphic" aria-hidden="true">notification_important</i>
-                <span class="mdc-list-item__text">Solicitações</span>
-            </a>
-            #}
+
+            {% for item in items %}
+                <a class="mdc-list-item {% if item.route == active %}mdc-list-item--activated{% endif %}" href="{{ path(item.route) }}">
+                    <i class="material-icons mdc-list-item__graphic" aria-hidden="true">{{ item.icon }}</i>
+                    <span class="mdc-list-item__text">{{ item.label }}</span>
+                </a>
+            {% endfor %}
+
         </div>
     </div>
 </aside>

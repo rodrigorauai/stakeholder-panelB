@@ -33,7 +33,7 @@ class PersonController extends AbstractController
     /**
      * @param PersonRepository $repository
      * @return Response
-     * @Route("/pessoas", name="person_list")
+     * @Route("/pessoas", name="person__index")
      */
     public function index(PersonRepository $repository)
     {
@@ -64,7 +64,7 @@ class PersonController extends AbstractController
             $this->em->persist($account);
             $this->em->flush();
 
-            return $this->redirectToRoute('person_list', [], 303);
+            return $this->redirectToRoute('person__index', [], 303);
         }
 
         return $this->render('person/form.html.twig', [

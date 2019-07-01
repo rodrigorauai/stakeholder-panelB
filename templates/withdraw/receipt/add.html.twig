@@ -1,5 +1,6 @@
 {% extends 'base.html.twig' %}
 {% set title = 'Comprovante de ' ~ withdraw.account.owner.name ~ ' (' ~ withdraw.operationTimestamp|date('d/m/Y') ~ ')' %}
+{% set drawer_active_route = 'withdraw__index' %}
 
 {% block title %}{{ title }}{% endblock %}
 

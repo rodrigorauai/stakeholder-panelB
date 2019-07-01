@@ -1,5 +1,6 @@
 {% extends 'base.html.twig' %}
 {% set title = 'Nota Fiscal de ' ~ payment.account.owner.name %}
+{% set drawer_active_route = 'payment__index' %}
 
 {% block title %}{{ title }}{% endblock %}
 

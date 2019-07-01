@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% set title = "Contrato #" ~ contract.id ~ ' com ' ~ contract.account.owner.name %}
+{% set drawer_active_route = 'person__index' %}
 
 {% block title %}{{ title }}{% endblock %}
 

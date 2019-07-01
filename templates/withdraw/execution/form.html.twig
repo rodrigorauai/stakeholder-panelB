@@ -1,5 +1,6 @@
 {% extends 'base.html.twig' %}
 {% set title = 'Retirada #' ~ withdraw.id ~ ' de ' ~ withdraw.account.owner.name %}
+{% set drawer_active_route = 'withdraw__index' %}
 
 {% block title %}{{ title }}{% endblock %}
 
