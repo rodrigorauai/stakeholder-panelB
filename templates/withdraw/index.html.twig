@@ -31,11 +31,14 @@
                                 {% if withdraw.receipts|length > 0 %}
                                     <a href="{{ path('withdraw__receipt__download', { id: withdraw.id }) }}"
                                         target="_blank">
-                                        Comprovante{#
-                                        #}<span class="material-icons icon-small align-supper">open_in_new</span>
-                                    </a>
+                                        Comprovante{# TODO: Fix this ugly hack
+                                        #}<span class="material-icons icon-small align-supper">open_in_new</span></a>
+                                    <a class="mdc-icon-button ml-2"
+                                         href="{{ path('withdraw__receipt__add', { id: withdraw.id }) }}">
+                                        <span class="material-icons align-text-bottom">edit</span></a>
                                 {% else %}
-                                    <a href="#">Registrar</a>
+                                    <a class="mdc-button"
+                                       href="{{ path('withdraw__receipt__add', { id: withdraw.id }) }}">Registrar</a>
                                 {% endif %}
                             {% else %}
 

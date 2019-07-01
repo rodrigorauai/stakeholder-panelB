@@ -47,9 +47,9 @@ class UploadHelper
         return $file->move($this->privatePath, $filename);
     }
 
-    public function saveInvoice(File $file, Withdraw $withdraw)
+    public function saveReceipt(File $file, Withdraw $withdraw)
     {
-        $savedFile = $this->savePrivateFile($file, 'invoice');
+        $savedFile = $this->savePrivateFile($file, 'receipt');
 
         /** @var Person $user */
         $user = $this->tokenStorage->getToken()->getUser();

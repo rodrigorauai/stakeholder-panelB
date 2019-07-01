@@ -3,12 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Withdraw;
+use App\Form\ReceiptFileType;
 use App\Form\WithdrawReceiptType;
 use App\Helper\UploadHelper;
 use App\Repository\WithdrawRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -49,7 +51,7 @@ class WithdrawController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $file = $form->get('receiptFile')->getData();
-            $uploadHelper->saveInvoice($file, $withdraw);
+            $uploadHelper->saveReceipt($file, $withdraw);
 
             $withdraw->setExecuted($this->getUser());
 
@@ -77,5 +79,38 @@ class WithdrawController extends AbstractController
         }
 
         return new BinaryFileResponse($withdraw->getReceipt()->getPath());
+    }
+
+    /**
+     * @param Withdraw $withdraw
+     * @param Request $request
+     * @param UploadHelper $helper
+     * @param EntityManagerInterface $entityManager
+     * @return RedirectResponse|Response
+     * @Route("/retiradas/{id}/comprovante-de-transferencia/editar", name="withdraw__receipt__add")
+     */
+    public function addReceipt(
+        Withdraw $withdraw,
+        Request $request,
+        UploadHelper $helper,
+        EntityManagerInterface $entityManager
+    ) {
+        $form = $this->createForm(ReceiptFileType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $file = $form->get('file')->getData();
+            $helper->saveReceipt($file, $withdraw);
+
+            // Flushes receipt file entity
+            $entityManager->flush();
+
+            return $this->redirectToRoute('withdraw__index', [], 303);
+        }
+
+        return $this->render('withdraw/receipt/add.html.twig', [
+            'withdraw' => $withdraw,
+            'form' => $form->createView(),
+        ]);
     }
 }
