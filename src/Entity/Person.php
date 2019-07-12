@@ -65,7 +65,7 @@ class Person extends Entity implements UserInterface
      * @param string $name
      * @param string $email
      */
-    public function __construct(string $name, string $email)
+    public function __construct(string $name, ?string $email)
     {
         parent::__construct($name);
 
