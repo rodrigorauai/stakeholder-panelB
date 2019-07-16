@@ -15,12 +15,14 @@
 </head>
 <body>
 
-{% if is_granted('ROLE_USER') %}
+{% block body %}
 
-{% include '_components/drawer/drawer.html.twig' %}
+    {% if is_granted('ROLE_USER') %}
 
-<div class="mdc-drawer-app-content">
-    {% include '_components/top-app-bar/top-app-bar.html.twig' %}
+        {% include '_components/drawer/drawer.html.twig' %}
+
+        <div class="mdc-drawer-app-content">
+        {% include '_components/top-app-bar/top-app-bar.html.twig' %}
     {% endif %}
 
     <main class="main-content" id="main-content">
@@ -30,10 +32,12 @@
     </main>
 
     {% if is_granted('ROLE_USER') %}
-</div>
-{% endif %}
+        </div>
+    {% endif %}
 
-{% block body_end %}{% endblock %}
+    {% block body_end %}{% endblock %}
+
+{% endblock %}
 
 {% block javascripts %}
     {{ encore_entry_script_tags('app') }}
