@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 
@@ -60,13 +62,18 @@ class Contract
      * @var bool
      * @ORM\Column(type="boolean", nullable=false)
      */
-    private $isEntitledToRefund;
+    private $isEntitledToRefund = false;
 
     /**
      * @var DateTime
      * @ORM\Column(type="datetime")
      */
     private $creationTimestamp;
+
+    /**
+     * @ORM\OneToMany(targetEntity="UploadedDigitizedContractFile", mappedBy="contract")
+     */
+    private $digitizedContracts;
 
     /**
      * Contract constructor.
@@ -91,6 +98,7 @@ class Contract
         $this->expirationDate = $expirationDate;
 
         $this->creationTimestamp = new DateTime();
+        $this->digitizedContracts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -188,5 +196,36 @@ class Contract
     public function setCreationTimestamp(?DateTime $creationTimestamp)
     {
         $this->creationTimestamp = $creationTimestamp;
+    }
+
+    /**
+     * @return Collection|UploadedDigitizedContractFile[]
+     */
+    public function getDigitizedContracts(): Collection
+    {
+        return $this->digitizedContracts;
+    }
+
+    public function addDigitizedContract(UploadedDigitizedContractFile $digitizedContract): self
+    {
+        if (!$this->digitizedContracts->contains($digitizedContract)) {
+            $this->digitizedContracts[] = $digitizedContract;
+            $digitizedContract->setContract($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDigitizedContract(UploadedDigitizedContractFile $digitizedContract): self
+    {
+        if ($this->digitizedContracts->contains($digitizedContract)) {
+            $this->digitizedContracts->removeElement($digitizedContract);
+            // set the owning side to null (unless already changed)
+            if ($digitizedContract->getContract() === $this) {
+                $digitizedContract->setContract(null);
+            }
+        }
+
+        return $this;
     }
 }

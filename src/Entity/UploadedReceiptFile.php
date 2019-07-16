@@ -11,7 +11,6 @@ class UploadedReceiptFile extends UploadedFile
 {
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Withdraw", inversedBy="receipts", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
      */
     private $withdraw;
 

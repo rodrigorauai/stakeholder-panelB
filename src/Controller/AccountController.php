@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Account;
 use App\Entity\Contract;
 use App\Form\ContractType;
+use App\Helper\UploadHelper;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -43,11 +44,12 @@ class AccountController extends AbstractController
      * @param Account $account
      * @param Request $request
      * @param EntityManagerInterface $entityManager
+     * @param UploadHelper $helper
      * @return RedirectResponse|Response
      * @throws Exception
      * @Route("/contas-de-patrocinio/{id}/contratos/novo", name="account__contract__create")
      */
-    public function createContract(Account $account, Request $request, EntityManagerInterface $entityManager)
+    public function createContract(Account $account, Request $request, EntityManagerInterface $entityManager, UploadHelper $helper)
     {
         $defaultExpiration = new DateTime('+ 1 year');
         $defaultExpiration->modify('last day of this month');
@@ -61,6 +63,9 @@ class AccountController extends AbstractController
             /** @var Contract $contract */
             $contract = $form->getData();
             $contract->setAccount($account);
+
+            $file = $form->get('contractFile')->getData();
+            $helper->saveDigitizedContract($file, $contract);
 
             $entityManager->persist($contract);
             $entityManager->flush();

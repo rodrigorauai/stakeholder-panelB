@@ -8,6 +8,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -44,6 +45,10 @@ class ContractType extends AbstractType
                 'format' => DateType::HTML5_FORMAT,
                 'html5' => true,
                 'widget' => 'single_text',
+            ])
+            ->add('contractFile', FileType::class, [
+                'label' => 'Contrato Digitalizado',
+                'mapped' => false,
             ])
             ->add('isEntitledToRefund', CheckboxType::class, [
                 'label' => 'Direito a rembolso',
