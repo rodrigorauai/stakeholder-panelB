@@ -12,6 +12,7 @@ namespace App\Helper;
 use App\Entity\Contract;
 use App\Entity\Person;
 use App\Entity\UploadedDigitizedContractFile;
+use App\Entity\UploadedPersonFile;
 use App\Entity\UploadedReceiptFile;
 use App\Entity\Withdraw;
 use Doctrine\ORM\EntityManagerInterface;
@@ -70,6 +71,19 @@ class UploadHelper
         $user = $this->tokenStorage->getToken()->getUser();
 
         $object = new UploadedDigitizedContractFile($savedFile->getPathname(), $contract, $user);
+        $this->entityManager->persist($object);
+
+        return $savedFile;
+    }
+
+    public function savePersonFile(string $name, File $file, Person $person)
+    {
+        $savedFile = $this->savePrivateFile($file, 'person-file');
+
+        /** @var Person $user */
+        $user = $this->tokenStorage->getToken()->getUser();
+
+        $object = new UploadedPersonFile($name, $savedFile->getPathname(), $person, $user);
         $this->entityManager->persist($object);
 
         return $savedFile;
