@@ -57,6 +57,12 @@ class Contract
     private $expirationDate;
 
     /**
+     * @var bool
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    private $isEntitledToRefund;
+
+    /**
      * @var DateTime
      * @ORM\Column(type="datetime")
      */
@@ -156,6 +162,22 @@ class Contract
     public function setExpirationDate(?DateTime $expirationDate)
     {
         $this->expirationDate = $expirationDate;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEntitledToRefund(): bool
+    {
+        return $this->isEntitledToRefund ?? false;
+    }
+
+    /**
+     * @param bool $isEntitledToRefund
+     */
+    public function setIsEntitledToRefund(bool $isEntitledToRefund)
+    {
+        $this->isEntitledToRefund = $isEntitledToRefund;
     }
 
     public function getCreationTimestamp(): ?DateTime

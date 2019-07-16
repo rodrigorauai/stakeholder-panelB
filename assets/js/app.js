@@ -4,6 +4,7 @@ import {MDCRipple} from "@material/ripple/component";
 import {MDCTabBar} from "@material/tab-bar/component";
 import {MDCSelect} from "@material/select/component";
 import {MDCMenu} from '@material/menu';
+import {MDCSwitch} from '@material/switch/component';
 
 import InitDrawer from './InitDrawer';
 
@@ -29,6 +30,10 @@ document.querySelectorAll('.mdc-tab-bar').forEach(function (element) {
 
 document.querySelectorAll('.mdc-select').forEach(function (element) {
     new MDCSelect(element);
+});
+
+document.querySelectorAll('.mdc-switch').forEach(function (element) {
+    new MDCSwitch(element);
 });
 
 let drawer;

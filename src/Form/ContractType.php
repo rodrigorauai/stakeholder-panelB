@@ -6,6 +6,7 @@ use App\Entity\Contract;
 use App\Entity\StakeholdPlan;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -43,6 +44,9 @@ class ContractType extends AbstractType
                 'format' => DateType::HTML5_FORMAT,
                 'html5' => true,
                 'widget' => 'single_text',
+            ])
+            ->add('isEntitledToRefund', CheckboxType::class, [
+                'label' => 'Direito a rembolso',
             ])
         ;
     }
