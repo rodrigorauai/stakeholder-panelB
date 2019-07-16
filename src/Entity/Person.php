@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Form\PersonData;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -61,6 +62,11 @@ class Person extends Entity implements UserInterface
     private $withdrawRequests;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\UploadedPersonFile", mappedBy="person")
+     */
+    private $files;
+
+    /**
      * Person constructor.
      * @param string $name
      * @param string $email
@@ -70,6 +76,7 @@ class Person extends Entity implements UserInterface
         parent::__construct($name);
 
         $this->email = $email;
+        $this->files = new ArrayCollection();
     }
 
     public static function fromDataObject(PersonData $data)
@@ -237,5 +244,36 @@ class Person extends Entity implements UserInterface
     public function getWithdrawRequests()
     {
         return $this->withdrawRequests;
+    }
+
+    /**
+     * @return Collection|UploadedPersonFile[]
+     */
+    public function getFiles(): Collection
+    {
+        return $this->files;
+    }
+
+    public function addFile(UploadedPersonFile $file): self
+    {
+        if (!$this->files->contains($file)) {
+            $this->files[] = $file;
+            $file->setPerson($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFile(UploadedPersonFile $file): self
+    {
+        if ($this->files->contains($file)) {
+            $this->files->removeElement($file);
+            // set the owning side to null (unless already changed)
+            if ($file->getPerson() === $this) {
+                $file->setPerson(null);
+            }
+        }
+
+        return $this;
     }
 }

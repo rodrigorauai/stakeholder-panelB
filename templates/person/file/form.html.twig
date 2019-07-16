@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% set title = 'Anexar Arquivo de ' ~ person.name %}
+{% set drawer_active_route = 'person__index' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <div class="container m-4">
+        {{ form_start(form) }}
+        {{ form_row(form.name, {
+            attr: {
+                autofocus: ''
+            }
+        }) }}
+        {{ form_widget(form) }}
+        <div class="form-row button-container">
+            {% include '_components/button/button.html.twig' with { label: 'Anexar Arquivo', type: 'submit', style: 'outlined'} only %}
+        </div>
+        {{ form_rest(form) }}
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+

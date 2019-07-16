@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% set title = 'Arquivos de ' ~ person.name|default(person.cpf|format_cpf) %}
+{% set drawer_active_route = 'person__index' %}
+
+{% block title %}Arquivos de {{ person.name }}{% endblock %}
+
+{% block content %}
+
+    {% include 'person/_tab-bar.html.twig' with { active_tab: 'person__file__index' } %}
+
+    <div class="container m-4">
+
+        <div class="mdc-list mdc-list--two-line mdc-list--avatar-list">
+
+            {% for file in person.files %}
+
+            <a class="mdc-list-item" href="{{ path('person__file__download', { id: file.id }) }}" target="_blank">
+                <span class="mdc-list-item__graphic material-icons">attach_file</span>
+                <span class="mdc-list-item__text">
+                    <span class="mdc-list-item__primary-text">{{ file.name }}</span>
+                    <span class="mdc-list-item__secondary-text">Anexado em {{ file.uploadTimestamp.format('d/m/Y') }}
+                        por {{ file.uploader.name }}
+                    </span>
+                </span>
+            </a>
+
+            {% endfor %}
+
+            {% if person.files.count == 0 %}
+                <p>Nenhum arquivo encontrado.</p>
+            {% endif %}
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block body_end %}
+    <div class="app-page-end">
+        <a class="mdc-fab mdc-fab--extended" href="{{ path('person__file__form', { id: person.id }) }}">
+            <span class="material-icons mdc-fab__icon">add</span>
+            <span class="mdc-fab__label">Anexar Arquivo</span>
+        </a>
+    </div>
+{% endblock %}

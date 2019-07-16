@@ -5,14 +5,18 @@ namespace App\Controller;
 use App\Entity\Account;
 use App\Entity\Address;
 use App\Entity\Person;
+use App\Entity\UploadedPersonFile;
 use App\Form\AddressType;
 use App\Form\BankAccountType;
 use App\Form\PersonData;
+use App\Form\PersonFileType;
 use App\Form\PersonType;
+use App\Helper\UploadHelper;
 use App\Repository\PersonRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -182,5 +186,56 @@ class PersonController extends AbstractController
             'person' => $person,
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @param Person $person
+     * @return Response
+     * @Route("/pessoas/{id}/arquivos", name="person__file__index")
+     */
+    public function uploadIndex(Person $person)
+    {
+        return $this->render('person/file/index.html.twig', [
+            'person' => $person,
+        ]);
+    }
+
+    /**
+     * @param Person $person
+     * @param Request $request
+     * @param UploadHelper $helper
+     * @return Response
+     * @Route("/pessoas/{id}/arquivos/novo", name="person__file__form")
+     */
+    public function uploadForm(Person $person, Request $request, UploadHelper $helper)
+    {
+        $form = $this->createForm(PersonFileType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+
+            $helper->savePersonFile($data['name'], $data['file'], $person);
+
+            // Flush entity created by the UploadHelper
+            $this->em->flush();
+
+            return $this->redirectToRoute('person__file__index', ['id' => $person->getId()], 303);
+        }
+
+        return $this->render('person/file/form.html.twig', [
+            'person' => $person,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param UploadedPersonFile $file
+     * @return BinaryFileResponse
+     * @Route("/pessoas/arquivos/{id}", name="person__file__download")
+     */
+    public function fileDownload(UploadedPersonFile $file)
+    {
+        return new BinaryFileResponse($file->getPath());
     }
 }
