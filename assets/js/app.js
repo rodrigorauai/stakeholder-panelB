@@ -3,6 +3,7 @@ import {MDCTextField} from "@material/textfield/component";
 import {MDCRipple} from "@material/ripple/component";
 import {MDCTabBar} from "@material/tab-bar/component";
 import {MDCSelect} from "@material/select/component";
+import {MDCMenu} from '@material/menu';
 
 import InitDrawer from './InitDrawer';
 
@@ -49,6 +50,17 @@ if (element) {
             });
 
             drawer.open = !drawer.open;
+        }
+    });
+
+    const accountMenuToggle = document.getElementById('account-menu-toggle');
+    const accountMenu = new MDCMenu(document.getElementById('account-menu'));
+
+    accountMenuToggle.addEventListener('click', function () {
+        accountMenu.open = !accountMenu.open;
+
+        if (accountMenu.open) {
+
         }
     });
 }

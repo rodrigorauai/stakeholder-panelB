@@ -12,6 +12,8 @@ $mdc-theme-primary: #0575E6;
 @import "~@material/tab-indicator/mdc-tab-indicator";
 @import "~@material/tab/mdc-tab";
 @import "~@material/select/mdc-select";
+@import "~@material/menu/mdc-menu";
+@import "~@material/menu-surface/mdc-menu-surface";
 
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
@@ -42,4 +44,8 @@ table tbody td,
 
 .icon-small {
   font-size: 14px;
+}
+
+#account-menu {
+  top: initial !important;
 }
