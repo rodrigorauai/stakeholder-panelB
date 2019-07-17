@@ -22,19 +22,22 @@ class StakeholdPlanRepository extends ServiceEntityRepository
     // /**
     //  * @return StakeholdingPlan[] Returns an array of StakeholdingPlan objects
     //  */
-    /*
+    
     public function findByExampleField($value)
     {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        if ($value !== null)
+            return $this->createQueryBuilder('s')
+                ->andWhere('s.id LIKE :val')
+                ->orWhere('s.administrativeName LIKE :val')
+                ->orWhere('s.commercialName LIKE :val')
+                ->setParameter('val', '%'.$value['index'].'%')
+                ->orderBy('s.id', 'ASC')
+                ->setMaxResults(10)
+                ->getQuery()
+                ->getResult()
+            ;
     }
-    */
+    
 
     /*
     public function findOneBySomeField($value): ?StakeholdingPlan
