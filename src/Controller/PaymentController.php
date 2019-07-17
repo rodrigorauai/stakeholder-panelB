@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Payment;
 use App\Form\PaymentInvoiceType;
+use App\Form\PaymentSearchType;
 use App\Repository\PaymentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,12 +19,20 @@ class PaymentController extends AbstractController
      * @return Response
      * @Route("/pagamentos", name="payment__index")
      */
-    public function index(PaymentRepository $repository)
+    public function index(Request $request, PaymentRepository $repository)
     {
         $payments = $repository->findAll();
 
+        $form = $this->createForm(PaymentSearchType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $payments = $repository->findByExampleField($form->getData('index'));
+        }
+        
         return $this->render('payment/index.html.twig', [
             'payments' => $payments,
+            'form' => $form->createView(),
         ]);
     }
 
