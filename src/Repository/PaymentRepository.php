@@ -49,7 +49,14 @@ class PaymentRepository extends ServiceEntityRepository
     {
         if ($value !== null)
             return $this->createQueryBuilder('p')
-                ->andWhere('p.name = :val')
+                ->join('p.contract', 'c')
+                ->join('c.plan', 'pl')
+                ->join('p.account', 'a')
+                ->join('a.owner', 'o')
+                ->andWhere('p.id LIKE :val')
+                ->orWhere('pl.administrativeName LIKE :val')
+                ->orWhere('o.name LIKE :val')
+                ->orWhere('p.invoiceUrl LIKE :val')
                 ->setParameter('val', '%'.$value['index'].'%')
                 ->orderBy('p.id', 'ASC')
                 ->setMaxResults(10)
@@ -57,7 +64,6 @@ class PaymentRepository extends ServiceEntityRepository
                 ->getResult()
             ;
     }
-    
 
     /*
     public function findOneBySomeField($value): ?Payment
