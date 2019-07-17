@@ -25,16 +25,17 @@ class CompanyRepository extends ServiceEntityRepository
     
     public function findByExampleField($value)
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.id LIKE :val')
-            ->orWhere('c.name LIKE :val')
-            ->orWhere('c.cnpj LIKE :val')
-            ->setParameter('val', '%'.$value['index'].'%')
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        if ($value !== null)
+            return $this->createQueryBuilder('c')
+                ->andWhere('c.id LIKE :val')
+                ->orWhere('c.name LIKE :val')
+                ->orWhere('c.cnpj LIKE :val')
+                ->setParameter('val', '%'.$value['index'].'%')
+                ->orderBy('c.id', 'ASC')
+                ->setMaxResults(10)
+                ->getQuery()
+                ->getResult()
+            ;
     }
 
     /*
