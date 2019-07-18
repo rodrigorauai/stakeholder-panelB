@@ -42,19 +42,22 @@ class StakeholdPlanRewardListener
                 Payment::PROVENANCE_CO_PARTICIPATION
             );
 
-            // Commission
-            $value = bcmul(bcdiv($reward->getPlan()->getMonthlyCommission(), 100, 2), $contract->getValue(), 2);
-
-            $commission = new Payment(
-                $contract->getAccount()->getOwner()->getTradeRepresentative()->getAccount(),
-                $value,
-                $reward,
-                $contract,
-                Payment::PROVENANCE_COMMISSION
-            );
-
             $args->getObjectManager()->persist($payment);
-            $args->getObjectManager()->persist($commission);
+
+            // Commission
+            if ($contract->getAccount()->getOwner()->getTradeRepresentative()) {
+                $value = bcmul(bcdiv($reward->getPlan()->getMonthlyCommission(), 100, 2), $contract->getValue(), 2);
+
+                $commission = new Payment(
+                    $contract->getAccount()->getOwner()->getTradeRepresentative()->getAccount(),
+                    $value,
+                    $reward,
+                    $contract,
+                    Payment::PROVENANCE_COMMISSION
+                );
+
+                $args->getObjectManager()->persist($commission);
+            }
         }
     }
 
