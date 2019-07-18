@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Company;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\Form\FormInterface;
 
 /**
  * @method Company|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,23 +20,38 @@ class CompanyRepository extends ServiceEntityRepository
         parent::__construct($registry, Company::class);
     }
 
-    // /**
-    //  * @return Company[] Returns an array of Company objects
-    //  */
-    
-    public function findByExampleField($value)
+    /**
+     * @param FormInterface $form
+     * @return Company[]
+     */
+    public function findByExampleField(FormInterface $form)
     {
-        if ($value !== null)
-            return $this->createQueryBuilder('c')
-                ->andWhere('c.id LIKE :val')
-                ->orWhere('c.name LIKE :val')
-                ->orWhere('c.cnpj LIKE :val')
-                ->setParameter('val', '%'.$value['index'].'%')
-                ->orderBy('c.id', 'ASC')
-                ->setMaxResults(10)
-                ->getQuery()
-                ->getResult()
-            ;
+        $qb = $this->createQueryBuilder('company');
+        $qb
+            ->select('company')
+            ->orderBy('company.id', 'DESC');
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $queryString = $form->get('queryString')->getData();
+
+            if ($queryString) {
+                $qb
+                    ->andWhere($qb->expr()->orX(
+                        $qb->expr()->eq('company.id', ':queryString'),
+                        $qb->expr()->like('company.name', ':containingQueryString'),
+                        $qb->expr()->eq('company.cnpj', ':digitsOnlyQueryString')
+                    ))
+                    ->setParameters([
+                        'queryString' => $queryString,
+                        'containingQueryString' => "%$queryString%",
+                        'digitsOnlyQueryString' => preg_replace('/[^\d]/', '', $queryString),
+                    ]);
+            }
+
+        }
+
+            return $qb->getQuery()->getResult();
     }
 
     /*

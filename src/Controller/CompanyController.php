@@ -9,8 +9,8 @@ use App\Entity\Company;
 use App\Form\AddressType;
 use App\Form\BankAccountType;
 use App\Form\CompanyData;
-use App\Form\CompanyType;
 use App\Form\CompanySearchType;
+use App\Form\CompanyType;
 use App\Repository\CompanyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -23,6 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class CompanyController extends AbstractController
 {
     /**
+     * @param Request $request
      * @param CompanyRepository $repository
      * @return Response
      * @Route("/empresas", name="company__index")
@@ -35,7 +36,7 @@ class CompanyController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $companies = $repository->findByExampleField($form->getData('index'));
+            $companies = $repository->findByExampleField($form);
         }
 
         return $this->render('company/index.html.twig', [
