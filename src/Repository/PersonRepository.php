@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Person;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\Form\FormInterface;
 
 /**
  * @method Person|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,37 +20,39 @@ class PersonRepository extends ServiceEntityRepository
         parent::__construct($registry, Person::class);
     }
 
-    // /**
-    //  * @return Person[] Returns an array of Person objects
-    //  */
-    
-    public function findByExampleField($value)
+    /**
+     * @param FormInterface $form
+     * @return Person[]
+     */
+    public function findUsingSearchForm(FormInterface $form)
     {
-        if ($value !== null)
-            return $this->createQueryBuilder('p')
-                ->andWhere('p.id LIKE :val')
-                ->orWhere('p.name LIKE :val')
-                ->orWhere('p.cpf LIKE :val')
-                ->orWhere('p.email LIKE :val')
-                ->orWhere('p.phone LIKE :val')
-                ->setParameter('val', '%'.$value['index'].'%')
-                ->orderBy('p.id', 'ASC')
-                ->setMaxResults(10)
-                ->getQuery()
-                ->getResult()
-            ;
-    }
-    
+        $qb = $this->createQueryBuilder('person');
+        $qb
+            ->select('person')
+            ->orderBy('person.id', 'DESC');
 
-    /*
-    public function findOneBySomeField($value): ?Person
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        if ($form->isSubmitted() && $form->isValid()) {
+            $queryString = $form->get('queryString')->getData();
+            $digitsOnlyQueryString = preg_replace('/[^\d]/', '', $queryString);
+
+            $qb
+                ->where(
+                    $qb->expr()->orX(
+                        $qb->expr()->eq('person.id', ':queryString'),
+                        $qb->expr()->like('person.name', ':containingQueryString'),
+                        $qb->expr()->eq('person.cpf', ':digitsOnlyQueryString'),
+                        $qb->expr()->like('person.email', ':containingQueryString'),
+                        $qb->expr()->eq('person.phone', ':containingDigitsOnlyQueryString')
+                    )
+                )
+                ->setParameters([
+                    'queryString' => $queryString,
+                    'containingQueryString' => "%$queryString%",
+                    'digitsOnlyQueryString' => $digitsOnlyQueryString,
+                    'containingDigitsOnlyQueryString' => "%$digitsOnlyQueryString%",
+                ]);
+        }
+
+        return $qb->getQuery()->getResult();
     }
-    */
 }
