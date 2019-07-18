@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Withdraw;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\Form\FormInterface;
 
 /**
  * @method Withdraw|null find($id, $lockMode = null, $lockVersion = null)
@@ -22,19 +23,30 @@ class WithdrawRepository extends ServiceEntityRepository
     // /**
     //  * @return Withdraw[] Returns an array of Withdraw objects
     //  */
-    /*
-    public function findByExampleField($value)
+    
+    public function findUsingSearchForm(FormInterface $form)
     {
-        return $this->createQueryBuilder('w')
-            ->andWhere('w.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('w.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $qb = $this->createQueryBuilder('withdraw');
+        $qb
+            ->select('withdraw')
+            ->orderBy('withdraw.id', 'DESC');
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $qb
+                ->join('withdraw.account', 'account')
+                ->join('account.owner', 'owner')
+                ->where(
+                    $qb->expr()->orX(
+                        $qb->expr()->eq('withdraw.id', ':queryString'),
+                        $qb->expr()->like('owner.name', ':queryString')
+                    )
+                )
+                ->setParameter('queryString', '%'.$form->get('queryString')->getData().'%');
+        }
+
+        return $qb->getQuery()->getResult();
     }
-    */
+    
 
     /*
     public function findOneBySomeField($value): ?Withdraw

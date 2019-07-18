@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Withdraw;
 use App\Form\ReceiptFileType;
 use App\Form\WithdrawReceiptType;
+use App\Form\WithdrawSearchType;
 use App\Helper\UploadHelper;
 use App\Repository\WithdrawRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,16 +20,21 @@ use Symfony\Component\Routing\Annotation\Route;
 class WithdrawController extends AbstractController
 {
     /**
+     * @param Request $request
      * @param WithdrawRepository $repository
      * @return Response
      * @Route("/retiradas", name="withdraw__index")
      */
-    public function index(WithdrawRepository $repository)
+    public function index(Request $request, WithdrawRepository $repository)
     {
-        $withdraws = $repository->findAll();
+        $form = $this->createForm(WithdrawSearchType::class);
+        $form->handleRequest($request);
+
+        $withdraws = $repository->findUsingSearchForm($form);
 
         return $this->render('withdraw/index.html.twig', [
             'withdraws' => $withdraws,
+            'form' => $form->createView(),
         ]);
     }
 
