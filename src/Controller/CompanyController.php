@@ -10,6 +10,7 @@ use App\Entity\UploadedCompanyFile;
 use App\Form\AddressType;
 use App\Form\BankAccountType;
 use App\Form\CompanyData;
+use App\Form\CompanySearchType;
 use App\Form\CompanyType;
 use App\Form\FileUploadType;
 use App\Helper\UploadHelper;
@@ -26,16 +27,25 @@ use Symfony\Component\Routing\Annotation\Route;
 class CompanyController extends AbstractController
 {
     /**
+     * @param Request $request
      * @param CompanyRepository $repository
      * @return Response
      * @Route("/empresas", name="company__index")
      */
-    public function index(CompanyRepository $repository)
+    public function index(Request $request, CompanyRepository $repository)
     {
         $companies = $repository->findAll();
 
+        $form = $this->createForm(CompanySearchType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $companies = $repository->findByExampleField($form);
+        }
+
         return $this->render('company/index.html.twig', [
             'companies' => $companies,
+            'form' => $form->createView(),
         ]);
     }
 
