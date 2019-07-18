@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\StakeholdPlan;
 use App\Entity\StakeholdPlanReward;
 use App\Form\StakeholdPlanRewardType;
+use App\Form\StakeholdPlanSearchType;
 use App\Form\StakeholdPlanType;
 use App\Repository\StakeholdPlanRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,17 +19,26 @@ use Symfony\Component\Routing\Annotation\Route;
 class StakeholdPlanController extends AbstractController
 {
     /**
+     * @param Request $request
      * @param StakeholdPlanRepository $repository
      * @return Response
      * @Route("/planos-de-patrocinio", name="stakehold_plan__index")
      */
-    public function index(StakeholdPlanRepository $repository)
+    public function index(Request $request, StakeholdPlanRepository $repository)
     {
         $plans = $repository->findAll();
+
+        $form = $this->createForm(StakeholdPlanSearchType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $plans = $repository->findUsingSearchForm($form);
+        }
 
         return $this->render('stakehold_plan/index.html.twig', [
             'controller_name' => 'StakeholdingPlanController',
             'plans' => $plans,
+            'form' => $form->createView(),
         ]);
     }
 
