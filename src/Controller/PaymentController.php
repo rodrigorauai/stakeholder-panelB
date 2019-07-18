@@ -15,20 +15,17 @@ use Symfony\Component\Routing\Annotation\Route;
 class PaymentController extends AbstractController
 {
     /**
+     * @param Request $request
      * @param PaymentRepository $repository
      * @return Response
      * @Route("/pagamentos", name="payment__index")
      */
     public function index(Request $request, PaymentRepository $repository)
     {
-        $payments = $repository->findAll();
-
         $form = $this->createForm(PaymentSearchType::class);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $payments = $repository->findByExampleField($form->getData('index'));
-        }
+        $payments = $repository->findUsingSearchForm($form);
         
         return $this->render('payment/index.html.twig', [
             'payments' => $payments,

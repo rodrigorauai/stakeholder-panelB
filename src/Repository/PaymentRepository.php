@@ -6,6 +6,7 @@ use App\Entity\Payment;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\Form\FormInterface;
 
 /**
  * @method Payment|null find($id, $lockMode = null, $lockVersion = null)
@@ -40,40 +41,29 @@ class PaymentRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
-
-    // /**
-    //  * @return Payment[] Returns an array of Payment objects
-    //  */
     
-    public function findByExampleField($value)
+    public function findUsingSearchForm(FormInterface $form)
     {
-        if ($value !== null)
-            return $this->createQueryBuilder('p')
-                ->join('p.contract', 'c')
-                ->join('c.plan', 'pl')
-                ->join('p.account', 'a')
-                ->join('a.owner', 'o')
-                ->andWhere('p.id LIKE :val')
-                ->orWhere('pl.administrativeName LIKE :val')
-                ->orWhere('o.name LIKE :val')
-                ->orWhere('p.invoiceUrl LIKE :val')
-                ->setParameter('val', '%'.$value['index'].'%')
-                ->orderBy('p.id', 'ASC')
-                ->setMaxResults(10)
-                ->getQuery()
-                ->getResult()
-            ;
-    }
+        $qb = $this->createQueryBuilder('payment');
+        $qb
+            ->select('payment')
+            ->orderBy('payment.id', 'DESC');
 
-    /*
-    public function findOneBySomeField($value): ?Payment
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        if ($form->isSubmitted() && $form->isValid()) {
+            $qb
+                ->join('payment.contract', 'contract')
+                ->join('contract.plan', 'plan')
+                ->join('payment.account', 'account')
+                ->join('account.owner',  'owner')
+                ->where($qb->expr()->orX(
+                    $qb->expr()->in('payment.id', ':queryString'),
+                    $qb->expr()->like('plan.administrativeName', ':queryString'),
+                    $qb->expr()->like('owner.name', ':queryString'),
+                    $qb->expr()->like('payment.invoiceUrl', ':queryString')
+                ))
+                ->setParameter('queryString', '%'.$form->get('queryString')->getData().'%');
+        }
+
+        return $qb->getQuery()->getResult();
     }
-    */
 }
