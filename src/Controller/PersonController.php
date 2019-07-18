@@ -11,6 +11,7 @@ use App\Form\BankAccountType;
 use App\Form\FileUploadType;
 use App\Form\PersonData;
 use App\Form\PersonType;
+use App\Form\PersonSearchType;
 use App\Helper\UploadHelper;
 use App\Repository\PersonRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -39,13 +40,21 @@ class PersonController extends AbstractController
      * @return Response
      * @Route("/pessoas", name="person__index")
      */
-    public function index(PersonRepository $repository)
+    public function index(Request $request, PersonRepository $repository)
     {
         $people = $repository->findAll();
+
+        $form = $this->createForm(PersonSearchType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $people = $repository->findByExampleField($form->getData('index'));
+        }
 
         return $this->render('person/index.html.twig', [
             'controller_name' => 'UserController',
             'people' => $people,
+            'form' => $form->createView(),
         ]);
     }
 
