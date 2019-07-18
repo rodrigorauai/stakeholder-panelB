@@ -32,16 +32,23 @@ class WithdrawRepository extends ServiceEntityRepository
             ->orderBy('withdraw.id', 'DESC');
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $qb
-                ->join('withdraw.account', 'account')
-                ->join('account.owner', 'owner')
-                ->where(
-                    $qb->expr()->orX(
-                        $qb->expr()->eq('withdraw.id', ':queryString'),
-                        $qb->expr()->like('owner.name', ':queryString')
+            $queryString = $form->get('queryString')->getData();
+
+            if ($queryString) {
+                $qb
+                    ->join('withdraw.account', 'account')
+                    ->join('account.owner', 'owner')
+                    ->where(
+                        $qb->expr()->orX(
+                            $qb->expr()->eq('withdraw.id', ':queryString'),
+                            $qb->expr()->like('owner.name', ':containingQueryString')
+                        )
                     )
-                )
-                ->setParameter('queryString', '%'.$form->get('queryString')->getData().'%');
+                    ->setParameters([
+                        'queryString' => $queryString,
+                        'containingQueryString' => "%$queryString%",
+                    ]);
+            }
         }
 
         return $qb->getQuery()->getResult();
