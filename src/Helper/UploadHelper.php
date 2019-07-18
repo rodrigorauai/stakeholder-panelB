@@ -9,8 +9,10 @@
 namespace App\Helper;
 
 
+use App\Entity\Company;
 use App\Entity\Contract;
 use App\Entity\Person;
+use App\Entity\UploadedCompanyFile;
 use App\Entity\UploadedDigitizedContractFile;
 use App\Entity\UploadedPersonFile;
 use App\Entity\UploadedReceiptFile;
@@ -84,6 +86,19 @@ class UploadHelper
         $user = $this->tokenStorage->getToken()->getUser();
 
         $object = new UploadedPersonFile($name, $savedFile->getPathname(), $person, $user);
+        $this->entityManager->persist($object);
+
+        return $savedFile;
+    }
+
+    public function saveCompanyFile(string $name, File $file, Company $company)
+    {
+        $savedFile = $this->savePrivateFile($file, 'company-file');
+
+        /** @var Person $user */
+        $user = $this->tokenStorage->getToken()->getUser();
+
+        $object = new UploadedCompanyFile($name, $savedFile->getPathname(), $company, $user);
         $this->entityManager->persist($object);
 
         return $savedFile;

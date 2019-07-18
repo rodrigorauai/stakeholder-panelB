@@ -8,8 +8,8 @@ use App\Entity\Person;
 use App\Entity\UploadedPersonFile;
 use App\Form\AddressType;
 use App\Form\BankAccountType;
+use App\Form\FileUploadType;
 use App\Form\PersonData;
-use App\Form\PersonFileType;
 use App\Form\PersonType;
 use App\Helper\UploadHelper;
 use App\Repository\PersonRepository;
@@ -209,7 +209,7 @@ class PersonController extends AbstractController
      */
     public function uploadForm(Person $person, Request $request, UploadHelper $helper)
     {
-        $form = $this->createForm(PersonFileType::class);
+        $form = $this->createForm(FileUploadType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
