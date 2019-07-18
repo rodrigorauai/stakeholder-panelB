@@ -18,6 +18,10 @@
                 id: 'company__bank_account__edit',
                 label: 'Conta Bancária',
                 path: path('company__bank_account__edit', { id: company.id }),
+            }, {
+                id: 'company__file__index',
+                label: 'Arquivos',
+                path: path('company__file__index', { id: company.id }),
             },
         ],
         active_tab: active_tab|default('company__edit'),
