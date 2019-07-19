@@ -70,6 +70,8 @@ class PersonController extends AbstractController
             $person = Person::fromDataObject($form->getData());
             $account = new Account($person);
 
+            $person->setCpf(str_replace(['-', '.'], '', $person->getCpf()));
+
             $this->em->persist($person);
             $this->em->persist($account);
             $this->em->flush();
@@ -108,6 +110,8 @@ class PersonController extends AbstractController
 
         if ($form->isSubmitted() && $form->isSubmitted()) {
             $person->updateFromDataObject($form->getData());
+
+            $person->setCpf(str_replace(['-', '.'], '', $person->getCpf()));
 
             $entityManager->persist($person);
             $entityManager->flush();
