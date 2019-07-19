@@ -68,9 +68,9 @@ class PersonController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $person = Person::fromDataObject($form->getData());
-            $account = new Account($person);
-
             $person->setCpf(str_replace(['-', '.'], '', $person->getCpf()));
+
+            $account = new Account($person);
 
             $this->em->persist($person);
             $this->em->persist($account);
