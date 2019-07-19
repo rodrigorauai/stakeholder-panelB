@@ -42,10 +42,12 @@ class PaymentController extends AbstractController
      */
     public function invoiceEdit(Payment $payment, Request $request, EntityManagerInterface $entityManager)
     {
-        $form = $this->createForm(PaymentInvoiceType::class, $payment);
+        $form = $this->createForm(PaymentInvoiceType::class, ['invoiceUrl' => $payment->getInvoiceUrl()]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $payment->setInvoiceUrl($form->get('invoiceUrl')->getData());
+
             $entityManager->persist($payment);
             $entityManager->flush();
 
