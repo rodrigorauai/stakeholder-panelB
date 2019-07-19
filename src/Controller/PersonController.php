@@ -10,6 +10,7 @@ use App\Form\AddressType;
 use App\Form\BankAccountType;
 use App\Form\FileUploadType;
 use App\Form\PersonData;
+use App\Form\PersonRolesType;
 use App\Form\PersonSearchType;
 use App\Form\PersonType;
 use App\Helper\UploadHelper;
@@ -243,5 +244,50 @@ class PersonController extends AbstractController
     public function fileDownload(UploadedPersonFile $file)
     {
         return new BinaryFileResponse($file->getPath());
+    }
+
+    /**
+     * @param Person $person
+     * @param Request $request
+     * @return Response
+     * @Route("/pessoas/{id}/cargos", name="person__role__index")
+     */
+    public function roleIndex(Person $person, Request $request)
+    {
+        $userRoles = array_merge(
+            ['ROLE_USER', 'ROLE_STAKEHOLDER'],
+            $person->getRoles()
+        );
+
+        $formData = [];
+
+        foreach ($userRoles as $role) {
+            $formData[strtolower(str_replace('ROLE_', 'IS_', $role))] = true;
+        }
+
+        $form = $this->createForm(PersonRolesType::class, $formData);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $userRoles = ['ROLE_USER', 'ROLE_STAKEHOLDER'];
+
+            foreach ($form->getData() as $authorization => $isGranted) {
+
+                if (!$isGranted) continue;
+
+                $userRoles[] = strtoupper(preg_replace('/is_/', 'role_', $authorization));
+            }
+
+            $person->setRoles($userRoles);
+
+            $this->em->persist($person);
+            $this->em->flush();
+        }
+
+        return $this->render('person/role/index.html.twig', [
+            'person' => $person,
+            'form' => $form->createView(),
+        ]);
     }
 }
