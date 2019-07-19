@@ -197,7 +197,7 @@
 
 {% block checkbox_label %}{% endblock %}
 {% block checkbox_widget %}
-    <div class="mdc-switch">
+    <div class="mdc-switch {% if disabled %} mdc-switch--disabled {% endif %}">
         <div class="mdc-switch__track"></div>
         <div class="mdc-switch__thumb-underlay">
             <div class="mdc-switch__thumb">
@@ -208,6 +208,7 @@
                        name="{{ full_name }}"
                        value="{{ value }}"
                        {% if checked %} checked {% endif %}
+                       {% if disabled %} disabled {% endif %}
                 >
             </div>
         </div>

@@ -22,7 +22,11 @@
                 id: 'person__file__index',
                 label: 'Arquivos',
                 path: path('person__file__index', { id: person.id }),
-            },
+            }, {
+                id: 'person__role__index',
+                label: 'Cargos',
+                path: path('person__role__index', { id: person.id }),
+            }
         ],
         active_tab: active_tab|default('person__edit'),
     }
