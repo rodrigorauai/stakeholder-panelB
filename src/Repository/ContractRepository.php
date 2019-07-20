@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Contract;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -19,32 +20,25 @@ class ContractRepository extends ServiceEntityRepository
         parent::__construct($registry, Contract::class);
     }
 
-    // /**
-    //  * @return Contract[] Returns an array of Contract objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @param array $accounts
+     * @return mixed
+     * @throws NonUniqueResultException
+     */
+    public function calculateTotalInvestment(array $accounts)
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $qb = $this->createQueryBuilder('contract');
+        $qb->select('SUM(contract.value)');
 
-    /*
-    public function findOneBySomeField($value): ?Contract
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        if (count($accounts) > 0) {
+            $qb
+                ->where(
+                    $qb->expr()->in('contract.account', ':accounts')
+                )
+                ->setParameter('accounts', $accounts)
+            ;
+        }
+
+        return $qb->getQuery()->getSingleScalarResult();
     }
-    */
 }
