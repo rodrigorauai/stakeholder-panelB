@@ -1,5 +1,5 @@
 {% set active = drawer_active_route|default('withdraw__index') %}
-
+{#
 {% set items = [
     {
         route: 'withdraw__index',
@@ -23,6 +23,9 @@
         label: 'Empresas',
     },
 ] %}
+#}
+
+{% set items = navigation.drawerLinks %}
 
 <aside class="mdc-drawer mdc-drawer--dismissible">
     <div class="mdc-drawer__header">
@@ -30,6 +33,10 @@
             <h3 class="mdc-drawer__title">
                 <img src="{{ asset('static/img/logo-adinvest.png') }}" alt="AdInvest">
             </h3>
+            <button class="account-switcher">
+                {{ profileSwitcher.currentProfile.label }}
+                <i class="material-icons account-switcher--icon">arrow_drop_down</i>
+            </button>
         </div>
     </div>
     <div class="mdc-drawer__content">
