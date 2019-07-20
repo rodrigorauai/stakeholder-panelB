@@ -11,6 +11,7 @@ namespace App\Helper;
 
 use App\Entity\Person;
 use App\Repository\ContractRepository;
+use App\Repository\PaymentRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Exception;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -32,14 +33,21 @@ class DashboardHelper
      */
     private $contractRepository;
 
+    /**
+     * @var PaymentRepository
+     */
+    private $paymentRepository;
+
     public function __construct(
         TokenStorageInterface $tokenStorage,
         ProfileSwitcher $profileSwitcher,
-        ContractRepository $contractRepository)
-    {
+        ContractRepository $contractRepository,
+        PaymentRepository $paymentRepository
+    ) {
         $this->profileSwitcher = $profileSwitcher;
         $this->contractRepository = $contractRepository;
         $this->tokenStorage = $tokenStorage;
+        $this->paymentRepository = $paymentRepository;
     }
 
     /**
@@ -73,6 +81,35 @@ class DashboardHelper
 
                 return $sum;
 
+        }
+
+        throw new Exception(sprintf('Unable to handle profile %s', $currentProfile['id']));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getTotalCoParticipation()
+    {
+        $currentProfile = $this->profileSwitcher->getCurrentProfile();
+
+        switch ($currentProfile['id'])
+        {
+            case ProfileSwitcher::PROFILE_STAKEHOLDER:
+
+                /** @var Person $user */
+                $user = $this->tokenStorage->getToken()->getUser();
+
+                $accounts = [];
+                $accounts[] = $user->getAccount();
+
+                foreach ($user->getCompanies() as $company) {
+                    $accounts[] = $company->getAccount();
+                }
+
+                $sum = $this->paymentRepository->calculateTotalCoParticipation($accounts);
+
+                return $sum;
         }
 
         throw new Exception(sprintf('Unable to handle profile %s', $currentProfile['id']));
