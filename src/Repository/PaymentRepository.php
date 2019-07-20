@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Payment;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\FormInterface;
 
@@ -65,5 +66,33 @@ class PaymentRepository extends ServiceEntityRepository
         }
 
         return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @param array $accounts
+     * @return mixed
+     * @throws NonUniqueResultException
+     */
+    public function calculateTotalCoParticipation(array $accounts)
+    {
+        $qb = $this->createQueryBuilder('payment');
+        $qb
+            ->select('SUM(payment.value)')
+            ->where(
+                $qb->expr()->eq('payment.provenance', ':provenance')
+            )
+            ->setParameter('provenance', Payment::PROVENANCE_CO_PARTICIPATION)
+        ;
+
+        if (count($accounts) > 0) {
+            $qb
+                ->andWhere(
+                    $qb->expr()->in('payment.account', ':accounts')
+                )
+                ->setParameter('accounts', $accounts)
+            ;
+        }
+
+        return $qb->getQuery()->getSingleScalarResult();
     }
 }
