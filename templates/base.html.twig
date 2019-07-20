@@ -35,6 +35,10 @@
         </div>
     {% endif %}
 
+    {% if is_granted('ROLE_USER') %}
+        {% include '_components/drawer/profile-switcher--dialog.html.twig' %}
+    {% endif %}
+
     {% block body_end %}{% endblock %}
 
 {% endblock %}

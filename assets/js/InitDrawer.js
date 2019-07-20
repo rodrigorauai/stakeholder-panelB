@@ -1,8 +1,16 @@
 import {MDCDrawer} from "@material/drawer/component";
+import {MDCDialog} from "@material/dialog/component";
 
 function InitDrawer(element)
 {
     let drawer;
+
+    let accountSwitcherButton = element.querySelector('.account-switcher');
+    let accountSwitcherDialog = new MDCDialog(document.querySelector('#account-switcher--dialog'));
+
+    accountSwitcherButton.addEventListener('click', function () {
+        accountSwitcherDialog.open();
+    });
 
     const mobileClass = "mdc-drawer--modal";
     const desktopClass = "mdc-drawer--dismissible";
