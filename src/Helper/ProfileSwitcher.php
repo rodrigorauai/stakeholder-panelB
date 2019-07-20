@@ -34,14 +34,18 @@ class ProfileSwitcher
 
     const SESSION_CURRENT_PROFILE_KEY = 'profile_switcher__current_profile';
 
+    const PROFILE_STAKEHOLDER = 'stakeholder';
+
+    const PROFILE_ADMINISTRATOR = 'administrator';
+
     public $availableProfiles = [
-        'stakeholder' => [
-            'id'    => 'stakeholder',
+         self::PROFILE_STAKEHOLDER => [
+            'id'    => self::PROFILE_STAKEHOLDER,
             'label' => 'Patrocinador',
             'roles' => ['ROLE_USER', 'ROLE_STAKEHOLDER'],
         ],
-        'administrator' => [
-            'id'    => 'administrator',
+        self::PROFILE_ADMINISTRATOR => [
+            'id'    => self::PROFILE_ADMINISTRATOR,
             'label' => 'Administrativo',
             'roles' => ['ROLE_ADMINISTRATIVE_ASSISTANT', 'ROLE_ADMINISTRATOR', 'ROLE_SYSTEM_ADMINISTRATOR'],
         ]
