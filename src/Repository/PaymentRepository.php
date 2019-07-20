@@ -78,10 +78,13 @@ class PaymentRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('payment');
         $qb
             ->select('SUM(payment.value)')
-            ->where(
-                $qb->expr()->eq('payment.provenance', ':provenance')
-            )
+            ->leftJoin('payment.reward', 'reward')
+            ->where($qb->expr()->andX(
+                $qb->expr()->eq('payment.provenance', ':provenance'),
+                $qb->expr()->lte('reward.disclosureDate', ':now')
+            ))
             ->setParameter('provenance', Payment::PROVENANCE_CO_PARTICIPATION)
+            ->setParameter('now', new DateTime())
         ;
 
         if (count($accounts) > 0) {
