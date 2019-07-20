@@ -17,3 +17,39 @@
 .mdc-drawer .mdc-drawer__subtitle {
   color: #fff;
 }
+
+.account-switcher {
+  background: none;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+  outline: none;
+  text-align: left;
+
+  @include mdc-ripple-surface;
+  @include mdc-ripple-radius-bounded;
+  @include mdc-states-base-color(white);
+  @include mdc-states-hover-opacity(.2);
+  @include mdc-states-focus-opacity(.25);
+  @include mdc-states-press-opacity(.3);
+
+  overflow: hidden;
+
+  padding: 5px 10px;
+  box-sizing: border-box;
+
+  color: rgba(255, 255, 255, .7);
+  border-bottom: 1px solid rgba(255, 255, 255, .7);
+
+  position: relative;
+
+  width: 150px;
+  margin: 10px auto 0;
+  line-height: 24px;
+}
+
+.account-switcher--icon {
+  vertical-align: middle;
+  position: absolute;
+  right: 5px;
+}
