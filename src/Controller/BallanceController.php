@@ -5,15 +5,15 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class DashboardController extends AbstractController
+class BallanceController extends AbstractController
 {
     /**
-     * @Route("/dashboard", name="dashboard")
+     * @Route("/ballance", name="ballance")
      */
     public function index()
     {
-        return $this->render('dashboard/index.html.twig', [
-            'controller_name' => self::class,
+        return $this->render('ballance/index.html.twig', [
+            'controller_name' => 'BallanceController',
         ]);
     }
 }

@@ -1,6 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello DashboardController!{% endblock %}
+{% set title = 'Dashboard' %}
+{% set drawer_active_route = 'dashboard' %}
+
+{% block title %}{{ title }}{% endblock %}
 
 {% block content %}
 <style>
@@ -17,4 +20,5 @@
         <li>Your template at <code><a href="{{ 'C:/Development/clientes/AdInvest/customer-panel-2/templates/dashboard/index.html.twig'|file_link(0) }}">templates/dashboard/index.html.twig</a></code></li>
     </ul>
 </div>
+
 {% endblock %}
