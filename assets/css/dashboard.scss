@@ -4,13 +4,11 @@
 
 .dashboard-card--dark {
   background-color: #00589f;
+  color: #ffffff;
 
-  .dashboard-card__heading-text {
+  .dashboard-card__heading-text,
+  .dashboard-card__footer {
     color: rgba(255, 255, 255, 0.8);
-  }
-
-  .dashboard-card--body {
-    color: #ffffff;
   }
 }
 
@@ -24,6 +22,20 @@
 
 .dashboard-card--body {
   margin: 3px 16px 16px;
+}
+
+.dashboard-card__footer {
+  padding: 8px 16px 8px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+  .material-icons {
+    vertical-align: middle;
+    margin-right: 10px;
+  }
+
+  .dashboard-card__footer-text {
+    vertical-align: middle;
+  }
 }
 
 .dashboard-chart {

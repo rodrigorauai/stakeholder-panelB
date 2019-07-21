@@ -9,6 +9,7 @@
 namespace App\Helper;
 
 
+use App\Entity\Payment;
 use App\Entity\Person;
 use App\Repository\ContractRepository;
 use App\Repository\PaymentRepository;
@@ -48,6 +49,11 @@ class DashboardHelper
      * @var string
      */
     protected $totalCoParticipation;
+
+    /**
+     * @var Payment
+     */
+    protected $nextPayment;
 
     public function __construct(
         TokenStorageInterface $tokenStorage,
@@ -261,5 +267,66 @@ class DashboardHelper
             default:
                 throw new Exception(sprintf('Unable to handle profile %s', $currentProfile['id']));
         }
+    }
+
+    /**
+     * @return Payment|array
+     * @throws Exception
+     */
+    public function getNextPayment()
+    {
+        if (!$this->nextPayment) {
+            $currentProfile = $this->profileSwitcher->getCurrentProfile();
+
+            switch ($currentProfile['id']) {
+                case ProfileSwitcher::PROFILE_STAKEHOLDER:
+
+                    /** @var Person $user */
+                    $user = $this->tokenStorage->getToken()->getUser();
+
+                    $accounts = [];
+                    $accounts[] = $user->getAccount();
+
+                    foreach ($user->getCompanies() as $company) {
+                        $accounts[] = $company->getAccount();
+                    }
+
+                    $coParticipations = $this->paymentRepository->findCoParticipationsByAccount($accounts);
+
+                    $dataSet = [];
+                    $firstMonth = null;
+
+                    foreach ($coParticipations as $coParticipation) {
+
+                        if ($firstMonth === null) {
+                            $firstMonth = clone $coParticipation->getReward()->getPaymentDueDate();
+                        }
+
+                        $dataSet[] = [
+                            $coParticipation->getReward()->getPaymentDueDate()->format('Y-m-d'),
+                            (float)$coParticipation->getValue(),
+                        ];
+                    }
+
+                    if (!$firstMonth) {
+                        $firstMonth = new DateTime();
+                    }
+
+                    $initialDate = $firstMonth->modify('-1 month');
+
+                    array_unshift($dataSet, [
+                        $initialDate->format('Y-m-d'),
+                        0.00,
+                    ]);
+
+                    $this->nextPayment = $this->paymentRepository->findNextPayment($accounts, true);
+                    break;
+
+                default:
+                    throw new Exception(sprintf('Unable to handle profile %s', $currentProfile['id']));
+            }
+        }
+
+        return $this->nextPayment;
     }
 }
