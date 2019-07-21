@@ -2,18 +2,18 @@
 
 namespace App\Twig;
 
-use App\Helper\ProfileSwitcher;
+use App\Helper\ProfileHelper;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
 
 class ProfileSwitcherExtension extends AbstractExtension implements GlobalsInterface
 {
     /**
-     * @var ProfileSwitcher
+     * @var ProfileHelper
      */
     private $switcher;
 
-    public function __construct(ProfileSwitcher $switcher)
+    public function __construct(ProfileHelper $switcher)
     {
         $this->switcher = $switcher;
     }

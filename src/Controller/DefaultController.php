@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Helper\ProfileSwitcher;
+use App\Helper\ProfileHelper;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -11,21 +11,21 @@ use Symfony\Component\Routing\Annotation\Route;
 class DefaultController extends AbstractController
 {
     /**
-     * @param ProfileSwitcher $profileSwitcher
+     * @param ProfileHelper $profileSwitcher
      * @return RedirectResponse
      * @throws Exception
      * @Route("/", name="default")
      */
-    public function index(ProfileSwitcher $profileSwitcher)
+    public function index(ProfileHelper $profileSwitcher)
     {
         $currentProfile = $profileSwitcher->getCurrentProfile();
 
         switch ($currentProfile['id']) {
 
-            case ProfileSwitcher::PROFILE_ADMINISTRATOR:
+            case ProfileHelper::PROFILE_ADMINISTRATOR:
                 return $this->redirectToRoute('withdraw__index');
 
-            case ProfileSwitcher::PROFILE_STAKEHOLDER:
+            case ProfileHelper::PROFILE_STAKEHOLDER:
                 return $this->redirectToRoute('dashboard');
         }
 

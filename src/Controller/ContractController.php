@@ -21,6 +21,8 @@ class ContractController extends AbstractController
      */
     public function index()
     {
+
+
         return $this->render('contract/index.html.twig', [
             'controller_name' => 'ContractController',
         ]);
