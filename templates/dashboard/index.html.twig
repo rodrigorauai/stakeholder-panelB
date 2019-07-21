@@ -32,6 +32,17 @@
                 </div>
             </div>
 
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+                <div class="mdc-card dashboard-card">
+                    <div class="dashboard-card--heading">
+                        <h2 class="mdc-typography--subtitle2">Retorno dos Patrocínios</h2>
+                    </div>
+                    <div class="dashboard-card--body">
+                        <span class="mdc-typography--headline5">{{ dashboardHelper.returnRate|number_format(2, ',', '.') }}%</span>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
