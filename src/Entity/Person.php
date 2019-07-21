@@ -276,4 +276,15 @@ class Person extends Entity implements UserInterface
 
         return $this;
     }
+
+    public function getAccounts()
+    {
+        $accounts = [$this->account];
+
+        foreach ($this->getCompanies() as $company) {
+            $accounts[] = $company->getAccount();
+        }
+
+        return $accounts;
+    }
 }
