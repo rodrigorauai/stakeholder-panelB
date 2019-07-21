@@ -127,7 +127,35 @@
                             </div>
 
                             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-mobile mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-12-desktop">
+                                <div class="mdc-card dashboard-card">
+                                    <div class="dashboard-card--heading dashboard-card--dark">
+                                        <h2 class="dashboard-card__heading-text mdc-typography--subtitle2">Últimos Pagamentos</h2>
+                                    </div>
+                                    <div class="dashboard-card--body">
+                                        <div class="table-responsive">
+                                            <table class="table m-0">
+                                                <thead>
+                                                <tr>
+                                                    <th>Valor</th>
+                                                    <th>Data</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for payment in dashboardHelper.lastPayments %}
+                                                        <tr>
+                                                            <td class="text-success">+ R$ {{ payment.value|number_format(2, ',', '.') }}</td>
+                                                            <td>{{ payment.executionTimestamp|date('d/m/Y') }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
 
+                                            {% if dashboardHelper.lastPayments|length == 0 %}
+                                                <p class="mb-0">Nenhum Rendimento Encontrado.</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                         </div>

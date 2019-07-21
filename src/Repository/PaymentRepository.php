@@ -178,4 +178,33 @@ class PaymentRepository extends ServiceEntityRepository
         // TODO: Find a better structure for returned data
         return $result[0];
     }
+
+    public function findLastPayments(array $accounts, int $limit)
+    {
+        $qb = $this->createQueryBuilder('payment');
+        $qb
+            ->select('payment')
+            ->leftJoin('payment.reward', 'reward')
+            ->orderBy('reward.paymentDueDate', 'DESC')
+            ->where($qb->expr()->andX(
+                $qb->expr()->eq('payment.provenance', ':provenance'),
+                $qb->expr()->lte('reward.disclosureDate', ':now'),
+                $qb->expr()->lte('reward.paymentDueDate', ':now')
+            ))
+            ->setParameter('provenance', Payment::PROVENANCE_CO_PARTICIPATION)
+            ->setParameter('now', new DateTime())
+            ->setMaxResults($limit)
+        ;
+
+        if (count($accounts) > 0) {
+            $qb
+                ->andWhere(
+                    $qb->expr()->in('payment.account', ':accounts')
+                )
+                ->setParameter('accounts', $accounts)
+            ;
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }
