@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Account;
 use App\Entity\Payment;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -130,5 +131,51 @@ class PaymentRepository extends ServiceEntityRepository
         }
 
         return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @param Account[] $accounts
+     * @param bool $aggregatePaymentsOnTheSameDay
+     * @return array
+     * @throws Exception
+     */
+    public function findNextPayment(array $accounts, bool $aggregatePaymentsOnTheSameDay)
+    {
+        $qb = $this->createQueryBuilder('payment');
+        $qb
+            ->select('SUM(payment.value) as value, reward.paymentDueDate as dueDate')
+            ->leftJoin('payment.reward', 'reward')
+            ->orderBy('reward.paymentDueDate')
+            ->where($qb->expr()->andX(
+                $qb->expr()->eq('payment.provenance', ':provenance'),
+                $qb->expr()->lte('reward.disclosureDate', ':now'),
+                $qb->expr()->gt('reward.paymentDueDate', ':now')
+            ))
+            ->setParameter('provenance', Payment::PROVENANCE_CO_PARTICIPATION)
+            ->setParameter('now', new DateTime())
+            ->setMaxResults(1)
+        ;
+
+        if (count($accounts) > 0) {
+            $qb
+                ->andWhere(
+                    $qb->expr()->in('payment.account', ':accounts')
+                )
+                ->setParameter('accounts', $accounts)
+            ;
+        }
+
+        if ($aggregatePaymentsOnTheSameDay) {
+            $qb->groupBy('dueDate');
+        }
+
+        $result = $qb->getQuery()->getScalarResult();
+
+        if (empty($result) || null === $result[0]['value'] || null === $result[0]['dueDate']) {
+            return null;
+        }
+
+        // TODO: Find a better structure for returned data
+        return $result[0];
     }
 }
