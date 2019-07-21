@@ -206,4 +206,60 @@ class DashboardHelper
                 throw new Exception(sprintf('Unable to handle profile %s', $currentProfile['id']));
         }
     }
+
+    /**
+     * @return array
+     * @throws Exception
+     */
+    public function getDataSetOfReturnByDate()
+    {
+        $currentProfile = $this->profileSwitcher->getCurrentProfile();
+
+        switch ($currentProfile['id']) {
+            case ProfileSwitcher::PROFILE_STAKEHOLDER:
+
+                /** @var Person $user */
+                $user = $this->tokenStorage->getToken()->getUser();
+
+                $accounts = [];
+                $accounts[] = $user->getAccount();
+
+                foreach ($user->getCompanies() as $company) {
+                    $accounts[] = $company->getAccount();
+                }
+
+                $coParticipations = $this->paymentRepository->findCoParticipationsByAccount($accounts);
+
+                $dataSet = [];
+                $firstMonth = null;
+
+                foreach ($coParticipations as $coParticipation) {
+
+                    if ($firstMonth === null) {
+                        $firstMonth = clone $coParticipation->getReward()->getPaymentDueDate();
+                    }
+
+                    $dataSet[] = [
+                        $coParticipation->getReward()->getPaymentDueDate()->format('Y-m-d'),
+                        (float) $coParticipation->getValue(),
+                    ];
+                }
+
+                if (!$firstMonth) {
+                    $firstMonth = new DateTime();
+                }
+
+                $initialDate = $firstMonth->modify('-1 month');
+
+                array_unshift($dataSet, [
+                    $initialDate->format('Y-m-d'),
+                    0.00,
+                ]);
+
+                return $dataSet;
+
+            default:
+                throw new Exception(sprintf('Unable to handle profile %s', $currentProfile['id']));
+        }
+    }
 }
