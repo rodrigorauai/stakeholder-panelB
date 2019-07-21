@@ -1,7 +1,11 @@
+.mdc-card {
+  overflow: hidden;
+}
+
 .dashboard-card--dark {
   background-color: #00589f;
 
-  .dashboard-card--heading {
+  .dashboard-card__heading-text {
     color: rgba(255, 255, 255, 0.8);
   }
 
@@ -11,7 +15,7 @@
 }
 
 .dashboard-card--heading {
-  margin: 16px 16px 3px;
+  padding: 16px 16px 3px;
 
   h2 {
     margin: 0;
@@ -20,4 +24,8 @@
 
 .dashboard-card--body {
   margin: 3px 16px 16px;
+}
+
+.dashboard-chart {
+  height: 200px;
 }

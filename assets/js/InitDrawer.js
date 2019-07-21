@@ -15,7 +15,7 @@ function InitDrawer(element)
     const mobileClass = "mdc-drawer--modal";
     const desktopClass = "mdc-drawer--dismissible";
 
-    const isMobile = window.matchMedia(`(max-width: 720px)`);
+    const isMobile = window.matchMedia(`(max-width: 1024px)`);
 
     const mobileOverlay = document.createElement("div");
     mobileOverlay.classList.add("mdc-drawer-scrim");
