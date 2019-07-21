@@ -14,11 +14,11 @@ use Exception;
 class NavigationHelper
 {
     /**
-     * @var ProfileSwitcher
+     * @var ProfileHelper
      */
     private $profileSwitcher;
 
-    public function __construct(ProfileSwitcher $profileSwitcher)
+    public function __construct(ProfileHelper $profileSwitcher)
     {
         $this->profileSwitcher = $profileSwitcher;
     }
@@ -33,7 +33,7 @@ class NavigationHelper
 
         switch ($currentProfile['id']) {
 
-            case ProfileSwitcher::PROFILE_ADMINISTRATOR:
+            case ProfileHelper::PROFILE_ADMINISTRATOR:
                 return [
                     [
                         'route' => 'withdraw__index',
@@ -58,7 +58,7 @@ class NavigationHelper
                     ],
                 ];
 
-            case ProfileSwitcher::PROFILE_STAKEHOLDER:
+            case ProfileHelper::PROFILE_STAKEHOLDER:
                 return [
                     [
                         'route' => 'dashboard',

@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Contract;
+use App\Entity\Person;
 use App\Form\ContractType;
+use App\Helper\ProfileHelper;
 use App\Helper\UploadHelper;
+use App\Repository\ContractRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -19,10 +22,31 @@ class ContractController extends AbstractController
     /**
      * @Route("/contract", name="contract_index")
      */
-    public function index()
+    public function index(ProfileHelper $profileHelper, ContractRepository $repository)
     {
+        /** @var Person $user */
+        $user = $this->getUser();
+        $profile = $profileHelper->getCurrentProfile();
+
+        $multipleOwners = false;
+
+        if ($profile['id'] === ProfileHelper::PROFILE_STAKEHOLDER) {
+            $accounts = $user->getAccounts();
+
+            dump($accounts);
+
+            if (count($accounts) > 1) {
+                $multipleOwners = true;
+            }
+
+            $contracts = $repository->findByAccount($accounts);
+        } else {
+            $contracts = $repository->findAll();
+        }
+
         return $this->render('contract/index.html.twig', [
-            'controller_name' => 'ContractController',
+            'contracts' => $contracts,
+            'multipleOwners' => $multipleOwners,
         ]);
     }
 

@@ -26,7 +26,7 @@ class DashboardHelper
     private $tokenStorage;
 
     /**
-     * @var ProfileSwitcher
+     * @var ProfileHelper
      */
     private $profileSwitcher;
 
@@ -62,7 +62,7 @@ class DashboardHelper
 
     public function __construct(
         TokenStorageInterface $tokenStorage,
-        ProfileSwitcher $profileSwitcher,
+        ProfileHelper $profileSwitcher,
         ContractRepository $contractRepository,
         PaymentRepository $paymentRepository
     ) {
@@ -85,11 +85,11 @@ class DashboardHelper
 
             switch ($currentProfile['id']) {
 
-                case ProfileSwitcher::PROFILE_ADMINISTRATOR:
+                case ProfileHelper::PROFILE_ADMINISTRATOR:
 
                     break;
 
-                case ProfileSwitcher::PROFILE_STAKEHOLDER:
+                case ProfileHelper::PROFILE_STAKEHOLDER:
 
                     /** @var Person $user */
                     $user = $this->tokenStorage->getToken()->getUser();
@@ -121,7 +121,7 @@ class DashboardHelper
             $currentProfile = $this->profileSwitcher->getCurrentProfile();
 
             switch ($currentProfile['id']) {
-                case ProfileSwitcher::PROFILE_STAKEHOLDER:
+                case ProfileHelper::PROFILE_STAKEHOLDER:
 
                     /** @var Person $user */
                     $user = $this->tokenStorage->getToken()->getUser();
@@ -168,7 +168,7 @@ class DashboardHelper
         $currentProfile = $this->profileSwitcher->getCurrentProfile();
 
         switch ($currentProfile['id']) {
-            case ProfileSwitcher::PROFILE_STAKEHOLDER:
+            case ProfileHelper::PROFILE_STAKEHOLDER:
 
                 /** @var Person $user */
                 $user = $this->tokenStorage->getToken()->getUser();
@@ -227,7 +227,7 @@ class DashboardHelper
         $currentProfile = $this->profileSwitcher->getCurrentProfile();
 
         switch ($currentProfile['id']) {
-            case ProfileSwitcher::PROFILE_STAKEHOLDER:
+            case ProfileHelper::PROFILE_STAKEHOLDER:
 
                 /** @var Person $user */
                 $user = $this->tokenStorage->getToken()->getUser();
@@ -284,7 +284,7 @@ class DashboardHelper
             $currentProfile = $this->profileSwitcher->getCurrentProfile();
 
             switch ($currentProfile['id']) {
-                case ProfileSwitcher::PROFILE_STAKEHOLDER:
+                case ProfileHelper::PROFILE_STAKEHOLDER:
 
                     /** @var Person $user */
                     $user = $this->tokenStorage->getToken()->getUser();
@@ -356,7 +356,7 @@ class DashboardHelper
         $currentProfile = $this->profileSwitcher->getCurrentProfile();
 
         switch ($currentProfile['id']) {
-            case ProfileSwitcher::PROFILE_STAKEHOLDER:
+            case ProfileHelper::PROFILE_STAKEHOLDER:
 
                 /** @var Person $user */
                 $user = $this->tokenStorage->getToken()->getUser();

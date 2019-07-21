@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Form\ProfileSwitchType;
-use App\Helper\ProfileSwitcher;
+use App\Helper\ProfileHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,12 +14,12 @@ class ProfileSwitchController extends AbstractController
 {
     /**
      * @param Request $request
-     * @param ProfileSwitcher $profileSwitcher
+     * @param ProfileHelper $profileSwitcher
      * @return RedirectResponse|Response
      * @throws \Exception
      * @Route("/profile/switch", name="profile__switch")
      */
-    public function index(Request $request, ProfileSwitcher $profileSwitcher)
+    public function index(Request $request, ProfileHelper $profileSwitcher)
     {
         $form = $this->createForm(ProfileSwitchType::class);
         $form->handleRequest($request);

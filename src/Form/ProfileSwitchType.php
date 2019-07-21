@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Helper\ProfileSwitcher;
+use App\Helper\ProfileHelper;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -12,7 +12,7 @@ use Symfony\Component\Routing\RouterInterface;
 class ProfileSwitchType extends AbstractType
 {
     /**
-     * @var ProfileSwitcher
+     * @var ProfileHelper
      */
     private $switcher;
     /**
@@ -20,7 +20,7 @@ class ProfileSwitchType extends AbstractType
      */
     private $router;
 
-    public function __construct(ProfileSwitcher $switcher, RouterInterface $router)
+    public function __construct(ProfileHelper $switcher, RouterInterface $router)
     {
         $this->switcher = $switcher;
         $this->router = $router;
