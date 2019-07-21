@@ -55,6 +55,11 @@ class DashboardHelper
      */
     protected $nextPayment;
 
+    /**
+     * @var
+     */
+    protected $lastPayments;
+
     public function __construct(
         TokenStorageInterface $tokenStorage,
         ProfileSwitcher $profileSwitcher,
@@ -328,5 +333,46 @@ class DashboardHelper
         }
 
         return $this->nextPayment;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getLastPayments()
+    {
+        if (!$this->lastPayments) {
+            $this->lastPayments = $this->paymentRepository->findLastPayments($this->getCurrentAccounts(), 5);
+        }
+
+        return $this->lastPayments;
+    }
+
+    /**
+     * @return array
+     * @throws Exception
+     */
+    protected function getCurrentAccounts()
+    {
+        $currentProfile = $this->profileSwitcher->getCurrentProfile();
+
+        switch ($currentProfile['id']) {
+            case ProfileSwitcher::PROFILE_STAKEHOLDER:
+
+                /** @var Person $user */
+                $user = $this->tokenStorage->getToken()->getUser();
+
+                $accounts = [];
+                $accounts[] = $user->getAccount();
+
+                foreach ($user->getCompanies() as $company) {
+                    $accounts[] = $company->getAccount();
+                }
+
+                return $accounts;
+
+            default:
+                throw new Exception(sprintf('Unable to handle profile %s', $currentProfile['id']));
+
+        }
     }
 }
