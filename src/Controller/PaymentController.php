@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Payment;
+use App\Entity\Person;
 use App\Form\PaymentInvoiceType;
 use App\Form\PaymentSearchType;
+use App\Helper\ProfileHelper;
 use App\Repository\PaymentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,15 +19,24 @@ class PaymentController extends AbstractController
     /**
      * @param Request $request
      * @param PaymentRepository $repository
+     * @param ProfileHelper $profileHelper
      * @return Response
      * @Route("/pagamentos", name="payment__index")
      */
-    public function index(Request $request, PaymentRepository $repository)
+    public function index(Request $request, PaymentRepository $repository, ProfileHelper $profileHelper)
     {
+        /** @var Person $user */
+        $user = $this->getUser();
+        $profile = $profileHelper->getCurrentProfile();
+
         $form = $this->createForm(PaymentSearchType::class);
         $form->handleRequest($request);
 
-        $payments = $repository->findUsingSearchForm($form);
+        if ($profile['id'] === ProfileHelper::PROFILE_STAKEHOLDER) {
+            $accounts = $user->getAccounts();
+        }
+
+        $payments = $repository->findUsingSearchForm($form, $accounts ?? null);
         
         return $this->render('payment/index.html.twig', [
             'payments' => $payments,

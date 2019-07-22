@@ -33,8 +33,6 @@ class ContractController extends AbstractController
         if ($profile['id'] === ProfileHelper::PROFILE_STAKEHOLDER) {
             $accounts = $user->getAccounts();
 
-            dump($accounts);
-
             if (count($accounts) > 1) {
                 $multipleOwners = true;
             }
