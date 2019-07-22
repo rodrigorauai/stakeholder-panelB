@@ -151,9 +151,16 @@
                                             </table>
 
                                             {% if dashboardHelper.lastPayments|length == 0 %}
-                                                <p class="mb-0">Nenhum Rendimento Encontrado.</p>
+                                                <p class="mb-0">Nenhum rendimento encontrado.</p>
                                             {% endif %}
                                         </div>
+                                    </div>
+                                    <div class="mdc-card__actions">
+                                        <a class="mdc-button mdc-card__action mdc-card__action--button"
+                                           href="{{ path('payment__index') }}"
+                                        >
+                                            <span class="mdc-button__label">Ver Todos</span>
+                                        </a>
                                     </div>
                                 </div>
                             </div>

@@ -75,5 +75,10 @@
                 </tbody>
             </table>
         </div>
+
+        {% if payments|length == 0 %}
+            <p>Nenhum rendimento encontrado</p>
+        {% endif %}
+
     </div>
 {% endblock %}
