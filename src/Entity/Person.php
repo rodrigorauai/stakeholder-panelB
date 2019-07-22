@@ -77,6 +77,11 @@ class Person extends Entity implements UserInterface
     private $sentInvoices;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\AuthenticationToken", mappedBy="user")
+     */
+    private $authenticationTokens;
+
+    /**
      * Person constructor.
      * @param string $name
      * @param string $email
@@ -89,6 +94,7 @@ class Person extends Entity implements UserInterface
         $this->files = new ArrayCollection();
         $this->revisedInvoices = new ArrayCollection();
         $this->sentInvoices = new ArrayCollection();
+        $this->authenticationTokens = new ArrayCollection();
     }
 
     public static function fromDataObject(PersonData $data)
@@ -356,6 +362,37 @@ class Person extends Entity implements UserInterface
             // set the owning side to null (unless already changed)
             if ($sentInvoice->getSubmittor() === $this) {
                 $sentInvoice->setSubmittor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|AuthenticationToken[]
+     */
+    public function getAuthenticationTokens(): Collection
+    {
+        return $this->authenticationTokens;
+    }
+
+    public function addAuthenticationToken(AuthenticationToken $authenticationToken): self
+    {
+        if (!$this->authenticationTokens->contains($authenticationToken)) {
+            $this->authenticationTokens[] = $authenticationToken;
+            $authenticationToken->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAuthenticationToken(AuthenticationToken $authenticationToken): self
+    {
+        if ($this->authenticationTokens->contains($authenticationToken)) {
+            $this->authenticationTokens->removeElement($authenticationToken);
+            // set the owning side to null (unless already changed)
+            if ($authenticationToken->getUser() === $this) {
+                $authenticationToken->setUser(null);
             }
         }
 
