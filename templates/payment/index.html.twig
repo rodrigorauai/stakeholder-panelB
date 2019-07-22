@@ -52,9 +52,11 @@
                                 <a href="{{ payment.invoiceUrl }}" target="_blank">
                                     Nota Fiscal
                                     <span class="material-icons icon-small align-supper">open_in_new</span></a>
-                                <a class="mdc-icon-button ml-2" href="{{ path('payment__invoice__edit', { id: payment.id }) }}">
-                                    <span class="material-icons align-text-bottom">edit</span>
-                                </a>
+                                {% if profileSwitcher.accessingAsAdministrator %}
+                                    <a class="mdc-icon-button ml-2" href="{{ path('payment__invoice__edit', { id: payment.id }) }}">
+                                        <span class="material-icons align-text-bottom">edit</span>
+                                    </a>
+                                {% endif %}
                             {% endif %}
                         </td>
                         <td>

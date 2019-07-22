@@ -118,4 +118,14 @@ class ProfileHelper
 
         return $form->createView();
     }
+
+    public function isAccessingAsAdministrator(): bool
+    {
+        return ($this->getCurrentProfile()['id'] === self::PROFILE_ADMINISTRATOR);
+    }
+
+    public function isAccessingAsStakeholder(): bool
+    {
+        return ($this->getCurrentProfile()['id'] === self::PROFILE_STAKEHOLDER);
+    }
 }
