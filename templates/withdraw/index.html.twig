@@ -52,8 +52,9 @@
                                     {% endif %}
                                 {% else %}
                                     {% if profileSwitcher.accessingAsAdministrator %}
-                                    <a class="mdc-button"
-                                       href="{{ path('withdraw__receipt__add', { id: withdraw.id }) }}">Registrar</a>
+                                        <a class="mdc-button"
+                                           href="{{ path('withdraw__receipt__add', { id: withdraw.id }) }}">Registrar</a>
+                                    {% endif %}
                                 {% endif %}
                             {% else %}
 
@@ -62,7 +63,7 @@
                         <td>
                             {% if withdraw.wasExecuted %}
                                 {{ withdraw.executionTimestamp.format('d/m/Y H:i:s') }}
-                            {% else %}
+                            {% elseif profileSwitcher.accessingAsAdministrator %}
                                 <a href="{{ path('withdraw__register_execution', { id: withdraw.id}) }}">
                                     Registrar Execução
                                 </a>

@@ -57,6 +57,7 @@ class WithdrawController extends AbstractController
      * @param UploadHelper $uploadHelper
      * @return Response
      * @Route("/retiradas/{id}/registro-de-execucao", name="withdraw__register_execution")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
     public function registerExecution(
         Withdraw $withdraw,
