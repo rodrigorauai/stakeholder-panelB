@@ -66,11 +66,11 @@
                 #}
 
                 <div class="form-row button-container">
-                    <button type="button" class="mdc-button">
-                    <span class="mdc-button__label">
-                        Esqueci minha senha
-                    </span>
-                    </button>
+                    <a class="mdc-button" href="{{ path('password_recovery') }}">
+                        <span class="mdc-button__label">
+                            Esqueci minha senha
+                        </span>
+                    </a>
                     {% include '_components/button/button.html.twig' with { type: 'submit', label: 'Entrar' } only %}
                 </div>
 
