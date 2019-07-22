@@ -8,9 +8,11 @@ function InitDrawer(element)
     let accountSwitcherButton = element.querySelector('.account-switcher');
     let accountSwitcherDialog = new MDCDialog(document.querySelector('#account-switcher--dialog'));
 
-    accountSwitcherButton.addEventListener('click', function () {
-        accountSwitcherDialog.open();
-    });
+    if (accountSwitcherButton) {
+        accountSwitcherButton.addEventListener('click', function () {
+            accountSwitcherDialog.open();
+        });
+    }
 
     const mobileClass = "mdc-drawer--modal";
     const desktopClass = "mdc-drawer--dismissible";

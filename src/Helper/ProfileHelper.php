@@ -63,7 +63,7 @@ class ProfileHelper
 
     public function hasMultipleProfiles(): bool
     {
-        return $this->getProfiles() > 1;
+        return count($this->getProfiles()) > 1;
     }
 
     public function getProfiles(): array
