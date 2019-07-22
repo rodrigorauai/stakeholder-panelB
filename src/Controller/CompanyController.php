@@ -17,6 +17,7 @@ use App\Helper\UploadHelper;
 use App\Repository\CompanyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -31,6 +32,7 @@ class CompanyController extends AbstractController
      * @param CompanyRepository $repository
      * @return Response
      * @Route("/empresas", name="company__index")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
     public function index(Request $request, CompanyRepository $repository)
     {
@@ -54,6 +56,7 @@ class CompanyController extends AbstractController
      * @param EntityManagerInterface $entityManager
      * @return Response
      * @Route("/empresas/adicionar", name="company__create")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
     public function create(Request $request, EntityManagerInterface $entityManager)
     {
@@ -82,6 +85,7 @@ class CompanyController extends AbstractController
      * @param EntityManagerInterface $entityManager
      * @return Response
      * @Route("/empresas/{id}/editar", name="company__edit")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
     public function edit(Company $company, Request $request, EntityManagerInterface $entityManager)
     {
@@ -110,6 +114,7 @@ class CompanyController extends AbstractController
      * @return RedirectResponse|Response
      * @throws Exception
      * @Route("/empresas/{id}/endereço", name="company_address__edit")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
     public function editAddress(Company $company, Request $request, EntityManagerInterface $entityManager)
     {
@@ -140,6 +145,7 @@ class CompanyController extends AbstractController
      * @param Company $company
      * @return Response
      * @Route("/company/{id}/contas-de-patrocinio", name="company_account__index")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
     public function showAccounts(Company $company)
     {
@@ -154,6 +160,7 @@ class CompanyController extends AbstractController
      * @param EntityManagerInterface $entityManager
      * @return RedirectResponse|Response
      * @Route("/empresas/{id}/conta-bancaria", name="company__bank_account__edit")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
     public function editBankAccount(Company $company, Request $request, EntityManagerInterface $entityManager)
     {
@@ -184,6 +191,7 @@ class CompanyController extends AbstractController
      * @param Company $company
      * @return Response
      * @Route("/company/{id}/arquivos", name="company__file__index")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
     public function uploadIndex(Company $company)
     {
@@ -199,6 +207,7 @@ class CompanyController extends AbstractController
      * @param EntityManagerInterface $entityManager
      * @return RedirectResponse|Response
      * @Route("/empresas/{id}/arquivos/novo", name="company__file__form")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
     public function uploadForm(Company $company, Request $request, UploadHelper $helper, EntityManagerInterface $entityManager)
     {
@@ -226,6 +235,7 @@ class CompanyController extends AbstractController
      * @param UploadedCompanyFile $file
      * @return BinaryFileResponse
      * @Route("/company/arquivos/{id}", name="company__file__download")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
     public function fileDownload(UploadedCompanyFile $file)
     {
