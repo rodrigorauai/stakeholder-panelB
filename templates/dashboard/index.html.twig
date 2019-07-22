@@ -80,7 +80,11 @@
                                              data-y-column-type="number"
                                              data-y-column-label="Rendimentos"
                                              data-y-column-format="dd MMM, yyyy"
-                                             data-set-path="{{ path('dashboard_chart__total_return_by_date') }}"></div>
+                                             data-set-path="{{ path('dashboard_chart__total_return_by_date') }}">
+                                            <div class="text-center">
+                                                <img src="static/img/loading-200px.gif" alt="Carregando" />
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -99,7 +103,11 @@
                                              data-y-column-type="number"
                                              data-y-column-label="Rendimentos"
                                              data-y-column-format="dd MMM, yyyy"
-                                             data-set-path="{{ path('dashboard_chart__return_by_date') }}"></div>
+                                             data-set-path="{{ path('dashboard_chart__return_by_date') }}">
+                                            <div class="text-center">
+                                                <img src="static/img/loading-200px.gif" alt="Carregando" />
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -141,12 +149,12 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {% for payment in dashboardHelper.lastPayments %}
-                                                        <tr>
-                                                            <td class="text-success">+ R$ {{ payment.value|number_format(2, ',', '.') }}</td>
-                                                            <td>{{ payment.executionTimestamp|date('d/m/Y') }}</td>
-                                                        </tr>
-                                                    {% endfor %}
+                                                {% for payment in dashboardHelper.lastPayments %}
+                                                    <tr>
+                                                        <td class="text-success">+ R$ {{ payment.value|number_format(2, ',', '.') }}</td>
+                                                        <td>{{ payment.executionTimestamp|date('d/m/Y') }}</td>
+                                                    </tr>
+                                                {% endfor %}
                                                 </tbody>
                                             </table>
 
