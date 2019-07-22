@@ -9,6 +9,7 @@ Executed: Executado
 Scheduled: Agendado
 Made: Realizado
 Waiting Invoice: Aguardando Nota Fiscal
+Waiting Invoice Approval: Aguardando Revisão da Nota Fiscal
 
 person:
     name__label: Nome

@@ -67,6 +67,16 @@ class Person extends Entity implements UserInterface
     private $files;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PaymentInvoice", mappedBy="revisor")
+     */
+    private $revisedInvoices;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PaymentInvoice", mappedBy="submittor")
+     */
+    private $sentInvoices;
+
+    /**
      * Person constructor.
      * @param string $name
      * @param string $email
@@ -77,6 +87,8 @@ class Person extends Entity implements UserInterface
 
         $this->email = $email;
         $this->files = new ArrayCollection();
+        $this->revisedInvoices = new ArrayCollection();
+        $this->sentInvoices = new ArrayCollection();
     }
 
     public static function fromDataObject(PersonData $data)
@@ -286,5 +298,67 @@ class Person extends Entity implements UserInterface
         }
 
         return $accounts;
+    }
+
+    /**
+     * @return Collection|PaymentInvoice[]
+     */
+    public function getRevisedInvoices(): Collection
+    {
+        return $this->revisedInvoices;
+    }
+
+    public function addRevisedInvoice(PaymentInvoice $revisedInvoice): self
+    {
+        if (!$this->revisedInvoices->contains($revisedInvoice)) {
+            $this->revisedInvoices[] = $revisedInvoice;
+            $revisedInvoice->setRevisor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRevisedInvoice(PaymentInvoice $revisedInvoice): self
+    {
+        if ($this->revisedInvoices->contains($revisedInvoice)) {
+            $this->revisedInvoices->removeElement($revisedInvoice);
+            // set the owning side to null (unless already changed)
+            if ($revisedInvoice->getRevisor() === $this) {
+                $revisedInvoice->setRevisor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PaymentInvoice[]
+     */
+    public function getSentInvoices(): Collection
+    {
+        return $this->sentInvoices;
+    }
+
+    public function addSentInvoice(PaymentInvoice $sentInvoice): self
+    {
+        if (!$this->sentInvoices->contains($sentInvoice)) {
+            $this->sentInvoices[] = $sentInvoice;
+            $sentInvoice->setSubmittor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSentInvoice(PaymentInvoice $sentInvoice): self
+    {
+        if ($this->sentInvoices->contains($sentInvoice)) {
+            $this->sentInvoices->removeElement($sentInvoice);
+            // set the owning side to null (unless already changed)
+            if ($sentInvoice->getSubmittor() === $this) {
+                $sentInvoice->setSubmittor(null);
+            }
+        }
+
+        return $this;
     }
 }

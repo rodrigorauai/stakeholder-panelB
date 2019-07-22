@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+{% set title = 'Nota Fiscal de ' ~ payment.account.owner.name %}
+{% set drawer_active_route = 'payment__index' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+
+    <div class="mdc-layout-grid">
+        <div class="mdc-layout-grid__inner">
+            <div class="mdc-layout-grid__cell--span-6">
+
+                <h2>Dados do Rendimento</h2>
+
+                <dl class="d-table">
+                    <div class="d-table-row">
+                        <dt class="d-table-cell">ID</dt>
+                        <dl class="d-table-cell">{{ payment.id }}</dl>
+                    </div>
+                    <div class="d-table-row">
+                        <dt class="d-table-cell">Valor</dt>
+                        <dl class="d-table-cell">R$ {{ payment.value|number_format(2, ',', '.') }}</dl>
+                    </div>
+                    <div class="d-table-row">
+                        <dt class="d-table-cell">Beneficiário</dt>
+                        <dl class="d-table-cell">{{ payment.beneficiary.owner.name }}</dl>
+                    </div>
+                </dl>
+            </div>
+
+            <div class="mdc-layout-grid__cell--span-6">
+
+                <h2>Avaliação</h2>
+
+                <p>Por favor, confirme se os dados da Nota Fiscal estão corretos.</p>
+                <p><a href="{{ payment.invoice.url }}" target="_blank">Visualizar nota fiscal</a></p>
+
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <div class="form-row">
+                    {% include '_components/button/button.html.twig' with { label: 'Registrar Avaliação', type: 'submit', style: 'outlined'} only %}
+                </div>
+                {{ form_rest(form) }}
+                {{ form_end(form) }}
+
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

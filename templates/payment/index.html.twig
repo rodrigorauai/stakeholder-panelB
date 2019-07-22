@@ -38,7 +38,11 @@
                         <td>{{ payment.id }}</td>
                         <td>
                             {% if payment.status == constant('STATUS_WAITING_INVOICE', payment) %}
-                                <a href="{{ path('payment__invoice__edit', { id: payment.id }) }}">
+                                <a href="{{ path('payment__invoice', { id: payment.id }) }}">
+                                    {{ payment.status|trans }}
+                                </a>
+                            {% elseif payment.status == constant('STATUS_WAITING_INVOICE_APPROVAL', payment) %}
+                                <a href="{{ path('payment__invoice__review', { id: payment.id }) }}">
                                     {{ payment.status|trans }}
                                 </a>
                             {% else %}
@@ -49,14 +53,9 @@
                         <td>{{ payment.provenance|trans }}</td>
                         <td>
                             {% if payment.hasInvoice %}
-                                <a href="{{ payment.invoiceUrl }}" target="_blank">
+                                <a href="{{ payment.invoice.url }}" target="_blank">
                                     Nota Fiscal
                                     <span class="material-icons icon-small align-supper">open_in_new</span></a>
-                                {% if profileSwitcher.accessingAsAdministrator %}
-                                    <a class="mdc-icon-button ml-2" href="{{ path('payment__invoice__edit', { id: payment.id }) }}">
-                                        <span class="material-icons align-text-bottom">edit</span>
-                                    </a>
-                                {% endif %}
                             {% endif %}
                         </td>
                         <td>
