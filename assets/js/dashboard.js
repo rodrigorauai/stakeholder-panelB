@@ -25,7 +25,7 @@ function drawCharts()
             },
             legend: {position: 'none'},
             chartArea: {
-                left: 40,
+                left: 50,
                 top: 20,
                 bottom: 30,
                 right: 20
