@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -32,6 +33,14 @@ class AuthenticationToken
      * @ORM\Column(type="datetimetz_immutable")
      */
     private $expirationDate;
+
+    public function __construct($string, $user)
+    {
+        $this->string = $string;
+        $this->user = $user;
+        $this->expirationDate = (new DateTime())->modify('+1 day');
+    }
+
 
     public function getId(): ?int
     {
