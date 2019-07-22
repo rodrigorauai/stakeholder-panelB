@@ -69,9 +69,9 @@ class NavigationHelper
                         'icon'  => 'attach_money',
                         'label' => 'Rendimentos',
                     ], [
-                        'route' => 'ballance',
-                        'icon'  => 'compare_arrows',
-                        'label' => 'Extrato',
+                        'route' => 'withdraw__index',
+                        'icon'  => 'save_alt',
+                        'label' => 'Retiradas',
                     ], [
                         'route' => 'contract_index',
                         'icon'  => 'insert_drive_file',
