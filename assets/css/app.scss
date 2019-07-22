@@ -1,9 +1,13 @@
 $mdc-theme-primary: #0575E6;
 
 @import "~@material/top-app-bar/mdc-top-app-bar";
+@import "~@material/card/mdc-card";
+@import "~@material/dialog/mdc-dialog";
 @import "~@material/drawer/mdc-drawer";
 @import "~@material/fab/mdc-fab";
+@import "~@material/layout-grid/mdc-layout-grid";
 @import "~@material/list/mdc-list";
+@import "~@material/radio/mdc-radio";
 @import "~@material/textfield/mdc-text-field";
 @import "~@material/button/mdc-button";
 @import "~@material/typography/mdc-typography";
@@ -47,6 +51,18 @@ table tbody td,
   font-size: 14px;
 }
 
+.content-container {
+  padding: 24px;
+}
+
 #account-menu {
   top: initial !important;
+}
+
+.mdc-list-items {
+  margin-bottom: 2px;
+  display: block;
+  height: 100%;
+  margin-left: 5px;
+  margin-top: 5px;
 }
