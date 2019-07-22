@@ -17,6 +17,7 @@ use App\Helper\UploadHelper;
 use App\Repository\PersonRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -41,6 +42,7 @@ class PersonController extends AbstractController
      * @param PersonRepository $repository
      * @return Response
      * @Route("/pessoas", name="person__index")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
     public function index(Request $request, PersonRepository $repository)
     {
@@ -60,6 +62,7 @@ class PersonController extends AbstractController
      * @param Request $request
      * @return Response
      * @Route("/pessoas/adicionar", name="person_create")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
     public function create(Request $request)
     {
@@ -87,6 +90,7 @@ class PersonController extends AbstractController
      * @param Person $person
      * @return Response
      * @Route("/pessoas/{id}", name="person_show")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
     public function show(Person $person)
     {
@@ -101,6 +105,7 @@ class PersonController extends AbstractController
      * @param EntityManagerInterface $entityManager
      * @return Response
      * @Route("/pessoas/{id}/dados-pessoais", name="person__edit")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
     public function edit(Person $person, Request $request, EntityManagerInterface $entityManager)
     {
@@ -129,6 +134,7 @@ class PersonController extends AbstractController
      * @return RedirectResponse|Response
      * @throws Exception
      * @Route("/pessoas/{id}/endereco", name="person_address__edit")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
     public function editAddress(Person $person, Request $request, EntityManagerInterface $entityManager)
     {
@@ -158,6 +164,7 @@ class PersonController extends AbstractController
      * @param Person $person
      * @return Response
      * @Route("/pessoas/{id}/contas-de-patrocinio", name="person_account__index")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
     public function showAccounts(Person $person)
     {
@@ -172,6 +179,7 @@ class PersonController extends AbstractController
      * @param EntityManagerInterface $entityManager
      * @return RedirectResponse|Response
      * @Route("/pessoas/{id}/conta-bancaria", name="person__bank_account__edit")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
     public function editBankAccount(Person $person, Request $request, EntityManagerInterface $entityManager)
     {
@@ -199,6 +207,7 @@ class PersonController extends AbstractController
      * @param Person $person
      * @return Response
      * @Route("/pessoas/{id}/arquivos", name="person__file__index")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
     public function uploadIndex(Person $person)
     {
@@ -213,6 +222,7 @@ class PersonController extends AbstractController
      * @param UploadHelper $helper
      * @return Response
      * @Route("/pessoas/{id}/arquivos/novo", name="person__file__form")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
     public function uploadForm(Person $person, Request $request, UploadHelper $helper)
     {
@@ -240,6 +250,7 @@ class PersonController extends AbstractController
      * @param UploadedPersonFile $file
      * @return BinaryFileResponse
      * @Route("/pessoas/arquivos/{id}", name="person__file__download")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
     public function fileDownload(UploadedPersonFile $file)
     {
@@ -251,6 +262,7 @@ class PersonController extends AbstractController
      * @param Request $request
      * @return Response
      * @Route("/pessoas/{id}/cargos", name="person__role__index")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
     public function roleIndex(Person $person, Request $request)
     {
