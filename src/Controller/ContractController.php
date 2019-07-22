@@ -9,6 +9,7 @@ use App\Helper\ProfileHelper;
 use App\Helper\UploadHelper;
 use App\Repository\ContractRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -55,6 +56,7 @@ class ContractController extends AbstractController
      * @param UploadHelper $helper
      * @return RedirectResponse|Response
      * @Route("/contratos-de-patrocinio/{id}", name="contract__edit")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
     public function edit(Contract $contract, Request $request, EntityManagerInterface $entityManager, UploadHelper $helper)
     {
