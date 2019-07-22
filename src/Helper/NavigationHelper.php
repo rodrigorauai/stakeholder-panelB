@@ -37,11 +37,11 @@ class NavigationHelper
                 return [
                     [
                         'route' => 'withdraw__index',
-                        'icon'  => 'attach_money',
+                        'icon'  => 'save_alt',
                         'label' => 'Retiradas',
                     ], [
                         'route' => 'payment__index',
-                        'icon'  => 'rotate_left',
+                        'icon'  => 'attach_money',
                         'label' => 'Rendimentos',
                     ], [
                         'route' => 'stakehold_plan__index',
