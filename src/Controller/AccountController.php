@@ -9,6 +9,7 @@ use App\Helper\UploadHelper;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,6 +20,7 @@ class AccountController extends AbstractController
 {
     /**
      * @Route("/account", name="account_index")
+     * @IsGranted({"ROLE_ADMINISTRATOR"})
      */
     public function index()
     {
@@ -32,6 +34,7 @@ class AccountController extends AbstractController
      * @param Account $account
      * @return Response
      * @Route("/contas-de-patrocinio/{id}", name="account__show")
+     * @IsGranted({"ROLE_ADMINISTRATOR"})
      */
     public function show(Account $account)
     {
@@ -48,6 +51,7 @@ class AccountController extends AbstractController
      * @return RedirectResponse|Response
      * @throws Exception
      * @Route("/contas-de-patrocinio/{id}/contratos/novo", name="account__contract__create")
+     * @IsGranted({"ROLE_ADMINISTRATOR"})
      */
     public function createContract(Account $account, Request $request, EntityManagerInterface $entityManager, UploadHelper $helper)
     {
