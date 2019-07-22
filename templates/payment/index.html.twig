@@ -59,9 +59,13 @@
                             {% endif %}
                         </td>
                         <td>
-                            <a href="{{ path('person_show', { id: payment.beneficiary.owner.id }) }}">
-                                {{ payment.beneficiary.owner.name}}
-                            </a>
+                            {% if profileSwitcher.accessingAsAdministrator %}
+                                <a href="{{ path('person_show', { id: payment.beneficiary.owner.id }) }}">
+                                    {{ payment.beneficiary.owner.name}}
+                                </a>
+                            {% else %}
+                                {{ payment.beneficiary.owner.name }}
+                            {% endif %}
                         </td>
                         <td>{{ payment.reward.paymentDueDate.format('d/m/Y') }}</td>
                         <td>{{ payment.reward.disclosureDate.format('d/m/Y') }}</td>
