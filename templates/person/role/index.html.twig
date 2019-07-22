@@ -6,6 +6,9 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
+
+    {% include 'person/_tab-bar.html.twig' with { active_tab: 'person__role__index' } %}
+
     <div class="container m-4">
         <p>Informe os cargos exercidos por {{ person.name }}.</p>
         {{ form_start(form) }}
