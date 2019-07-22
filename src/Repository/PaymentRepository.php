@@ -45,7 +45,7 @@ class PaymentRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
     
-    public function findUsingSearchForm(FormInterface $form, ?array $accounts = null)
+    public function findUsingSearchForm(FormInterface $form, ?array $accounts = null, ?string $provenance = null)
     {
         $qb = $this->createQueryBuilder('payment');
         $qb
@@ -71,6 +71,12 @@ class PaymentRepository extends ServiceEntityRepository
             $qb
                 ->andWhere($qb->expr()->in('payment.account', ':accounts'))
                 ->setParameter('accounts', $accounts);
+        }
+
+        if ($provenance !== null) {
+            $qb
+                ->andWhere($qb->expr()->eq('payment.provenance', ':provenance'))
+                ->setParameter(':provenance', $provenance);
         }
 
         return $qb->getQuery()->getResult();

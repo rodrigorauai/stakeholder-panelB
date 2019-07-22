@@ -34,9 +34,10 @@ class PaymentController extends AbstractController
 
         if ($profile['id'] === ProfileHelper::PROFILE_STAKEHOLDER) {
             $accounts = $user->getAccounts();
+            $provenance = Payment::PROVENANCE_CO_PARTICIPATION;
         }
 
-        $payments = $repository->findUsingSearchForm($form, $accounts ?? null);
+        $payments = $repository->findUsingSearchForm($form, $accounts ?? null, $provenance ?? null);
         
         return $this->render('payment/index.html.twig', [
             'payments' => $payments,
