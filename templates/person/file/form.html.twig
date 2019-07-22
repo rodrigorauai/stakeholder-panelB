@@ -6,6 +6,9 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
+
+    {% include 'person/_tab-bar.html.twig' with { active_tab: 'person__file__index' } %}
+
     <div class="container m-4">
         {{ form_start(form) }}
         {{ form_row(form.name, {
