@@ -9,6 +9,7 @@ use App\Form\PaymentSearchType;
 use App\Helper\ProfileHelper;
 use App\Repository\PaymentRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -51,6 +52,7 @@ class PaymentController extends AbstractController
      * @param EntityManagerInterface $entityManager
      * @return Response
      * @Route("/pagamentos/{id}/nota-fiscal", name="payment__invoice__edit")
+     * @IsGranted({"ROLE_ADMINISTRATOR", "ROLE_SYSTEM_ADMINISTRATOR"})
      */
     public function invoiceEdit(Payment $payment, Request $request, EntityManagerInterface $entityManager)
     {
