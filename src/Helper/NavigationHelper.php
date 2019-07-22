@@ -65,11 +65,15 @@ class NavigationHelper
                         'icon'  => 'dashboard',
                         'label' => 'Dashboard',
                     ], [
-                        'route' => 'ballance', # TODO: Replace placeholder with the actual route
+                        'route' => 'payment__index',
+                        'icon'  => 'attach_money',
+                        'label' => 'Rendimentos',
+                    ], [
+                        'route' => 'ballance',
                         'icon'  => 'compare_arrows',
                         'label' => 'Extrato',
                     ], [
-                        'route' => 'contract_index', # TODO: Replace placeholder with the actual route
+                        'route' => 'contract_index',
                         'icon'  => 'insert_drive_file',
                         'label' => 'Contratos',
                     ],
