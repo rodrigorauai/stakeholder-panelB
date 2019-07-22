@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Person;
 use App\Entity\Withdraw;
 use App\Form\ReceiptFileType;
 use App\Form\WithdrawReceiptType;
 use App\Form\WithdrawSearchType;
+use App\Helper\ProfileHelper;
 use App\Helper\UploadHelper;
 use App\Repository\WithdrawRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,15 +24,24 @@ class WithdrawController extends AbstractController
     /**
      * @param Request $request
      * @param WithdrawRepository $repository
+     * @param ProfileHelper $profileHelper
      * @return Response
      * @Route("/retiradas", name="withdraw__index")
      */
-    public function index(Request $request, WithdrawRepository $repository)
+    public function index(Request $request, WithdrawRepository $repository, ProfileHelper $profileHelper)
     {
+        /** @var Person $user */
+        $user = $this->getUser();
+        $profile = $profileHelper->getCurrentProfile();
+
         $form = $this->createForm(WithdrawSearchType::class);
         $form->handleRequest($request);
 
-        $withdraws = $repository->findUsingSearchForm($form);
+        if ($profile['id'] === ProfileHelper::PROFILE_STAKEHOLDER) {
+            $accounts = $user->getAccounts();
+        }
+
+        $withdraws = $repository->findUsingSearchForm($form, $accounts ?? null);
 
         return $this->render('withdraw/index.html.twig', [
             'withdraws' => $withdraws,

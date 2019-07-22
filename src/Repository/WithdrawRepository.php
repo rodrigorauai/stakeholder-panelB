@@ -20,16 +20,23 @@ class WithdrawRepository extends ServiceEntityRepository
         parent::__construct($registry, Withdraw::class);
     }
 
-    // /**
-    //  * @return Withdraw[] Returns an array of Withdraw objects
-    //  */
-    
-    public function findUsingSearchForm(FormInterface $form)
+    /**
+     * @param FormInterface $form
+     * @param array|null $accounts
+     * @return Withdraw[]
+     */
+    public function findUsingSearchForm(FormInterface $form, ?array $accounts = null)
     {
         $qb = $this->createQueryBuilder('withdraw');
         $qb
             ->select('withdraw')
             ->orderBy('withdraw.id', 'DESC');
+
+        if ($accounts) {
+            $qb
+                ->andWhere($qb->expr()->in('withdraw.account', ':accounts'))
+                ->setParameter('accounts', $accounts);
+        }
 
         if ($form->isSubmitted() && $form->isValid()) {
             $queryString = $form->get('queryString')->getData();
@@ -38,7 +45,7 @@ class WithdrawRepository extends ServiceEntityRepository
                 $qb
                     ->join('withdraw.account', 'account')
                     ->join('account.owner', 'owner')
-                    ->where(
+                    ->andWhere(
                         $qb->expr()->orX(
                             $qb->expr()->eq('withdraw.id', ':queryString'),
                             $qb->expr()->like('owner.name', ':containingQueryString')
