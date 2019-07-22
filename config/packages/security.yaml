@@ -1,4 +1,12 @@
 security:
+    role_hierarchy:
+        ROLE_SYSTEM_ADMINISTRATOR: [ROLE_ADMINISTRATOR]
+
+        ROLE_ADMINISTRATOR: [ROLE_ADMINISTRATIVE_ASSISTANT]
+        ROLE_ADMINISTRATIVE_ASSISTANT: [ROLE_USER]
+
+        ROLE_STAKEHOLDER: [ROLE_USER]
+
     encoders:
         App\Entity\Person:
             algorithm: argon2i
