@@ -21,6 +21,7 @@ use Exception;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -140,6 +141,43 @@ class PersonController extends AbstractController
         }
 
         return $this->render('person/edit.html.twig', [
+            'person' => $person,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Person $person
+     * @param Request $request
+     * @param PasswordHelper $helper
+     * @param LoggerInterface $logger
+     * @return Response
+     * @Route("/pessoas/{id}/acesso", name="person__authentication__form")
+     */
+    public function authentication(Person $person, Request $request, PasswordHelper $helper, LoggerInterface $logger)
+    {
+        $form = $this->createFormBuilder()
+            ->add('sendPasswordDefinitionEmail', HiddenType::class, [
+                'data' => true,
+            ])
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                $helper->sendPasswordDefinitionEmail($person);
+                $this->addFlash('success', 'E-mail enviado.');
+            } catch (TransportExceptionInterface $exception) {
+                $this->addFlash('error', 'Não foi possível enviar o e-mail de definição de senha.');
+                $logger->error($exception->getMessage());
+            } catch (Exception $exception) {
+                $this->addFlash('error', 'Não foi possível enviar o e-mail de definição de senha.');
+                $logger->error($exception->getMessage());
+            }
+        }
+
+        return $this->render('person/authentication/form.html.twig', [
             'person' => $person,
             'form' => $form->createView(),
         ]);
