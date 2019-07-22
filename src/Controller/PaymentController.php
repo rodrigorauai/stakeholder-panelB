@@ -3,16 +3,19 @@
 namespace App\Controller;
 
 use App\Entity\Payment;
+use App\Entity\PaymentInvoice;
 use App\Entity\Person;
 use App\Form\PaymentInvoiceType;
 use App\Form\PaymentSearchType;
 use App\Helper\ProfileHelper;
 use App\Repository\PaymentRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class PaymentController extends AbstractController
@@ -51,24 +54,37 @@ class PaymentController extends AbstractController
      * @param Request $request
      * @param EntityManagerInterface $entityManager
      * @return Response
-     * @Route("/pagamentos/{id}/nota-fiscal", name="payment__invoice__edit")
-     * @IsGranted({"ROLE_ADMINISTRATOR", "ROLE_SYSTEM_ADMINISTRATOR"})
+     * @throws Exception
+     * @Route("/pagamentos/{id}/nota-fiscal", name="payment__invoice")
      */
-    public function invoiceEdit(Payment $payment, Request $request, EntityManagerInterface $entityManager)
+    public function invoiceAdd(Payment $payment, Request $request, EntityManagerInterface $entityManager)
     {
-        $form = $this->createForm(PaymentInvoiceType::class, ['invoiceUrl' => $payment->getInvoiceUrl()]);
+        $form = $this->createForm(PaymentInvoiceType::class, $payment->getInvoice(), [
+            'payment' => $payment,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $payment->setInvoiceUrl($form->get('invoiceUrl')->getData());
 
-            $entityManager->persist($payment);
+            if ($payment->getStatus() !== Payment::STATUS_WAITING_INVOICE) {
+                throw new AccessDeniedHttpException();
+            }
+
+            /** @var PaymentInvoice $invoice */
+            $invoice = $form->getData();
+
+            if ($this->isGranted(["ROLE_ADMINISTRATIVE_ASSISTANT"])) {
+                $invoice->setDateRevised(new DateTimeImmutable());
+                $invoice->setRevisor($this->getUser());
+            }
+
+            $entityManager->persist($invoice);
             $entityManager->flush();
 
-            return $this->redirectToRoute('payment__invoice__edit', ['id' => $payment->getId()], 303);
+            return $this->redirectToRoute('payment__invoice', ['id' => $payment->getId()], 303);
         }
 
-        return $this->render('payment/invoice/edit.html.twig', [
+        return $this->render('payment/invoice/form.html.twig', [
             'payment' => $payment,
             'form' => $form->createView(),
         ]);
