@@ -41,6 +41,10 @@
                                 <a href="{{ path('payment__invoice', { id: payment.id }) }}">
                                     {{ payment.status|trans }}
                                 </a>
+                            {% elseif payment.status == constant('STATUS_WAITING_INVOICE_APPROVAL', payment) %}
+                                <a href="{{ path('payment__invoice__review', { id: payment.id }) }}">
+                                    {{ payment.status|trans }}
+                                </a>
                             {% else %}
                                 {{ payment.status|trans }}
                             {% endif %}

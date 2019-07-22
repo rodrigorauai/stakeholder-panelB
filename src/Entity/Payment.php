@@ -238,9 +238,10 @@ class Payment extends AccountFinancialMovement
     public function getInvoice(): ?PaymentInvoice
     {
         if (!$this->invoice) {
+            /** @var PaymentInvoice $invoice */
             $invoice = $this->invoices->last();
 
-            if ($invoice) {
+            if ($invoice && $invoice->getStatus() !== PaymentInvoice::STATUS_REPROVED) {
                 $this->invoice = $invoice;
             }
         }
