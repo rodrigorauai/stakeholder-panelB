@@ -42,6 +42,7 @@ security:
     access_control:
         - { path: ^/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/esqueci-minha-senha, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/definir-senha, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, roles: ROLE_USER }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
