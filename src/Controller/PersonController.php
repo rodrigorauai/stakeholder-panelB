@@ -13,16 +13,19 @@ use App\Form\PersonData;
 use App\Form\PersonRolesType;
 use App\Form\PersonSearchType;
 use App\Form\PersonType;
+use App\Helper\PasswordHelper;
 use App\Helper\UploadHelper;
 use App\Repository\PersonRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class PersonController extends AbstractController
@@ -60,13 +63,16 @@ class PersonController extends AbstractController
 
     /**
      * @param Request $request
-     * @return Response
+     * @param PasswordHelper $helper
+     * @param LoggerInterface $logger
+     * @return RedirectResponse|Response
      * @Route("/pessoas/adicionar", name="person_create")
      * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
-    public function create(Request $request)
+    public function create(Request $request, PasswordHelper $helper, LoggerInterface $logger)
     {
         $form = $this->createForm(PersonType::class);
+        $form->get('sendPasswordDefinitionEmail')->setData(true);
 
         $form->handleRequest($request);
 
@@ -77,6 +83,18 @@ class PersonController extends AbstractController
             $this->em->persist($person);
             $this->em->persist($account);
             $this->em->flush();
+
+            if (true === $form->get('sendPasswordDefinitionEmail')->getData()) {
+                try {
+                    $helper->sendPasswordDefinitionEmail($person);
+                } catch (TransportExceptionInterface $exception) {
+                    $this->addFlash('error', 'Não foi possível enviar o e-mail de definição de senha.');
+                    $logger->error($exception->getMessage());
+                } catch (Exception $exception) {
+                    $this->addFlash('error', 'Não foi possível enviar o e-mail de definição de senha.');
+                    $logger->error($exception->getMessage());
+                }
+            }
 
             return $this->redirectToRoute('person__index', [], 303);
         }

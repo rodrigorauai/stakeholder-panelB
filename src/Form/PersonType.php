@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Person;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -37,6 +38,10 @@ class PersonType extends AbstractType
                 'required' => false,
                 'class' => Person::class,
                 'choice_label' => 'name',
+            ])
+            ->add('sendPasswordDefinitionEmail', CheckboxType::class, [
+                'label' => 'Enviar e-mail de definição de senha',
+                'mapped' => false,
             ])
         ;
     }
