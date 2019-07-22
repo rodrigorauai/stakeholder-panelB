@@ -11,6 +11,7 @@ use App\Helper\ProfileHelper;
 use App\Helper\UploadHelper;
 use App\Repository\WithdrawRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -105,6 +106,7 @@ class WithdrawController extends AbstractController
      * @param EntityManagerInterface $entityManager
      * @return RedirectResponse|Response
      * @Route("/retiradas/{id}/comprovante-de-transferencia/editar", name="withdraw__receipt__add")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSSISTANT"})
      */
     public function addReceipt(
         Withdraw $withdraw,
