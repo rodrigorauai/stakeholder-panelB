@@ -5,6 +5,17 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
+    <div class="container m-4" style="float:right;">
+        {{ form_start(form) }}
+        {{ form_row(form.queryString, {
+            attr: {
+                autofocus: '',
+            }
+        }) }}
+        {{ form_widget(form) }}
+        {{ form_rest(form) }}
+        {{ form_end(form) }}
+    </div>
     <div class="my-4 mx-2">
         <div class="table-responsive">
             <table class="table text-nowrap">
@@ -21,7 +32,7 @@
                 <tbody>
                 {% for withdraw in withdraws %}
                     <tr>
-                        <th scope="row">{{ withdraw.id }}</th>
+                        <td>{{ withdraw.id }}</td>
                         <td>
                             {{ withdraw.status|trans }}
                         </td>
@@ -31,15 +42,19 @@
                             {% if withdraw.wasExecuted %}
                                 {% if withdraw.receipts|length > 0 %}
                                     <a href="{{ path('withdraw__receipt__download', { id: withdraw.id }) }}"
-                                        target="_blank">
+                                       target="_blank">
                                         Comprovante{# TODO: Fix this ugly hack
                                         #}<span class="material-icons icon-small align-supper">open_in_new</span></a>
-                                    <a class="mdc-icon-button ml-2"
-                                         href="{{ path('withdraw__receipt__add', { id: withdraw.id }) }}">
-                                        <span class="material-icons align-text-bottom">edit</span></a>
+                                    {% if profileSwitcher.accessingAsAdministrator %}
+                                        <a class="mdc-icon-button ml-2"
+                                           href="{{ path('withdraw__receipt__add', { id: withdraw.id }) }}">
+                                            <span class="material-icons align-text-bottom">edit</span></a>
+                                    {% endif %}
                                 {% else %}
-                                    <a class="mdc-button"
-                                       href="{{ path('withdraw__receipt__add', { id: withdraw.id }) }}">Registrar</a>
+                                    {% if profileSwitcher.accessingAsAdministrator %}
+                                        <a class="mdc-button"
+                                           href="{{ path('withdraw__receipt__add', { id: withdraw.id }) }}">Registrar</a>
+                                    {% endif %}
                                 {% endif %}
                             {% else %}
 
@@ -48,7 +63,7 @@
                         <td>
                             {% if withdraw.wasExecuted %}
                                 {{ withdraw.executionTimestamp.format('d/m/Y H:i:s') }}
-                            {% else %}
+                            {% elseif profileSwitcher.accessingAsAdministrator %}
                                 <a href="{{ path('withdraw__register_execution', { id: withdraw.id}) }}">
                                     Registrar Execução
                                 </a>
