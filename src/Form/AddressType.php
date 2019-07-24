@@ -15,27 +15,13 @@ class AddressType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('postalCode', TextType::class, [
-                'label' => 'CEP',
-            ])
-            ->add('street', TextType::class, [
-                'label' => 'Logradouro',
-            ])
-            ->add('number', TextType::class, [
-                'label' => 'Número',
-            ])
-            ->add('complement', TextType::class, [
-                'label' => 'Complemento',
-                'required' => false,
-            ])
-            ->add('district', TextType::class, [
-                'label' => 'Bairro',
-            ])
-            ->add('city', TextType::class, [
-                'label' => 'Cidade',
-            ])
-            ->add('state', ChoiceType::class, [
-                'label' => 'Estado',
+            ->add('postalCode', TextType::class, ['label' => 'CEP',])
+            ->add('street', TextType::class, ['label' => 'Logradouro',])
+            ->add('number', TextType::class, ['label' => 'Número',])
+            ->add('complement', TextType::class, ['label' => 'Complemento', 'required' => false,])
+            ->add('district', TextType::class, ['label' => 'Bairro',])
+            ->add('city', TextType::class, ['label' => 'Cidade',])
+            ->add('state', ChoiceType::class, ['label' => 'Estado',
                 'choices' => [
                     'Acre' => 'AC',
                     'Alagoas' => 'AL',
@@ -64,14 +50,9 @@ class AddressType extends AbstractType
                     'São Paulo' => 'SP',
                     'Sergipe' => 'SE',
                     'Tocantins' => 'TO',
-                ],
-            ])
-            ->add('country', ChoiceType::class, [
-                'label' => 'País',
-                'choices' => [
-                    'Brasil' => 'Brazil',
-                ]
-            ])
+                ],])
+            ->add('country', ChoiceType::class, ['label' => 'País', 'choices' =>
+                ['Brasil' => 'Brazil',]])
         ;
     }
 
@@ -80,15 +61,16 @@ class AddressType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Address::class,
             'empty_data' => function (FormInterface $form) {
-                $address = new Address(
-                    $form->get('postalCode')->getData(),
-                    $form->get('street')->getData(),
-                    $form->get('number')->getData(),
-                    $form->get('district')->getData(),
-                    $form->get('city')->getData(),
-                    $form->get('state')->getData(),
-                    $form->get('country')->getData()
-                );
+                        $address = new Address(
+                            $form->get('postalCode')->getData(),
+                            $form->get('street')->getData(),
+                            $form->get('number')->getData(),
+                            $form->get('complement')->getData(),
+                            $form->get('district')->getData(),
+                            $form->get('city')->getData(),
+                            $form->get('state')->getData(),
+                            $form->get('country')->getData()
+                        );
 
                 return $address;
             },

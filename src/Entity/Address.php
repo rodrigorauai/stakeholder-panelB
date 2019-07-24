@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Form\AddressType;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -81,16 +82,16 @@ class Address
      */
     private $country;
 
-    public function __construct($postalCode, $street, $number, $district, $city, $state, $country, $complement)
+    public function __construct($postalCode, $street, $number, $complement, $district, $city, $state, $country)
     {
         $this->postalCode = $postalCode;
         $this->street = $street;
         $this->number = $number;
+        $this->complement = $complement;
         $this->district = $district;
         $this->city = $city;
         $this->state = $state;
         $this->country = $country;
-        $this->complement = $complement;
     }
 
     public function getId(): ?int
@@ -105,15 +106,16 @@ class Address
 
     /**
      * @param Entity $entity
+     * @return null
      * @throws Exception
      */
     public function setEntity(Entity $entity)
     {
         if ($this->entity) {
-            throw new Exception('This address already belongs to a person');
+            return null;
         }
 
-        $this->entity = $entity;
+        return $this->entity = $entity;
     }
 
     public function getEntity(): ?Entity
