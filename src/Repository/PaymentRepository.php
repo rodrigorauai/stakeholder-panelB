@@ -58,11 +58,18 @@ class PaymentRepository extends ServiceEntityRepository
                 ->join('contract.plan', 'plan')
                 ->join('payment.account', 'account')
                 ->join('account.owner',  'owner')
+                ->leftJoin('payment.invoices', 'invoices')
                 ->where($qb->expr()->orX(
                     $qb->expr()->eq('payment.id', ':queryStringId'),
                     $qb->expr()->like('plan.administrativeName', ':queryString'),
                     $qb->expr()->like('owner.name', ':queryString')
                 ))
+                ->orWhere($qb->expr()->in('invoices', 
+                    $this->createQueryBuilder('i')
+                        ->orWhere('invoices.url LIKE :queryString')
+                        ->setParameter('queryString', '%'.$form->get('queryString')->getData().'%')
+                        ->getDQL()
+                    ))
                 ->setParameters([
                     'queryString' => '%'.$form->get('queryString')->getData().'%',
                     'queryStringId' => $form->get('queryString')->getData(),
