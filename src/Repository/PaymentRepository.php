@@ -66,7 +66,9 @@ class PaymentRepository extends ServiceEntityRepository
                 ))
                 ->orWhere($qb->expr()->in('invoices', 
                     $this->createQueryBuilder('i')
-                        ->orWhere('invoices.url LIKE :queryString')
+                        ->where($qb->expr()->orX(
+                            $qb->expr()->like('invoices.url', ':queryString')
+                        ))
                         ->setParameter('queryString', '%'.$form->get('queryString')->getData().'%')
                         ->getDQL()
                     ))
