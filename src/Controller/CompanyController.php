@@ -6,14 +6,21 @@ use App\Entity\Account;
 use App\Entity\Address;
 use App\Entity\BankAccount;
 use App\Entity\Company;
+use App\Entity\UploadedCompanyFile;
 use App\Form\AddressType;
 use App\Form\BankAccountType;
 use App\Form\CompanyData;
+use App\Form\CompanySearchType;
 use App\Form\CompanyType;
+use App\Form\FileUploadType;
+use App\Helper\ProfileHelper;
+use App\Helper\UploadHelper;
 use App\Repository\CompanyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,16 +29,34 @@ use Symfony\Component\Routing\Annotation\Route;
 class CompanyController extends AbstractController
 {
     /**
+     * @param ProfileHelper $profileSwitcher
+     * @param Request $request
      * @param CompanyRepository $repository
      * @return Response
      * @Route("/empresas", name="company__index")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT", "ROLE_STAKEHOLDER"})
      */
-    public function index(CompanyRepository $repository)
+    public function index(ProfileHelper $profileSwitcher, Request $request, CompanyRepository $repository)
     {
         $companies = $repository->findAll();
 
+        $form = $this->createForm(CompanySearchType::class);
+        $form->handleRequest($request);
+
+        $currentProfile = $profileSwitcher->getCurrentProfile();
+        switch ($currentProfile['id']) {
+
+            case ProfileHelper::PROFILE_STAKEHOLDER:
+                return $this->redirectToRoute('dashboard');
+        }
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $companies = $repository->findByExampleField($form);
+        }
+
         return $this->render('company/index.html.twig', [
             'companies' => $companies,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -40,6 +65,7 @@ class CompanyController extends AbstractController
      * @param EntityManagerInterface $entityManager
      * @return Response
      * @Route("/empresas/adicionar", name="company__create")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
     public function create(Request $request, EntityManagerInterface $entityManager)
     {
@@ -68,6 +94,7 @@ class CompanyController extends AbstractController
      * @param EntityManagerInterface $entityManager
      * @return Response
      * @Route("/empresas/{id}/editar", name="company__edit")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
     public function edit(Company $company, Request $request, EntityManagerInterface $entityManager)
     {
@@ -96,6 +123,7 @@ class CompanyController extends AbstractController
      * @return RedirectResponse|Response
      * @throws Exception
      * @Route("/empresas/{id}/endereço", name="company_address__edit")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
     public function editAddress(Company $company, Request $request, EntityManagerInterface $entityManager)
     {
@@ -126,6 +154,7 @@ class CompanyController extends AbstractController
      * @param Company $company
      * @return Response
      * @Route("/company/{id}/contas-de-patrocinio", name="company_account__index")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
     public function showAccounts(Company $company)
     {
@@ -140,6 +169,7 @@ class CompanyController extends AbstractController
      * @param EntityManagerInterface $entityManager
      * @return RedirectResponse|Response
      * @Route("/empresas/{id}/conta-bancaria", name="company__bank_account__edit")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
     public function editBankAccount(Company $company, Request $request, EntityManagerInterface $entityManager)
     {
@@ -164,5 +194,60 @@ class CompanyController extends AbstractController
             'account' => $account,
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @param Company $company
+     * @return Response
+     * @Route("/company/{id}/arquivos", name="company__file__index")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
+     */
+    public function uploadIndex(Company $company)
+    {
+        return $this->render('company/file/index.html.twig', [
+            'company' => $company,
+        ]);
+    }
+
+    /**
+     * @param Company $company
+     * @param Request $request
+     * @param UploadHelper $helper
+     * @param EntityManagerInterface $entityManager
+     * @return RedirectResponse|Response
+     * @Route("/empresas/{id}/arquivos/novo", name="company__file__form")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
+     */
+    public function uploadForm(Company $company, Request $request, UploadHelper $helper, EntityManagerInterface $entityManager)
+    {
+        $form = $this->createForm(FileUploadType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+
+            $helper->saveCompanyFile($data['name'], $data['file'], $company);
+
+            // Flush entity created by the UploadHelper
+            $entityManager->flush();
+
+            return $this->redirectToRoute('company__file__index', ['id' => $company->getId()], 303);
+        }
+
+        return $this->render('company/file/form.html.twig', [
+            'company' => $company,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param UploadedCompanyFile $file
+     * @return BinaryFileResponse
+     * @Route("/company/arquivos/{id}", name="company__file__download")
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
+     */
+    public function fileDownload(UploadedCompanyFile $file)
+    {
+        return new BinaryFileResponse($file->getPath());
     }
 }
