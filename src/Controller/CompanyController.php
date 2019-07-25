@@ -36,14 +36,10 @@ class CompanyController extends AbstractController
      */
     public function index(Request $request, CompanyRepository $repository)
     {
-        $companies = $repository->findAll();
-
         $form = $this->createForm(CompanySearchType::class);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $companies = $repository->findByExampleField($form);
-        }
+        $companies = $repository->findByExampleField($form);
 
         return $this->render('company/index.html.twig', [
             'companies' => $companies,

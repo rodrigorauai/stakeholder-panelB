@@ -28,14 +28,10 @@ class StakeholdPlanController extends AbstractController
      */
     public function index(Request $request, StakeholdPlanRepository $repository)
     {
-        $plans = $repository->findAll();
-
         $form = $this->createForm(StakeholdPlanSearchType::class);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $plans = $repository->findUsingSearchForm($form);
-        }
+        $plans = $repository->findUsingSearchForm($form);
 
         return $this->render('stakehold_plan/index.html.twig', [
             'controller_name' => 'StakeholdingPlanController',
