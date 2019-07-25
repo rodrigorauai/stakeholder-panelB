@@ -30,12 +30,10 @@ class UniqueUserValidator extends ConstraintValidator
             'email' => $value
         ]);
         if (!$existingUser) {
+            $this->context->buildViolation($constraint->message)
+                ->setParameter('{{ value }}', $value)
+                ->addViolation();
             return;
         }
-
-        // TODO: implement the validation here
-        $this->context->buildViolation($constraint->message)
-            ->setParameter('{{ value }}', $value)
-            ->addViolation();
     }
 }
