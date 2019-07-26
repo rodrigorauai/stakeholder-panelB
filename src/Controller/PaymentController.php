@@ -38,12 +38,9 @@ class PaymentController extends AbstractController
         $form = $this->createForm(PaymentSearchType::class);
         $form->handleRequest($request);
 
-        $showContracts = true;
-
         if ($profile['id'] === ProfileHelper::PROFILE_STAKEHOLDER) {
             $accounts = $user->getAccounts();
             $provenance = Payment::PROVENANCE_CO_PARTICIPATION;
-            $showContracts = false;
         }
 
         $payments = $repository->findUsingSearchForm($form, $accounts ?? null, $provenance ?? null);
@@ -51,7 +48,6 @@ class PaymentController extends AbstractController
         return $this->render('payment/index.html.twig', [
             'payments' => $payments,
             'form' => $form->createView(),
-            'showContracts' => $showContracts,
         ]);
     }
 
