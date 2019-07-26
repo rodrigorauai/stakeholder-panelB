@@ -70,7 +70,7 @@
                         <td>{{ payment.reward.paymentDueDate.format('d/m/Y') }}</td>
                         <td>{{ payment.reward.disclosureDate.format('d/m/Y') }}</td>
                         <td>
-                            <a href={{ path('contract__edit', { id: payment.contract.id }) }}>
+                            <a {% if showContracts %} href={{ path('contract__edit', { id: payment.contract.id }) }} {% endif %}>
                                 Contrato no valor de R${{ payment.contract.value|number_format(2, ',', '.') }}
                                 no {{ payment.contract.plan.administrativeName }}
                             </a>
