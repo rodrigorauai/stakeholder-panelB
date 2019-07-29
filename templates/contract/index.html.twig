@@ -10,6 +10,17 @@
     <div class="mdc-layout-grid">
         <div class="mdc-layout-grid__inner">
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                <div class="container" style="float:right;">
+                    {{ form_start(form) }}
+                    {{ form_row(form.queryString, {
+                        attr: {
+                            autofocus: '',
+                        }
+                    }) }}
+                    {{ form_widget(form) }}
+                    {{ form_rest(form) }}
+                    {{ form_end(form) }}
+                </div>
                 <div class="table-responsive">
                     <table class="table">
                         <thead>

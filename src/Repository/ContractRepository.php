@@ -6,6 +6,7 @@ use App\Entity\Contract;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\Form\FormInterface;
 
 /**
  * @method Contract|null find($id, $lockMode = null, $lockVersion = null)
@@ -29,6 +30,34 @@ class ContractRepository extends ServiceEntityRepository
             ->orderBy('contract.id', 'DESC')
             ->getQuery()
             ->getResult();
+    }
+
+    public function findUsingSearchForm(FormInterface $form, ?array $accounts = null)
+    {
+        $qb = $this->createQueryBuilder('contract');
+        $qb
+            ->select('contract')
+            ->orderBy('contract.id', 'DESC');
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $queryString = $form->get('queryString')->getData();
+
+            if ($queryString) {
+                $qb
+                    ->where($qb->expr()->orX(
+                        $qb->expr()->eq('contract.id', ':queryStringId')
+                    ))
+                    ->setParameter('queryStringId', $queryString);
+            }
+        }
+
+        if ($accounts !== null) {
+            $qb
+                ->andWhere($qb->expr()->in('contract.account', ':accounts'))
+                ->setParameter('accounts', $accounts);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
     /**
