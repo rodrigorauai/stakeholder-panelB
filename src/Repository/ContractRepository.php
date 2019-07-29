@@ -44,10 +44,16 @@ class ContractRepository extends ServiceEntityRepository
 
             if ($queryString) {
                 $qb
+                    ->join('contract.account', 'account')
+                    ->join('account.owner', 'owner')
                     ->where($qb->expr()->orX(
-                        $qb->expr()->eq('contract.id', ':queryStringId')
+                        $qb->expr()->eq('contract.id', ':queryStringId'),
+                        $qb->expr()->like('owner.name', ':queryString')
                     ))
-                    ->setParameter('queryStringId', $queryString);
+                    ->setParameters([
+                        'queryStringId' => $queryString,
+                        'queryString' => "%$queryString%",
+                    ]);
             }
         }
 
