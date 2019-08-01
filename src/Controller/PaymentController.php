@@ -69,6 +69,7 @@ class PaymentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             if ($payment->getStatus() !== Payment::STATUS_WAITING_INVOICE) {
+                return $this->redirectToRoute('payment__index', [], 303);
                 throw new AccessDeniedHttpException();
             }
 
