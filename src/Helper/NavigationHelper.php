@@ -46,7 +46,7 @@ class NavigationHelper
                     ], [
                         'route' => 'stakehold_plan__index',
                         'icon'  => 'assignment',
-                        'label' => 'Planos de Patrocínio',
+                        'label' => 'Planos',
                     ], [
                         'route' => 'person__index',
                         'icon'  => 'people',

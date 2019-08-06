@@ -41,7 +41,7 @@ class ProfileHelper
     public $availableProfiles = [
          self::PROFILE_STAKEHOLDER => [
             'id'    => self::PROFILE_STAKEHOLDER,
-            'label' => 'Patrocinador',
+            'label' => 'Sócio',
             'roles' => ['ROLE_USER', 'ROLE_STAKEHOLDER'],
         ],
         self::PROFILE_ADMINISTRATOR => [

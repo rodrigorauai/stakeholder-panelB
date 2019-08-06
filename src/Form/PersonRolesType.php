@@ -13,7 +13,7 @@ class PersonRolesType extends AbstractType
     {
         $builder
             ->add('is_stakeholder', CheckboxType::class, [
-                'label' => 'Patrocinador',
+                'label' => 'Sócio',
                 'data' => true,
                 'disabled' => true,
             ])
