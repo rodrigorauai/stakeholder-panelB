@@ -60,7 +60,7 @@
                         </td>
                         <td>
                             {% if profileSwitcher.accessingAsAdministrator %}
-                                {% if payment.hasInvoice %}
+                                {% if payment.beneficiary.owner.cnpj %}
                                     <a href="{{ path('company__edit', { id: payment.beneficiary.owner.id }) }}">
                                         {{ payment.beneficiary.owner.name}}
                                     </a>

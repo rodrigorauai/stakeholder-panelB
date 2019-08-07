@@ -190,6 +190,11 @@ class Person extends Entity implements UserInterface
         $this->phone = $phone;
     }
 
+    public function getCnpj(): ?string
+    {
+        return null;
+    }
+
     /**
      * A visual identifier that represents this user.
      *
