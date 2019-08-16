@@ -4,4 +4,4 @@ twig:
     strict_variables: '%kernel.debug%'
     form_themes: ['_form/material_theme.html.twig']
     globals:
-        system_title: 'SociosDigitais'
+        system_title: '%env(SYSTEM_TITLE)%'
