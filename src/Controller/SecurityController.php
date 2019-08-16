@@ -3,12 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Person;
+use App\Helper\PasswordHelper;
 use App\Repository\AuthenticationTokenRepository;
 use App\Repository\PersonRepository;
-use App\Security\AuthenticationTokenManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -18,7 +17,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\NamedAddress;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -52,13 +50,12 @@ class SecurityController extends AbstractController
 
     /**
      * @param Request $request
-     * @param AuthenticationTokenManager $manager
      * @param PersonRepository $repository
+     * @param PasswordHelper $helper
      * @return RedirectResponse|Response
-     * @throws Exception
      * @Route("/esqueci-minha-senha", name="password_recovery")
      */
-    public function passwordRecovery(Request $request, AuthenticationTokenManager $manager, PersonRepository $repository)
+    public function passwordRecovery(Request $request, PersonRepository $repository, PasswordHelper $helper)
     {
         $form = $this->createFormBuilder()
             ->add('email', EmailType::class, ['label' => 'Seu e-mail', 'required' => true,])
@@ -74,27 +71,13 @@ class SecurityController extends AbstractController
             if (!$user) {
                 $this->addFlash('error', 'Não foi possível encontrar uma conta com o seu e-mail.');
             } else {
-                $email = (new TemplatedEmail())
-                    ->from(new NamedAddress('sistema@adinvest.com', 'AdInvest'))
-                    ->to($user->getEmail())
-                    ->replyTo('rafaelsouza@adinvest.com')
-                    ->subject('Redefinição de Senha - AdInvest')
-                    ->htmlTemplate('_emails/password-recovery.html.twig')
-                    ->context([
-                        'user' => $user,
-                        'token' => $manager->generateAuthenticationToken($user),
-                    ]);
 
                 try {
-                    $sent = true;
-                    $this->mailer->send($email);
-                } catch (TransportExceptionInterface $exception) {
-                    $sent = false;
-                }
-
-                if ($sent) {
+                    $helper->sendPasswordDefinitionEmail($user);
                     $this->addFlash('success', 'Em breve você receberá em seu e-mail um link para redefinir sua senha.');
-                } else {
+                } catch (TransportExceptionInterface $exception) {
+                    $this->addFlash('error', 'Não foi possível enviar o e-mail de redefinição de senha.');
+                } catch (Exception $exception) {
                     $this->addFlash('error', 'Não foi possível enviar o e-mail de redefinição de senha.');
                 }
 
