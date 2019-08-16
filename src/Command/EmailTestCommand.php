@@ -2,25 +2,24 @@
 
 namespace App\Command;
 
+use App\Helper\EmailHelper;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 
 class EmailTestCommand extends Command
 {
     protected static $defaultName = 'app:email:test';
 
     /**
-     * @var MailerInterface
+     * @var EmailHelper
      */
     private $mailer;
 
-    public function __construct(MailerInterface $mailer, string $name = null)
+    public function __construct(EmailHelper $mailer, string $name = null)
     {
         parent::__construct($name);
         $this->mailer = $mailer;
@@ -40,12 +39,7 @@ class EmailTestCommand extends Command
 
         $to = $input->getArgument('to');
 
-        $email = (new Email())
-            ->from('sistema@adinvest.com')
-            ->to($to)
-            ->subject('Testing e-mail sending from Symfony Mailer!')
-            ->text('Sending emails is fun again!')
-            ->html('<p>See Twig integration for better HTML integration!</p>');
+        $email = $this->mailer->createEmail($to, 'Testing e-mail sending from Symfony Mailer!', 'Sending emails is fun again!');
 
         try {
             $this->mailer->send($email);
