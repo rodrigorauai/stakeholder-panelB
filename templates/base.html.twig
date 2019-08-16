@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}Você é simplesmente incrível!{% endblock %} - AdInvest</title>
+    <title>{% block title %}Você é simplesmente incrível!{% endblock %} - SociosDigitais</title>
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/normalize/6.0.0/normalize.min.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="shortcut icon" href="{{ asset('static/img/favicon.png') }}">
+{#    <link rel="shortcut icon" href="{{ asset('static/img/favicon.png') }}">#}
     {% block stylesheets %}
         {{ encore_entry_link_tags('app') }}
     {% endblock %}
@@ -33,6 +33,10 @@
 
     {% if is_granted('ROLE_USER') %}
         </div>
+    {% endif %}
+
+    {% if is_granted('ROLE_USER') %}
+        {% include '_components/drawer/profile-switcher--dialog.html.twig' %}
     {% endif %}
 
     {% block body_end %}{% endblock %}
