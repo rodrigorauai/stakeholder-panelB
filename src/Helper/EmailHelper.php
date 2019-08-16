@@ -12,6 +12,7 @@ namespace App\Helper;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\NamedAddress;
 use Symfony\Component\Mime\RawMessage;
 
@@ -74,8 +75,28 @@ class EmailHelper
             $email->replyTo($this->replyTo);
         }
 
+        $email->to($to);
+        $email->subject($subject);
+
         $email->htmlTemplate($template);
         $email->context($context);
+
+        return $email;
+    }
+
+    public function createEmail($to, string $subject, string $content)
+    {
+        $email = new Email();
+        $email->from($this->from);
+
+        if ($this->replyTo) {
+            $email->replyTo($this->replyTo);
+        }
+
+        $email->to($to);
+        $email->subject($subject);
+
+        $email->html($content);
 
         return $email;
     }
