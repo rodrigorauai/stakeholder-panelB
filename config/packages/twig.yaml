@@ -3,3 +3,5 @@ twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
     form_themes: ['_form/material_theme.html.twig']
+    globals:
+        system_logo: 'static/img/logo-adinvest-302px.png'

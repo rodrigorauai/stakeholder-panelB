@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}AdInvest - Entrar{% endblock %}
+{% block title %}Entrar{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -18,7 +18,7 @@
 
             <section class="header">
                 <h1 class="mt-0">
-                    <img id="logo" src="{{ asset('static/img/logo-adinvest-302px.png') }}" alt="AdInvest">
+                    <img id="logo" src="{{ system_logo }}" alt="AdInvest">
                 </h1>
             </section>
 
@@ -27,8 +27,7 @@
                 <div class="form-row">
                     <div class="mdc-text-field mdc-text-field--outlined">
                         <input type="text" class="mdc-text-field__input" value="{{ last_username }}"
-                               name="email" id="inputEmail" required autofocus
-                        >
+                               name="email" id="inputEmail" required autofocus>
                         <div class="mdc-notched-outline">
                             <div class="mdc-notched-outline__leading"></div>
                             <div class="mdc-notched-outline__notch">
@@ -66,11 +65,11 @@
                 #}
 
                 <div class="form-row button-container">
-                    <button type="button" class="mdc-button">
-                    <span class="mdc-button__label">
-                        Esqueci minha senha
-                    </span>
-                    </button>
+                    <a class="mdc-button" href="{{ path('password_recovery') }}">
+                        <span class="mdc-button__label">
+                            Esqueci minha senha
+                        </span>
+                    </a>
                     {% include '_components/button/button.html.twig' with { type: 'submit', label: 'Entrar' } only %}
                 </div>
 
