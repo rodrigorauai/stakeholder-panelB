@@ -60,9 +60,15 @@
                         </td>
                         <td>
                             {% if profileSwitcher.accessingAsAdministrator %}
-                                <a href="{{ path('person_show', { id: payment.beneficiary.owner.id }) }}">
-                                    {{ payment.beneficiary.owner.name}}
-                                </a>
+                                {% if payment.beneficiary.owner.cnpj %}
+                                    <a href="{{ path('company__edit', { id: payment.beneficiary.owner.id }) }}">
+                                        {{ payment.beneficiary.owner.name}}
+                                    </a>
+                                {% else %}
+                                    <a href="{{ path('person_show', { id: payment.beneficiary.owner.id }) }}">
+                                        {{ payment.beneficiary.owner.name}}
+                                    </a>
+                                {% endif %}
                             {% else %}
                                 {{ payment.beneficiary.owner.name }}
                             {% endif %}
