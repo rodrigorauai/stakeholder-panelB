@@ -85,7 +85,7 @@ class PaymentController extends AbstractController
             $entityManager->persist($invoice);
             $entityManager->flush();
 
-            return $this->redirectToRoute('payment__invoice', ['id' => $payment->getId()], 303);
+            return $this->redirectToRoute('payment__index', [], 303);
         }
 
         return $this->render('payment/invoice/form.html.twig', [
