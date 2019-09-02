@@ -81,6 +81,9 @@ class PersonController extends AbstractController
             $person = Person::fromDataObject($form->getData());
             $account = new Account($person);
 
+            $userRoles = ['ROLE_USER', 'ROLE_STAKEHOLDER'];
+            $person->setRoles($userRoles);
+
             $this->em->persist($person);
             $this->em->persist($account);
             $this->em->flush();

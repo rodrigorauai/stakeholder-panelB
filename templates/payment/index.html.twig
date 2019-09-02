@@ -42,7 +42,7 @@
                                     {{ payment.status|trans }}
                                 </a>
                             {% elseif payment.status == constant('STATUS_WAITING_INVOICE_APPROVAL', payment) %}
-                                <a href="{{ path('payment__invoice__review', { id: payment.id }) }}">
+                                <a {% if profileSwitcher.accessingAsAdministrator %} href="{{ path('payment__invoice__review', { id: payment.id }) }}" {% endif %}>
                                     {{ payment.status|trans }}
                                 </a>
                             {% else %}
@@ -76,7 +76,7 @@
                         <td>{{ payment.reward.paymentDueDate.format('d/m/Y') }}</td>
                         <td>{{ payment.reward.disclosureDate.format('d/m/Y') }}</td>
                         <td>
-                            <a href={{ path('contract__edit', { id: payment.contract.id }) }}>
+                            <a {% if profileSwitcher.accessingAsAdministrator %} href={{ path('contract__edit', { id: payment.contract.id }) }} {% endif %}>
                                 Contrato no valor de R${{ payment.contract.value|number_format(2, ',', '.') }}
                                 no {{ payment.contract.plan.administrativeName }}
                             </a>
