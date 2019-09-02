@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Contract;
 use App\Entity\Person;
 use App\Form\ContractType;
+use App\Form\ContractSearchType;
 use App\Helper\ProfileHelper;
 use App\Helper\UploadHelper;
 use App\Repository\ContractRepository;
@@ -23,11 +24,14 @@ class ContractController extends AbstractController
     /**
      * @Route("/contract", name="contract_index")
      */
-    public function index(ProfileHelper $profileHelper, ContractRepository $repository)
+    public function index(Request $request, ProfileHelper $profileHelper, ContractRepository $repository)
     {
         /** @var Person $user */
         $user = $this->getUser();
         $profile = $profileHelper->getCurrentProfile();
+
+        $form = $this->createForm(ContractSearchType::class);
+        $form->handleRequest($request);
 
         $multipleOwners = false;
 
@@ -37,15 +41,14 @@ class ContractController extends AbstractController
             if (count($accounts) > 1) {
                 $multipleOwners = true;
             }
-
-            $contracts = $repository->findByAccount($accounts);
-        } else {
-            $contracts = $repository->findAll();
         }
+
+        $contracts = $repository->findUsingSearchForm($form, $accounts ?? null);
 
         return $this->render('contract/index.html.twig', [
             'contracts' => $contracts,
             'multipleOwners' => $multipleOwners,
+            'form' => $form->createView(),
         ]);
     }
 
