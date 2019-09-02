@@ -69,6 +69,7 @@ class PaymentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             if ($payment->getStatus() !== Payment::STATUS_WAITING_INVOICE) {
+                return $this->redirectToRoute('payment__index', [], 303);
                 throw new AccessDeniedHttpException();
             }
 
@@ -84,7 +85,7 @@ class PaymentController extends AbstractController
             $entityManager->persist($invoice);
             $entityManager->flush();
 
-            return $this->redirectToRoute('payment__invoice', ['id' => $payment->getId()], 303);
+            return $this->redirectToRoute('payment__index', [], 303);
         }
 
         return $this->render('payment/invoice/form.html.twig', [
