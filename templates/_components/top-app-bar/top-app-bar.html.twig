@@ -9,11 +9,19 @@
                 <button id="account-menu-toggle" class="material-icons mdc-top-app-bar__action-item" aria-label="Account menu">more_vert</button>
                 <div id="account-menu" class="mdc-menu mdc-menu-surface">
                     <ul class="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical" tabindex="-1">
+                        <a class="btn-link" href="{{ path('configuration') }}">
                         <li class="mdc-list-item" role="menuitem">
-                            <a href="{{ path('logout') }}">
-                                <span class="mdc-list-item__text">Sair</span>
-                            </a>
+                                    <span class="mdc-list-item__text" id="margin-item">Configuração</span>
                         </li>
+                        </a>
+                    </ul>
+                    <ul class="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical" tabindex="-1">
+                        <a class="btn-link" href="{{ path('logout') }}">
+                        <li class="mdc-list-item" role="menuitem">
+                                <span class="mdc-list-item__text" id="margin-item">Sair</span>
+                        </li>
+                        </a>
+
                     </ul>
                 </div>
             </div>
