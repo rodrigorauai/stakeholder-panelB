@@ -11,6 +11,7 @@ namespace App\Form;
 use App\Entity\Person;
 use App\Validator\CpfFormat;
 use App\Validator\CpfNumber;
+use App\Validator\UniqueUser;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class PersonData
@@ -28,21 +29,25 @@ class PersonData
      * @Assert\NotBlank()
      * @CpfFormat()
      * @CpfNumber()
+     * @UniqueUser()
      */
     public $cpf;
 
     /**
+     * @UniqueUser()
      * @Assert\Length(max="16", maxMessage="O RG não pode ter mais de 16 caracteres.")
      */
     public $rg;
 
     /**
      * @Assert\NotBlank()
+     * @UniqueUser()
      * @Assert\Email(checkHost=true, checkMX=true, message="E-mail inválido.")
      */
     public $email;
 
     /**
+     * @UniqueUser()
      * @Assert\Length(
      *     max=13, maxMessage="O telefone deve ter no máximo 13 dígitos.",
      *     min=10, minMessage="O telefone deve ter no mínimo 10 dígitos.",
