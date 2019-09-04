@@ -26,14 +26,18 @@ class UniqueUserValidator extends ConstraintValidator
         if (null === $value || '' === $value) {
             return;
         }
-        $existingUser = $this->personRepository->findOneBy([
-            'email' => $value
-        ]);
+
+        $existingUser = $this->personRepository->findOneBy(['email' => $value]) ||
+        $existingUser = $this->personRepository->findOneBy(['cpf'   => $value]) ||
+        $existingUser = $this->personRepository->findOneBy(['rg'    => $value]) ||
+        $existingUser = $this->personRepository->findOneBy(['phone' => $value]);
+
         if (!$existingUser) {
-            $this->context->buildViolation($constraint->message)
-                ->setParameter('{{ value }}', $value)
-                ->addViolation();
             return;
         }
+        // TODO: implement the validation here
+        $this->context->buildViolation($constraint->message)
+            ->setParameter('{{ value }}', $value)
+            ->addViolation();
     }
 }

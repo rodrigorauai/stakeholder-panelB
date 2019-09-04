@@ -29,10 +29,12 @@ class PersonData
      * @Assert\NotBlank()
      * @CpfFormat()
      * @CpfNumber()
+     * @UniqueUser()
      */
     public $cpf;
 
     /**
+     * @UniqueUser()
      * @Assert\Length(max="16", maxMessage="O RG não pode ter mais de 16 caracteres.")
      */
     public $rg;
@@ -45,6 +47,7 @@ class PersonData
     public $email;
 
     /**
+     * @UniqueUser()
      * @Assert\Length(
      *     max=13, maxMessage="O telefone deve ter no máximo 13 dígitos.",
      *     min=10, minMessage="O telefone deve ter no mínimo 10 dígitos.",
