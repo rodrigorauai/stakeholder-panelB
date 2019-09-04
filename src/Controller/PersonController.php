@@ -136,7 +136,7 @@ class PersonController extends AbstractController
         $form = $this->createForm(PersonType::class, PersonData::fromEntity($person));
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $person->updateFromDataObject($form->getData());
 
             $person->setCpf(str_replace(['-', '.'], '', $person->getCpf()));
