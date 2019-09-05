@@ -15,6 +15,7 @@ use App\Form\CompanyType;
 use App\Form\FileUploadType;
 use App\Helper\UploadHelper;
 use App\Repository\CompanyRepository;
+use App\Repository\ConfigurationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -147,9 +148,12 @@ class CompanyController extends AbstractController
      * @Route("/company/{id}/contas-de-patrocinio", name="company_account__index")
      * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
-    public function showAccounts(Company $company)
+    public function showAccounts(Company $company, ConfigurationRepository $repository)
     {
+        $currency = $repository->findOneByActive();
+
         return $this->render('company/show--accounts.html.twig', [
+            'currency' => $currency->getLabel(),
             'company' => $company,
         ]);
     }
