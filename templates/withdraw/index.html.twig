@@ -36,7 +36,7 @@
                         <td>
                             {{ withdraw.status|trans }}
                         </td>
-                        <td class="text-right">R$ {{ withdraw.value|number_format(2, ',', '.') }}</td>
+                        <td class="text-right">{{ currency }} {{ withdraw.value|number_format(2, ',', '.') }}</td>
                         <td>{{ withdraw.account.owner.name }}</td>
                         <td>
                             {% if withdraw.wasExecuted %}
