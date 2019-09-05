@@ -58,25 +58,22 @@ class ConfigurationController extends AbstractController
         $form = $this->createForm(ConfigurationType::class, ConfigurationData::fromEntity($config));
         $form->handleRequest($request);
 
-
         if ($form->isSubmitted() && $form->isValid()) {
 
             $currency = $form->getData()->currency;
             $config = $repository->findOneBy(['currency' => $currency]);
             $config->setActive(1);
-            
-            $disableds = $repository->findByDisabled();
-            // dd($disableds);
-
-            foreach ($disableds as $disable) {
-                // dd($disable);
-                $disable->setActive(0);
-                $this->em->persist($disable);
-            }
 
             $this->em->persist($config);
             $this->em->flush();
 
+            $disableds = $repository->findByDisabled($config->getId());
+
+            foreach ($disableds as $disable) {
+                $disable->setActive(0);
+                $this->em->persist($disable);
+                $this->em->flush();
+            }
         }
 
         return $this->render('configuration/index.html.twig', [

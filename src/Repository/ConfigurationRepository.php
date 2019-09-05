@@ -47,11 +47,11 @@ class ConfigurationRepository extends ServiceEntityRepository
         ;
     }
     
-    public function findByDisabled()
+    public function findByDisabled($id)
     {
         return $this->createQueryBuilder('configuration')
-            ->andWhere('configuration.active = :val')
-            ->setParameter('val', 0)
+            ->andWhere('configuration.id != :val')
+            ->setParameter('val', $id)
             ->getQuery()
             ->getResult()
         ;
