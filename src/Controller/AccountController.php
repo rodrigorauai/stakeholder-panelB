@@ -6,6 +6,7 @@ use App\Entity\Account;
 use App\Entity\Contract;
 use App\Form\ContractType;
 use App\Helper\UploadHelper;
+use App\Repository\ConfigurationRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -36,9 +37,12 @@ class AccountController extends AbstractController
      * @Route("/contas-de-patrocinio/{id}", name="account__show")
      * @IsGranted({"ROLE_ADMINISTRATOR"})
      */
-    public function show(Account $account)
+    public function show(Account $account, ConfigurationRepository $repository)
     {
+        $currency = $repository->findOneByActive();
+
         return $this->render('account/show.html.twig', [
+            'currency' => $currency->getLabel(),
             'account' => $account,
         ]);
     }
