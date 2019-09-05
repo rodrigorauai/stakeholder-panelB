@@ -106,7 +106,7 @@ class PaymentController extends AbstractController
      * @Route("/pagamentos/{id}/nota-fiscal/revisao", name="payment__invoice__review")
      * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
-    public function invoiceReview(Payment $payment, Request $request, EntityManagerInterface $entityManager)
+    public function invoiceReview(Payment $payment, Request $request, EntityManagerInterface $entityManager, ConfigurationRepository $crepository)
     {
         $form = $this->createForm(PaymentInvoiceReviewType::class, $payment->getInvoice());
         $form->handleRequest($request);
@@ -123,7 +123,10 @@ class PaymentController extends AbstractController
             return $this->redirectToRoute('payment__invoice', ['id' => $payment->getId()], 303);
         }
 
+        $currency = $crepository->findOneByActive();
+
         return $this->render('payment/invoice/review-form.html.twig', [
+            'currency' => $currency->getLabel(),
             'payment' => $payment,
             'form' => $form->createView(),
         ]);

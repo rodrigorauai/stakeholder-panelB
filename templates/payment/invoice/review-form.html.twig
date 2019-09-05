@@ -19,7 +19,7 @@
                     </div>
                     <div class="d-table-row">
                         <dt class="d-table-cell">Valor</dt>
-                        <dl class="d-table-cell">R$ {{ payment.value|number_format(2, ',', '.') }}</dl>
+                        <dl class="d-table-cell">{{ currency }} {{ payment.value|number_format(2, ',', '.') }}</dl>
                     </div>
                     <div class="d-table-row">
                         <dt class="d-table-cell">Beneficiário</dt>
