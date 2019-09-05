@@ -66,7 +66,8 @@ class WithdrawController extends AbstractController
         Withdraw $withdraw,
         Request $request,
         EntityManagerInterface $entityManager,
-        UploadHelper $uploadHelper
+        UploadHelper $uploadHelper,
+        ConfigurationRepository $crepository
     ) {
         $form = $this->createForm(WithdrawReceiptType::class, null);
         $form->handleRequest($request);
@@ -83,7 +84,10 @@ class WithdrawController extends AbstractController
             return $this->redirectToRoute('withdraw__register_execution', ['id' => $withdraw->getId()], 303);
         }
 
+        $currency = $crepository->findOneByActive();
+
         return $this->render('withdraw/execution/form.html.twig', [
+            'currency' => $currency->getLabel(),
             'withdraw' => $withdraw,
             'form' => $form->createView(),
         ]);

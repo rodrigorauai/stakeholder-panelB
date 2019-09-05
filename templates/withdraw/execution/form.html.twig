@@ -17,7 +17,7 @@
 
             <div class="d-table-row">
                 <dt class="d-table-cell">Valor</dt>
-                <dd class="d-table-cell">R$ {{ withdraw.value|number_format(2, ',', '.') }}</dd>
+                <dd class="d-table-cell">{{ currency }} {{ withdraw.value|number_format(2, ',', '.') }}</dd>
             </div>
 
             <div class="d-table-row">
