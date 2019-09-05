@@ -22,6 +22,11 @@ class Configuration
     private $currency;
 
     /**
+     * @ORM\Column(type="string", length=16)
+     */
+    private $label;
+
+    /**
      * @ORM\Column(type="boolean")
      */
     private $active;
@@ -39,6 +44,18 @@ class Configuration
     public function setCurrency(string $currency): self
     {
         $this->currency = $currency;
+
+        return $this;
+    }
+
+    public function getLabel(): ?string
+    {
+        return $this->label;
+    }
+
+    public function setLabel(string $label): self
+    {
+        $this->label = $label;
 
         return $this;
     }
