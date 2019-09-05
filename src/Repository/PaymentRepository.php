@@ -58,13 +58,24 @@ class PaymentRepository extends ServiceEntityRepository
                 ->join('contract.plan', 'plan')
                 ->join('payment.account', 'account')
                 ->join('account.owner',  'owner')
+                ->leftJoin('payment.invoices', 'invoices')
                 ->where($qb->expr()->orX(
-                    $qb->expr()->in('payment.id', ':queryString'),
+                    $qb->expr()->eq('payment.id', ':queryStringId'),
                     $qb->expr()->like('plan.administrativeName', ':queryString'),
-                    $qb->expr()->like('owner.name', ':queryString'),
-                    $qb->expr()->like('payment.invoiceUrl', ':queryString')
+                    $qb->expr()->like('owner.name', ':queryString')
                 ))
-                ->setParameter('queryString', '%'.$form->get('queryString')->getData().'%');
+                ->orWhere($qb->expr()->in('invoices', 
+                    $this->createQueryBuilder('i')
+                        ->where($qb->expr()->orX(
+                            $qb->expr()->like('invoices.url', ':queryString')
+                        ))
+                        ->setParameter('queryString', '%'.$form->get('queryString')->getData().'%')
+                        ->getDQL()
+                    ))
+                ->setParameters([
+                    'queryString' => '%'.$form->get('queryString')->getData().'%',
+                    'queryStringId' => $form->get('queryString')->getData(),
+                ]);
         }
 
         if ($accounts !== null) {
