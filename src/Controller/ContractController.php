@@ -9,6 +9,7 @@ use App\Form\ContractSearchType;
 use App\Helper\ProfileHelper;
 use App\Helper\UploadHelper;
 use App\Repository\ContractRepository;
+use App\Repository\ConfigurationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,7 +25,7 @@ class ContractController extends AbstractController
     /**
      * @Route("/contract", name="contract_index")
      */
-    public function index(Request $request, ProfileHelper $profileHelper, ContractRepository $repository)
+    public function index(Request $request, ProfileHelper $profileHelper, ContractRepository $repository, ConfigurationRepository $crepository)
     {
         /** @var Person $user */
         $user = $this->getUser();
@@ -45,7 +46,10 @@ class ContractController extends AbstractController
 
         $contracts = $repository->findUsingSearchForm($form, $accounts ?? null);
 
+        $currency = $crepository->findOneByActive();
+
         return $this->render('contract/index.html.twig', [
+            'currency' => $currency->getLabel(),
             'contracts' => $contracts,
             'multipleOwners' => $multipleOwners,
             'form' => $form->createView(),

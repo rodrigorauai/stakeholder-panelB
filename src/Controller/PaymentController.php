@@ -10,6 +10,7 @@ use App\Form\PaymentInvoiceType;
 use App\Form\PaymentSearchType;
 use App\Helper\ProfileHelper;
 use App\Repository\PaymentRepository;
+use App\Repository\ConfigurationRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -29,7 +30,7 @@ class PaymentController extends AbstractController
      * @return Response
      * @Route("/pagamentos", name="payment__index")
      */
-    public function index(Request $request, PaymentRepository $repository, ProfileHelper $profileHelper)
+    public function index(Request $request, PaymentRepository $repository, ProfileHelper $profileHelper, ConfigurationRepository $crepository)
     {
         /** @var Person $user */
         $user = $this->getUser();
@@ -44,8 +45,10 @@ class PaymentController extends AbstractController
         }
 
         $payments = $repository->findUsingSearchForm($form, $accounts ?? null, $provenance ?? null);
+        $currency = $crepository->findOneByActive();
         
         return $this->render('payment/index.html.twig', [
+            'currency' => $currency->getLabel(),
             'payments' => $payments,
             'form' => $form->createView(),
         ]);
