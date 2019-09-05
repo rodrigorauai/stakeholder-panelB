@@ -64,6 +64,15 @@ class ConfigurationController extends AbstractController
             $currency = $form->getData()->currency;
             $config = $repository->findOneBy(['currency' => $currency]);
             $config->setActive(1);
+            
+            $disableds = $repository->findByDisabled();
+            // dd($disableds);
+
+            foreach ($disableds as $disable) {
+                // dd($disable);
+                $disable->setActive(0);
+                $this->em->persist($disable);
+            }
 
             $this->em->persist($config);
             $this->em->flush();
