@@ -40,8 +40,8 @@
                             </a>
                         </td>
                         <td>{{ plan.commercialName }}</td>
-                        <td class="text-right">R$ {{ plan.minimumValue|number_format(2, ',', '.') }}</td>
-                        <td class="text-right">R$ {{ plan.valueMultiple|number_format(2, ',', '.') }}</td>
+                        <td class="text-right">{{ currency }} {{ plan.minimumValue|number_format(2, ',', '.') }}</td>
+                        <td class="text-right">{{ currency }} {{ plan.valueMultiple|number_format(2, ',', '.') }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
