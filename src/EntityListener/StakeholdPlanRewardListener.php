@@ -32,7 +32,8 @@ class StakeholdPlanRewardListener
         /** @var Contract $contract */
         foreach ($contracts as $contract) {
             // Co-participation (Plan's reward)
-            $value = bcmul(bcdiv($reward->getRate(), '100',4), $contract->getValue(), 2);
+
+            $value = bcmul(bcdiv($reward->getRate(), '100', 4), $contract->getValue(), 2);
 
             $payment = new Payment(
                 $contract->getAccount(),
