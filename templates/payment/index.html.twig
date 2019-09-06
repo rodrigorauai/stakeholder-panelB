@@ -24,6 +24,7 @@
                     <th scope="col">ID</th>
                     <th scope="col">Status</th>
                     <th scope="col" class="text-right">Valor</th>
+                    <th scope="col">Porcentagem</th>
                     <th class="col">Proveniência</th>
                     <th class="col">Nota Fiscal</th>
                     <th scope="col">Beneficiário</th>
@@ -50,6 +51,7 @@
                             {% endif %}
                         </td>
                         <td class="text-right">R$ {{ payment.value|number_format(2, ',', '.') }}</td>
+                        <td>{{ payment.reward.rate|number_format(2, ',', '.') }} %</td>
                         <td>{{ payment.provenance|trans }}</td>
                         <td>
                             {% if payment.hasInvoice %}
