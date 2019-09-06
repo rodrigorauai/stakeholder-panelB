@@ -79,6 +79,8 @@ class PersonController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $person = Person::fromDataObject($form->getData());
+            $person->setCpf(str_replace(['-', '.'], '', $person->getCpf()));
+
             $account = new Account($person);
 
             $userRoles = ['ROLE_USER', 'ROLE_STAKEHOLDER'];
@@ -134,8 +136,10 @@ class PersonController extends AbstractController
         $form = $this->createForm(PersonType::class, PersonData::fromEntity($person));
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $person->updateFromDataObject($form->getData());
+
+            $person->setCpf(str_replace(['-', '.'], '', $person->getCpf()));
 
             $entityManager->persist($person);
             $entityManager->flush();
