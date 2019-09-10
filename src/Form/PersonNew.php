@@ -13,7 +13,7 @@ use App\Validator\CpfFormat;
 use App\Validator\UniqueUser;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class PersonData
+class PersonNew
 {
     /**
      * @Assert\NotBlank()
@@ -25,23 +25,26 @@ class PersonData
     public $name;
 
     /**
+     * @UniqueUser()
      * @Assert\NotBlank()
      * @CpfFormat()
      */
     public $cpf;
-
     /**
+     * @UniqueUser()
      * @Assert\Length(max="16", maxMessage="O RG não pode ter mais de 16 caracteres.")
      */
     public $rg;
 
     /**
      * @Assert\NotBlank()
+     * @UniqueUser()
      * @Assert\Email(checkHost=true, checkMX=true, message="E-mail inválido.")
      */
     public $email;
 
     /**
+     * @UniqueUser()
      * @Assert\Length(
      *     max=13, maxMessage="O telefone deve ter no máximo 13 dígitos.",
      *     min=10, minMessage="O telefone deve ter no mínimo 10 dígitos.",
@@ -54,16 +57,16 @@ class PersonData
      */
     public $tradeRepresentative;
 
-    public static function fromEntity(Person $person): PersonData
-    {
-        $data = new PersonData();
-        $data->name = $person->getName();
-        $data->cpf = $person->getCpf();
-        $data->rg = $person->getRg();
-        $data->email = $person->getEmail();
-        $data->phone = $person->getPhone();
-        $data->tradeRepresentative = $person->getTradeRepresentative();
-
-        return $data;
-    }
+//    public static function fromEntity(Person $person): PersonNew
+//    {
+//        $data = new PersonNew();
+//        $data->name = $person->getName();
+//        $data->cpf = $person->getCpf();
+//        $data->rg = $person->getRg();
+//        $data->email = $person->getEmail();
+//        $data->phone = $person->getPhone();
+//        $data->tradeRepresentative = $person->getTradeRepresentative();
+//
+//        return $data;
+//    }
 }
