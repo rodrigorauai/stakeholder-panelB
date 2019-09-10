@@ -13,9 +13,11 @@ use App\Form\PersonData;
 use App\Form\PersonRolesType;
 use App\Form\PersonSearchType;
 use App\Form\PersonType;
+use App\Form\PersonTypeNew;
 use App\Helper\PasswordHelper;
 use App\Helper\UploadHelper;
 use App\Repository\PersonRepository;
+use App\Validator\UniqueUserValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
@@ -72,7 +74,7 @@ class PersonController extends AbstractController
      */
     public function create(Request $request, PasswordHelper $helper, LoggerInterface $logger)
     {
-        $form = $this->createForm(PersonType::class);
+        $form = $this->createForm(PersonTypeNew::class);
         $form->get('sendPasswordDefinitionEmail')->setData(true);
 
         $form->handleRequest($request);
@@ -137,14 +139,16 @@ class PersonController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $person->updateFromDataObject($form->getData());
 
-            $person->setCpf(str_replace(['-', '.'], '', $person->getCpf()));
+             $person->updateFromDataObject($form->getData());
 
-            $entityManager->persist($person);
-            $entityManager->flush();
+             $person->setCpf(str_replace(['-', '.'], '', $person->getCpf()));
 
-            return $this->redirectToRoute('person__edit', ['id' => $person->getId()], 303);
+             $entityManager->persist($person);
+             $entityManager->flush();
+
+             return $this->redirectToRoute('person__edit', ['id' => $person->getId()], 303);
+
         }
 
         return $this->render('person/edit.html.twig', [

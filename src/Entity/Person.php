@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Form\PersonData;
+use App\Form\PersonNew;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -97,7 +98,7 @@ class Person extends Entity implements UserInterface
         $this->authenticationTokens = new ArrayCollection();
     }
 
-    public static function fromDataObject(PersonData $data)
+    public static function fromDataObject(PersonNew $data)
     {
         $person = new Person($data->name, $data->email);
 
