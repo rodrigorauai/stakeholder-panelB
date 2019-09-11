@@ -17,6 +17,7 @@ use App\Form\PersonTypeNew;
 use App\Helper\PasswordHelper;
 use App\Helper\UploadHelper;
 use App\Repository\PersonRepository;
+use App\Repository\ConfigurationRepository;
 use App\Validator\UniqueUserValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -233,9 +234,12 @@ class PersonController extends AbstractController
      * @Route("/pessoas/{id}/contas-de-patrocinio", name="person_account__index")
      * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
-    public function showAccounts(Person $person)
+    public function showAccounts(Person $person, ConfigurationRepository $repository)
     {
+        $currency = $repository->findOneByActive();
+
         return $this->render('person/show--accounts.html.twig', [
+            'currency' => $currency->getLabel(),
             'person' => $person,
         ]);
     }

@@ -42,7 +42,7 @@
                                 {% if multipleOwners %}
                                     <td>{{ contract.account.owner.name }}</td>
                                 {% endif %}
-                                <td class="text-right">R$ {{ contract.value|number_format(2, ',', '.') }}</td>
+                                <td class="text-right">{{ currency }} {{ contract.value|number_format(2, ',', '.') }}</td>
                                 <td>{{ contract.plan.commercialName }}</td>
                                 <td class="text-center">{{ contract.executionDate|date('d/m/Y') }}</td>
                                 <td class="text-center">{{ contract.expirationDate|date('d/m/Y') }}</td>

@@ -10,6 +10,7 @@ use App\Form\WithdrawSearchType;
 use App\Helper\ProfileHelper;
 use App\Helper\UploadHelper;
 use App\Repository\WithdrawRepository;
+use App\Repository\ConfigurationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,7 +30,7 @@ class WithdrawController extends AbstractController
      * @return Response
      * @Route("/retiradas", name="withdraw__index")
      */
-    public function index(Request $request, WithdrawRepository $repository, ProfileHelper $profileHelper)
+    public function index(Request $request, WithdrawRepository $repository, ProfileHelper $profileHelper, ConfigurationRepository $crepository)
     {
         /** @var Person $user */
         $user = $this->getUser();
@@ -43,8 +44,10 @@ class WithdrawController extends AbstractController
         }
 
         $withdraws = $repository->findUsingSearchForm($form, $accounts ?? null);
+        $currency = $crepository->findOneByActive();
 
         return $this->render('withdraw/index.html.twig', [
+            'currency' => $currency->getLabel(),
             'withdraws' => $withdraws,
             'form' => $form->createView(),
         ]);
@@ -63,7 +66,8 @@ class WithdrawController extends AbstractController
         Withdraw $withdraw,
         Request $request,
         EntityManagerInterface $entityManager,
-        UploadHelper $uploadHelper
+        UploadHelper $uploadHelper,
+        ConfigurationRepository $crepository
     ) {
         $form = $this->createForm(WithdrawReceiptType::class, null);
         $form->handleRequest($request);
@@ -80,7 +84,10 @@ class WithdrawController extends AbstractController
             return $this->redirectToRoute('withdraw__register_execution', ['id' => $withdraw->getId()], 303);
         }
 
+        $currency = $crepository->findOneByActive();
+
         return $this->render('withdraw/execution/form.html.twig', [
+            'currency' => $currency->getLabel(),
             'withdraw' => $withdraw,
             'form' => $form->createView(),
         ]);

@@ -31,7 +31,7 @@
                                 <h2 class="dashboard-card__heading-text mdc-typography--subtitle2">Valor Total de Patrocínio</h2>
                             </div>
                             <div class="dashboard-card--body">
-                                <span class="mdc-typography--headline5">R$ {{ dashboardHelper.totalInvestment|number_format(2, ',', '.') }}</span>
+                                <span class="mdc-typography--headline5">{{ currency }} {{ dashboardHelper.totalInvestment|number_format(2, ',', '.') }}</span>
                             </div>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
                                 <h2 class="dashboard-card__heading-text mdc-typography--subtitle2">Rendimentos Acumulados</h2>
                             </div>
                             <div class="dashboard-card--body">
-                                <span class="mdc-typography--headline5">R$ {{ dashboardHelper.totalCoParticipation|number_format(2, ',', '.') }}</span>
+                                <span class="mdc-typography--headline5">{{ currency }} {{ dashboardHelper.totalCoParticipation|number_format(2, ',', '.') }}</span>
                             </div>
                         </div>
                     </div>
@@ -151,7 +151,7 @@
                                                 <tbody>
                                                 {% for payment in dashboardHelper.lastPayments %}
                                                     <tr>
-                                                        <td class="text-success">+ R$ {{ payment.value|number_format(2, ',', '.') }}</td>
+                                                        <td class="text-success">+ {{ currency }} {{ payment.value|number_format(2, ',', '.') }}</td>
                                                         <td>{{ payment.executionTimestamp|date('d/m/Y') }}</td>
                                                     </tr>
                                                 {% endfor %}

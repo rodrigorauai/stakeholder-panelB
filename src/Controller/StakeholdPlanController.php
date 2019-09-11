@@ -8,6 +8,7 @@ use App\Form\StakeholdPlanRewardType;
 use App\Form\StakeholdPlanSearchType;
 use App\Form\StakeholdPlanType;
 use App\Repository\StakeholdPlanRepository;
+use App\Repository\ConfigurationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -26,7 +27,7 @@ class StakeholdPlanController extends AbstractController
      * @Route("/planos-de-patrocinio", name="stakehold_plan__index")
      * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
-    public function index(Request $request, StakeholdPlanRepository $repository)
+    public function index(Request $request, StakeholdPlanRepository $repository, ConfigurationRepository $crepository)
     {
         $plans = $repository->findAll();
 
@@ -37,7 +38,10 @@ class StakeholdPlanController extends AbstractController
             $plans = $repository->findUsingSearchForm($form);
         }
 
+        $currency = $crepository->findOneByActive();
+
         return $this->render('stakehold_plan/index.html.twig', [
+            'currency' => $currency->getLabel(),
             'controller_name' => 'StakeholdingPlanController',
             'plans' => $plans,
             'form' => $form->createView(),

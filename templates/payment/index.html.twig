@@ -50,7 +50,8 @@
                                 {{ payment.status|trans }}
                             {% endif %}
                         </td>
-                        <td class="text-right">R$ {{ payment.value|number_format(2, ',', '.') }}</td>
+
+                        <td class="text-right">{{ currency }} {{ payment.value|number_format(2, ',', '.') }}</td>
                         <td>{{ payment.reward.rate|number_format(2, ',', '.') }} %</td>
                         <td>{{ payment.provenance|trans }}</td>
                         <td>
@@ -79,7 +80,7 @@
                         <td>{{ payment.reward.disclosureDate.format('d/m/Y') }}</td>
                         <td>
                             <a {% if profileSwitcher.accessingAsAdministrator %} href={{ path('contract__edit', { id: payment.contract.id }) }} {% endif %}>
-                                Contrato no valor de R${{ payment.contract.value|number_format(2, ',', '.') }}
+                                Contrato no valor de {{ currency }}{{ payment.contract.value|number_format(2, ',', '.') }}
                                 no {{ payment.contract.plan.administrativeName }}
                             </a>
                         </td>

@@ -7,7 +7,7 @@
 
 {% block content %}
     <div class="container m-4">
-        <p>Saldo da conta: R$ {{ account.balance|number_format(2, ',', '.') }}</p>
+        <p>Saldo da conta: {{ currency }} {{ account.balance|number_format(2, ',', '.') }}</p>
     </div>
 
     <div class="m-4">
@@ -22,7 +22,7 @@
                 <a class="mdc-list-item" href="{{ path('contract__edit', { id: contract.id }) }}">
                     <span class="material-icons mdc-list-item__graphic" aria-hidden="true">insert_drive_file</span>
                     <span class="mdc-list-item__text">
-                        <span class="mdc-list-item__primary-text">R$ {{ contract.value|number_format(2, ',', '.') }}</span>
+                        <span class="mdc-list-item__primary-text">{{ currency }} {{ contract.value|number_format(2, ',', '.') }}</span>
                         <span class="mdc-list-item__secondary-text">{{ contract.plan.administrativeName }}
                             - de {{ contract.executionDate.format('d/m/Y') }}
                             a {{ contract.expirationDate.format('d/m/Y') }}
