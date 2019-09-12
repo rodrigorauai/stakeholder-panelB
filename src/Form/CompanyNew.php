@@ -1,9 +1,9 @@
 <?php
 /**
- * Copyright © 2019 Rafael de Souza - All Rights Reserved
+ * Copyright © 2019 Lucas Andrade - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
- * Written by Rafael de Souza <rafael.de.souza@outlook.com>, 06 2019
+ * Written by Lucas Andrade <lucasmendes95@outlook.com.br>, 09 2019
  */
 
 namespace App\Form;
@@ -16,7 +16,7 @@ use App\Validator\CnpjNumbers;
 use App\Validator\UniqueCnpj;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class CompanyData
+class CompanyNew
 {
     /**
      * @Assert\NotBlank()
@@ -28,6 +28,7 @@ class CompanyData
      * @Assert\NotBlank()
      * @CnpjFormat()
      * @CnpjNumbers()
+     * @UniqueCnpj()
      */
     public $cnpj;
 

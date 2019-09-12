@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Form\CompanyData;
+use App\Form\CompanyNew;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -38,12 +39,14 @@ class Company extends Entity
         $this->files = new ArrayCollection();
     }
 
-    public static function fromDataObject(CompanyData $data)
+    public static function fromDataObject(CompanyNew $data)
     {
         $company = new Company(
             $data->name,
             preg_replace('/[^\d]/', '', $data->cnpj)
+//            preg_replace('@[./-]@', '', $data->cnpj)
         );
+//        dd($data);
 
         $company->addManager($data->manager);
 

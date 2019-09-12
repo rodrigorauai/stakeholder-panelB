@@ -21,7 +21,14 @@ class UniqueCnpjValidator extends ConstraintValidator
         if (null === $value || '' === $value) {
             return;
         }
-        $existingCnpj = $this->companyRepository->findOneBy(['cnpj' => $value]);
+
+        $valuesCNPJ = str_replace(['.', '/', '-'], '', $value);
+
+        $valuesCNPJ = $this->companyRepository->findOneBy(['cnpj' => $valuesCNPJ]);
+
+        $existingCnpj = $valuesCNPJ;
+//        dd($existingCnpj);
+
 
         if (!$existingCnpj) {
             return;
@@ -30,5 +37,6 @@ class UniqueCnpjValidator extends ConstraintValidator
         $this->context->buildViolation($constraint->message)
             ->setParameter('{{ value }}', $value)
             ->addViolation();
+
     }
 }

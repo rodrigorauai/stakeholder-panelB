@@ -12,6 +12,7 @@ use App\Form\BankAccountType;
 use App\Form\CompanyData;
 use App\Form\CompanySearchType;
 use App\Form\CompanyType;
+use App\Form\CompanyTypeNew;
 use App\Form\FileUploadType;
 use App\Helper\UploadHelper;
 use App\Repository\CompanyRepository;
@@ -60,7 +61,7 @@ class CompanyController extends AbstractController
      */
     public function create(Request $request, EntityManagerInterface $entityManager)
     {
-        $form = $this->createForm(CompanyType::class);
+        $form = $this->createForm(CompanyTypeNew::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -94,6 +95,7 @@ class CompanyController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $company->updateFromDataObject($form->getData());
+            $company->setCnpj(str_replace(['.', '/', '-'], '', $company->getCnpj()));
 
             $entityManager->persist($company);
             $entityManager->flush();
