@@ -114,7 +114,7 @@ class WithdrawController extends AbstractController
      * @param EntityManagerInterface $entityManager
      * @return RedirectResponse|Response
      * @Route("/retiradas/{id}/comprovante-de-transferencia/editar", name="withdraw__receipt__add")
-     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSSISTANT"})
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSSISTANT", "ROLE_ADMINISTRATOR"})
      */
     public function addReceipt(
         Withdraw $withdraw,
