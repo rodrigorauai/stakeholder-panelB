@@ -3,56 +3,121 @@
 {% set title = 'Rendimentos de ' ~ plan.administrativeName %}
 {% set drawer_active_route = 'stakehold_plan__index' %}
 
+{% for translate in translates %}
+    {% if translate.translate == 'BRL' %}
+        {% set title = 'income of ' ~ plan.administrativeName %}
+    {% else %}
+        {% set title = 'Rendimentos de ' ~ plan.administrativeName %}
+    {% endif %}
+{% endfor %}
+
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
 
     {% include 'stakehold_plan/_tab-bar.html.twig' with { active_tab: 'stakehold_plan__reward__index' } %}
 
-    <div class="m-4">
+    {% for translate in translates %}
+        {% if translate.translate == 'BRL' %}
+            <div class="m-4">
 
-        {% if plan.rewards.count == 0 %}
-            <p>Nenhum rendimento registrado.</p>
+                {% if plan.rewards.count == 0 %}
+                    <p>No income recorded.</p>
+                {% endif %}
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Release date</th>
+                            <th>Income</th>
+                            <th>Realization Date</th>
+                            <th><span class="sr-only">Options</span></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for reward in plan.rewards %}
+                            <tr>
+                                <td>{{ reward.disclosureDate.format('d/m/Y') }}</td>
+                                <td>{{ reward.rate|number_format(2, ',', '.') }} %</td>
+                                <td>{{ reward.paymentDueDate.format('d/m/Y') }}</td>
+                                <td class="align-middle">
+
+                                    {% if reward.paymentDueDate|date('Ymd') >= "tomorrow"|date('Ymd') %}
+                                        <a class="mdc-button"
+                                           href="{{ path('stakehold_plan__reward__edit', {id: reward.id}) }}">Edit</a>
+                                    {% endif %}
+
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        {% else %}
+            <div class="m-4">
+
+                {% if plan.rewards.count == 0 %}
+                    <p>Nenhum rendimento registrado.</p>
+                {% endif %}
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Data de Divulgação</th>
+                            <th>Rendimento</th>
+                            <th>Data de Realização</th>
+                            <th><span class="sr-only">Opções</span></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for reward in plan.rewards %}
+                            <tr>
+                                <td>{{ reward.disclosureDate.format('d/m/Y') }}</td>
+                                <td>{{ reward.rate|number_format(2, ',', '.') }} %</td>
+                                <td>{{ reward.paymentDueDate.format('d/m/Y') }}</td>
+                                <td class="align-middle">
+
+                                    {% if reward.paymentDueDate|date('Ymd') >= "tomorrow"|date('Ymd') %}
+                                        <a class="mdc-button"
+                                           href="{{ path('stakehold_plan__reward__edit', {id: reward.id}) }}">Editar</a>
+                                    {% endif %}
+
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
         {% endif %}
+    {% endfor %}
 
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Data de Divulgação</th>
-                    <th>Rendimento</th>
-                    <th>Data de Realização</th>
-                    <th><span class="sr-only">Opções</span></th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for reward in plan.rewards %}
-                    <tr>
-                        <td>{{ reward.disclosureDate.format('d/m/Y') }}</td>
-                        <td>{{ reward.rate|number_format(2, ',', '.') }} %</td>
-                        <td>{{ reward.paymentDueDate.format('d/m/Y') }}</td>
-                        <td class="align-middle">
 
-                            {% if reward.paymentDueDate|date('Ymd') >= "tomorrow"|date('Ymd') %}
-                                <a class="mdc-button"
-                                   href="{{ path('stakehold_plan__reward__edit', {id: reward.id}) }}">Editar</a>
-                            {% endif %}
-
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-    </div>
 {% endblock %}
 
 {% block body_end %}
-    <div class="app-page-end">
-        <a class="mdc-fab mdc-fab--extended" href="{{ path('stakehold_plan__reward__create', { id: plan.id }) }}">
-            <span class="material-icons mdc-fab__icon">add</span>
-            <span class="mdc-fab__label">Adicionar Rendimento</span>
-        </a>
-    </div>
+
+    {% for translate in translates %}
+        {% if translate.translate == 'BRL' %}
+            <div class="app-page-end">
+                <a class="mdc-fab mdc-fab--extended" href="{{ path('stakehold_plan__reward__create', { id: plan.id }) }}">
+                    <span class="material-icons mdc-fab__icon">add</span>
+                    <span class="mdc-fab__label">Add Income</span>
+                </a>
+            </div>
+        {% else %}
+            <div class="app-page-end">
+                <a class="mdc-fab mdc-fab--extended" href="{{ path('stakehold_plan__reward__create', { id: plan.id }) }}">
+                    <span class="material-icons mdc-fab__icon">add</span>
+                    <span class="mdc-fab__label">Adicionar Rendimento</span>
+                </a>
+            </div>
+        {% endif %}
+    {% endfor %}
+
 {% endblock %}

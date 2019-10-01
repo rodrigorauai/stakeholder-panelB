@@ -1,21 +1,47 @@
 {% extends 'base.html.twig' %}
+
 {% set title = 'Nota Fiscal de ' ~ payment.account.owner.name %}
 {% set drawer_active_route = 'payment__index' %}
+
+{% for translate in translates %}
+    {% if translate.translate == 'BRL' %}
+        {% set title = 'Invoice of ' ~ payment.account.owner.name %}
+    {% else %}
+        {% set title = 'Nota Fiscal de ' ~ payment.account.owner.name %}
+    {% endif %}
+{% endfor %}
 
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
 
-    <div class="container m-4">
+    {% for translate in translates %}
+        {% if translate.translate == 'BRL' %}
+            <div class="container m-4">
 
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <div class="form-row button-container">
-            {% include '_components/button/button.html.twig' with { label: 'Salvar Endereço da Nota Fiscal', type: 'submit', style: 'outlined'} only %}
-        </div>
-        {{ form_rest(form) }}
-        {{ form_end(form) }}
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <div class="form-row button-container">
+                    {% include '_components/button/button.html.twig' with { label: 'Save Invoice Address', type: 'submit', style: 'outlined'} only %}
+                </div>
+                {{ form_rest(form) }}
+                {{ form_end(form) }}
 
-    </div>
+            </div>
+        {% else %}
+            <div class="container m-4">
+
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <div class="form-row button-container">
+                    {% include '_components/button/button.html.twig' with { label: 'Salvar Endereço da Nota Fiscal', type: 'submit', style: 'outlined'} only %}
+                </div>
+                {{ form_rest(form) }}
+                {{ form_end(form) }}
+
+            </div>
+        {% endif %}
+    {% endfor %}
+
 
 {% endblock %}

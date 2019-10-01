@@ -3,21 +3,46 @@
 {% set title = person.name ~ ' - Cargos' %}
 {% set drawer_active_route = 'person__index' %}
 
+{% for translate in translates %}
+    {% if translate.translate == 'BRL' %}
+        {% set title = person.name ~ ' - Positions' %}
+    {% else %}
+        {% set title = person.name ~ ' - Cargos' %}
+    {% endif %}
+{% endfor %}
+
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
 
     {% include 'person/_tab-bar.html.twig' with { active_tab: 'person__role__index' } %}
 
-    <div class="container m-4">
-        <p>Informe os cargos exercidos por {{ person.name }}.</p>
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <div class="form-row button-container">
-            {% include '_components/button/button.html.twig' with { label: 'Atualizar Cargos', type: 'submit', style: 'outlined'} only %}
-        </div>
-        {{ form_rest(form) }}
-        {{ form_end(form) }}
-    </div>
+    {% for translate in translates %}
+        {% if translate.translate == 'BRL' %}
+            <div class="container m-4">
+                <p>Inform the positions held by {{ person.name }}.</p>
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <div class="form-row button-container">
+                    {% include '_components/button/button.html.twig' with { label: 'Update positions', type: 'submit', style: 'outlined'} only %}
+                </div>
+                {{ form_rest(form) }}
+                {{ form_end(form) }}
+            </div>
+        {% else %}
+            <div class="container m-4">
+                <p>Informe os cargos exercidos por {{ person.name }}.</p>
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <div class="form-row button-container">
+                    {% include '_components/button/button.html.twig' with { label: 'Atualizar Cargos', type: 'submit', style: 'outlined'} only %}
+                </div>
+                {{ form_rest(form) }}
+                {{ form_end(form) }}
+            </div>
+        {% endif %}
+    {% endfor %}
+
+
 {% endblock %}
 

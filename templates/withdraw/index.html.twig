@@ -2,6 +2,14 @@
 {% set title = 'Retiradas' %}
 {% set drawer_active_route = 'withdraw__index' %}
 
+{% for translate in translates %}
+    {% if translate.translate == 'BRL' %}
+        {% set title = 'Withdraw' %}
+    {% else %}
+        {% set title = 'Retiradas' %}
+    {% endif %}
+{% endfor %}
+
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
@@ -17,62 +25,139 @@
         {{ form_end(form) }}
     </div>
     <div class="my-4 mx-2">
-        <div class="table-responsive">
-            <table class="table text-nowrap">
-                <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Status</th>
-                    <th scope="col" class="text-right">Valor</th>
-                    <th scope="col">Proprietário da Conta</th>
-                    <th scope="col">Comprovante</th>
-                    <th scope="col">Data de Execução</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for withdraw in withdraws %}
-                    <tr>
-                        <th scope="row">{{ withdraw.id }}</th>
-                        <td>
-                            {{ withdraw.status|trans }}
-                        </td>
-                        <td class="text-right">{{ currency }} {{ withdraw.value|number_format(2, ',', '.') }}</td>
-                        <td>{{ withdraw.account.owner.name }}</td>
-                        <td>
-                            {% if withdraw.wasExecuted %}
-                                {% if withdraw.receipts|length > 0 %}
-                                    <a href="{{ path('withdraw__receipt__download', { id: withdraw.id }) }}"
-                                       target="_blank">
-                                        Comprovante{# TODO: Fix this ugly hack
-                                        #}<span class="material-icons icon-small align-supper">open_in_new</span></a>
-                                    {% if profileSwitcher.accessingAsAdministrator %}
-                                        <a class="mdc-icon-button ml-2"
-                                           href="{{ path('withdraw__receipt__add', { id: withdraw.id }) }}">
-                                            <span class="material-icons align-text-bottom">edit</span></a>
-                                    {% endif %}
-                                {% else %}
-                                    {% if profileSwitcher.accessingAsAdministrator %}
-                                        <a class="mdc-button"
-                                           href="{{ path('withdraw__receipt__add', { id: withdraw.id }) }}">Registrar</a>
-                                    {% endif %}
-                                {% endif %}
-                            {% else %}
 
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if withdraw.wasExecuted %}
-                                {{ withdraw.executionTimestamp.format('d/m/Y H:i:s') }}
-                            {% elseif profileSwitcher.accessingAsAdministrator %}
-                                <a href="{{ path('withdraw__register_execution', { id: withdraw.id}) }}">
-                                    Registrar Execução
-                                </a>
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+        {% for translate in translates %}
+            {% if translate.translate == 'BRL' %}
+                <div class="table-responsive">
+                    <table class="table text-nowrap">
+                        <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Status</th>
+                            <th scope="col" class="text-right">Value</th>
+                            <th scope="col">Account owner</th>
+                            <th scope="col">Receipt</th>
+                            <th scope="col">Execution Date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for withdraw in withdraws %}
+                            <tr>
+                                <th scope="row">{{ withdraw.id }}</th>
+                                <td>
+                                    {% for translate in translates %}
+                                        {% if translate.translate == 'BRL' %}
+                                            {% if withdraw.status == constant('STATUS_PENDING', withdraw) %}
+                                                Pending
+                                            {% elseif withdraw.status == constant('STATUS_EXECUTED', withdraw) %}
+                                                Executed
+                                            {% endif %}
+                                        {% else %}
+                                            {% if withdraw.status == constant('STATUS_PENDING', withdraw) %}
+                                                {{ withdraw.status|trans }}
+                                            {% elseif withdraw.status == constant('STATUS_EXECUTED', withdraw) %}
+                                                {{ withdraw.status|trans }}
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td class="text-right">{{ currency }} {{ withdraw.value|number_format(2, ',', '.') }}</td>
+                                <td>{{ withdraw.account.owner.name }}</td>
+                                <td>
+                                    {% if withdraw.wasExecuted %}
+                                        {% if withdraw.receipts|length > 0 %}
+                                            <a href="{{ path('withdraw__receipt__download', { id: withdraw.id }) }}"
+                                               target="_blank">
+                                                Receipt{# TODO: Fix this ugly hack
+                                        #}<span class="material-icons icon-small align-supper">open_in_new</span></a>
+                                            {% if profileSwitcher.accessingAsAdministrator %}
+                                                <a class="mdc-icon-button ml-2"
+                                                   href="{{ path('withdraw__receipt__add', { id: withdraw.id }) }}">
+                                                    <span class="material-icons align-text-bottom">edit</span></a>
+                                            {% endif %}
+                                        {% else %}
+                                            {% if profileSwitcher.accessingAsAdministrator %}
+                                                <a class="mdc-button"
+                                                   href="{{ path('withdraw__receipt__add', { id: withdraw.id }) }}">Register</a>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% else %}
+
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if withdraw.wasExecuted %}
+                                        {{ withdraw.executionTimestamp.format('d/m/Y H:i:s') }}
+                                    {% elseif profileSwitcher.accessingAsAdministrator %}
+                                        <a href="{{ path('withdraw__register_execution', { id: withdraw.id}) }}">
+                                            Record Execution
+                                        </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+
+
+                <div class="table-responsive">
+                    <table class="table text-nowrap">
+                        <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Status</th>
+                            <th scope="col" class="text-right">Valor</th>
+                            <th scope="col">Proprietário da Conta</th>
+                            <th scope="col">Comprovante</th>
+                            <th scope="col">Data de Execução</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for withdraw in withdraws %}
+                            <tr>
+                                <th scope="row">{{ withdraw.id }}</th>
+                                <td>{{ withdraw.status|trans }}</td>
+                                <td class="text-right">{{ currency }} {{ withdraw.value|number_format(2, ',', '.') }}</td>
+                                <td>{{ withdraw.account.owner.name }}</td>
+                                <td>
+                                    {% if withdraw.wasExecuted %}
+                                        {% if withdraw.receipts|length > 0 %}
+                                            <a href="{{ path('withdraw__receipt__download', { id: withdraw.id }) }}"
+                                               target="_blank">
+                                                Comprovante{# TODO: Fix this ugly hack
+                                        #}<span class="material-icons icon-small align-supper">open_in_new</span></a>
+                                            {% if profileSwitcher.accessingAsAdministrator %}
+                                                <a class="mdc-icon-button ml-2"
+                                                   href="{{ path('withdraw__receipt__add', { id: withdraw.id }) }}">
+                                                    <span class="material-icons align-text-bottom">edit</span></a>
+                                            {% endif %}
+                                        {% else %}
+                                            {% if profileSwitcher.accessingAsAdministrator %}
+                                                <a class="mdc-button"
+                                                   href="{{ path('withdraw__receipt__add', { id: withdraw.id }) }}">Registrar</a>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% else %}
+
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if withdraw.wasExecuted %}
+                                        {{ withdraw.executionTimestamp.format('d/m/Y H:i:s') }}
+                                    {% elseif profileSwitcher.accessingAsAdministrator %}
+                                        <a href="{{ path('withdraw__register_execution', { id: withdraw.id}) }}">
+                                            Registrar Execução
+                                        </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        {% endfor %}
     </div>
 {% endblock %}

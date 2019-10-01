@@ -3,27 +3,67 @@
 {% set title = company.name ~ ' - Contas de Patrocínio' %}
 {% set drawer_active_route = 'company__index' %}
 
-{% block title %}Conta de patrocínio de {{ company.name }}{% endblock %}
+{% for translate in translates %}
+    {% if translate.translate == 'BRL' %}
+        {% set title = company.name ~ ' - Investment accounts' %}
+    {% else %}
+        {% set title = company.name ~ ' - Contas de Patrocínio' %}
+    {% endif %}
+{% endfor %}
+
+{% block title %}
+
+    {% for translate in translates %}
+        {% if translate.translate == 'BRL' %}
+            Investment account of {{ company.name }}
+        {% else %}
+            Conta de patrocínio de {{ company.name }}
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}
 
 {% block content %}
 
     {% include 'company/_tab-bar.html.twig' with { active_tab: 'company_account__index' } %}
 
-    <div class="container m-4">
+    {% for translate in translates %}
+        {% if translate.translate == 'BRL' %}
+            <div class="container m-4">
 
-        <div class="mdc-list mdc-list--two-line mdc-list--avatar-list">
-            <a class="mdc-list-item" href="{{ path('account__show', { id: company.account.id }) }}">
-                <span class="mdc-list-item__graphic material-icons">account_balance_wallet</span>
-                <span class="mdc-list-item__text">
+                <div class="mdc-list mdc-list--two-line mdc-list--avatar-list">
+                    <a class="mdc-list-item" href="{{ path('account__show', { id: company.account.id }) }}">
+                        <span class="mdc-list-item__graphic material-icons">account_balance_wallet</span>
+                        <span class="mdc-list-item__text">
+                    <span class="mdc-list-item__primary-text">Company account {{ company.name }}</span>
+                    <span class="mdc-list-item__secondary-text">{# TODO: Solve spacing issue#}
+                        balance: {{ currency }} {{ company.account.balance|number_format(2, ',', '.') }} -
+                        {{ company.account.contracts.count }} contracts
+                    </span>
+                </span>
+                    </a>
+                </div>
+
+            </div>
+        {% else %}
+            <div class="container m-4">
+
+                <div class="mdc-list mdc-list--two-line mdc-list--avatar-list">
+                    <a class="mdc-list-item" href="{{ path('account__show', { id: company.account.id }) }}">
+                        <span class="mdc-list-item__graphic material-icons">account_balance_wallet</span>
+                        <span class="mdc-list-item__text">
                     <span class="mdc-list-item__primary-text">Conta da empresa {{ company.name }}</span>
                     <span class="mdc-list-item__secondary-text">{# TODO: Solve spacing issue
                       #}Saldo: {{ currency }} {{ company.account.balance|number_format(2, ',', '.') }} -
                         {{ company.account.contracts.count }} contratos
                     </span>
                 </span>
-            </a>
-        </div>
+                    </a>
+                </div>
 
-    </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+
 
 {% endblock %}

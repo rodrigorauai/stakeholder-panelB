@@ -6,6 +6,7 @@ use App\Entity\Person;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @method Person|null find($id, $lockMode = null, $lockVersion = null)
@@ -54,5 +55,15 @@ class PersonRepository extends ServiceEntityRepository
         }
 
         return $qb->getQuery()->getResult();
+    }
+
+    public function paginator () {
+            $request = new Request();
+
+            $qb = $this->getQuery();
+            $request->query->getInt('page', 1);
+            $request->query->getInt('limit', 5);
+
+            return $qb->getQuery()->getResult();
     }
 }

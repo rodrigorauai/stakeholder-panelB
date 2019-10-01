@@ -3,17 +3,35 @@
 {% set title = 'Configuração' %}
 {% set drawer_active_route = 'configuration' %}
 
+{% for translate in translates %}
+    {% if translate.translate == 'BRL' %}
+        {% set title = 'Configuration' %}
+    {% else %}
+        {% set title = 'Configuração' %}
+    {% endif %}
+{% endfor %}
+
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
 
+    {% include 'configuration/tab-bar.html.twig' with { active_tab: 'configuration' } %}
     <div class="container m-4">
 
         {{ form_start(form) }}
         {{ form_widget(form) }}
-        <div class="form-row button-container">
-            {% include '_components/button/button.html.twig' with { label: 'Salvar', type: 'submit', style: 'outlined'} only %}
-        </div>
+        {% for translate in translates %}
+            {% if translate.translate == 'BRL' %}
+                <div class="form-row button-container">
+                    {% include '_components/button/button.html.twig' with { label: 'Save', type: 'submit', style: 'outlined'} only %}
+                </div>
+            {% else %}
+                <div class="form-row button-container">
+                    {% include '_components/button/button.html.twig' with { label: 'Salvar', type: 'submit', style: 'outlined'} only %}
+                </div>
+            {% endif %}
+
+        {% endfor %}
         {{ form_rest(form) }}
         {{ form_end(form) }}
 

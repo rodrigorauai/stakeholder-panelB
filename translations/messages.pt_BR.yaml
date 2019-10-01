@@ -2,14 +2,19 @@ Not registered: Não registrado
 
 commission: Comissão
 co-participation: Rendimento
+co-participationUSN: Income
 
 Pending: Pendente
 Executed: Executado
 
 Scheduled: Agendado
 Made: Realizado
+MadeUSN: Made
+ScheduledUSN: Scheduled
 Waiting Invoice: Aguardando Nota Fiscal
+Waiting InvoiceUSN: Waiting Invoice
 Waiting Invoice Approval: Aguardando Revisão da Nota Fiscal
+Waiting Invoice ApprovalUSN: Waiting Invoice Approval
 
 person:
     name__label: Nome

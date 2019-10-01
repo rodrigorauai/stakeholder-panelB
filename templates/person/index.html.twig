@@ -2,6 +2,14 @@
 {% set title = 'Pessoas' %}
 {% set drawer_active_route = 'person__index' %}
 
+{% for translate in translates %}
+    {% if translate.translate == 'BRL' %}
+        {% set title = 'People' %}
+    {% else %}
+        {% set title = 'Pessoas' %}
+    {% endif %}
+{% endfor %}
+
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
@@ -16,43 +24,92 @@
         {{ form_rest(form) }}
         {{ form_end(form) }}
     </div>
-    <div class="my-4 mx-2">
-        <div class="table-responsive">
-            <table class="table text-nowrap">
-                <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Nome</th>
-                    <th scope="col">CPF</th>
-                    <th scope="col">E-mail</th>
-                    <th scope="col">Telefone</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for person in people %}
-                    <tr>
-                        <td>{{ person.id }}</td>
-                        <td>
-                            <a href="{{ path('person_show', { id: person.id }) }}">
-                                {{ person.name|default('person.name__not_informed'|trans) }}
-                            </a>
-                        </td>
-                        <td>{{ person.cpf|format_cpf }}</td>
-                        <td>{{ person.email|default('Not registered'|trans) }}</td>
-                        <td>{{ person.phone|default('Not registered'|trans) }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
+
+    {% for translate in translates %}
+        {% if translate.translate == 'BRL' %}
+            <div class="my-4 mx-2">
+                <div class="table-responsive">
+                    <table class="table text-nowrap">
+                        <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">CPF</th>
+                            <th scope="col">E-mail</th>
+                            <th scope="col">Telephone</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for person in people %}
+                            <tr>
+                                <td>{{ person.id }}</td>
+                                <td>
+                                    <a href="{{ path('person_show', { id: person.id }) }}">
+                                        {{ person.name|default('person.name__not_informed'|trans) }}
+                                    </a>
+                                </td>
+                                <td>{{ person.cpf|format_cpf }}</td>
+                                <td>{{ person.email|default('Not registered'|trans) }}</td>
+                                <td>{{ person.phone|default('Not registered'|trans) }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% else %}
+            <div class="my-4 mx-2">
+                <div class="table-responsive">
+                    <table class="table text-nowrap">
+                        <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">CPF</th>
+                            <th scope="col">E-mail</th>
+                            <th scope="col">Telefone</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for person in people %}
+                            <tr>
+                                <td>{{ person.id }}</td>
+                                <td>
+                                    <a href="{{ path('person_show', { id: person.id }) }}">
+                                        {{ person.name|default('person.name__not_informed'|trans) }}
+                                    </a>
+                                </td>
+                                <td>{{ person.cpf|format_cpf }}</td>
+                                <td>{{ person.email|default('Not registered'|trans) }}</td>
+                                <td>{{ person.phone|default('Not registered'|trans) }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+
 {% endblock %}
 
 {% block body_end %}
-    <div class="app-page-end">
-        <a class="mdc-fab mdc-fab--extended" href="{{ path('person_create') }}">
-            <span class="material-icons mdc-fab__icon">add</span>
-            <span class="mdc-fab__label">Adicionar Pessoa</span>
-        </a>
-    </div>
+
+    {% for translate in translates %}
+        {% if translate.translate == 'BRL' %}
+            <div class="app-page-end">
+                <a class="mdc-fab mdc-fab--extended" href="{{ path('person_create') }}">
+                    <span class="material-icons mdc-fab__icon">add</span>
+                    <span class="mdc-fab__label">Add person</span>
+                </a>
+            </div>
+        {% else %}
+            <div class="app-page-end">
+                <a class="mdc-fab mdc-fab--extended" href="{{ path('person_create') }}">
+                    <span class="material-icons mdc-fab__icon">add</span>
+                    <span class="mdc-fab__label">Adicionar Pessoa</span>
+                </a>
+            </div>
+        {% endif %}
+    {% endfor %}
 {% endblock %}

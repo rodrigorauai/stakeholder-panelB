@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\TranslateRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -33,6 +34,8 @@ class Payment extends AccountFinancialMovement
 
     const PROVENANCE_CO_PARTICIPATION = 'co-participation';
 
+    const PROVENANCE_CO_PARTICIPATION_USN = 'co-participation';
+
     const PROVENANCE_COMMISSION = 'commission';
 
     /**
@@ -53,14 +56,23 @@ class Payment extends AccountFinancialMovement
 
     const STATUS_MADE = 'Made';
 
+    const STATUS_MADE_USN = 'MadeUSN';
+
     const STATUS_SCHEDULED = 'Scheduled';
+
+    const STATUS_SCHEDULED_USN = 'ScheduledUSN';
 
     const STATUS_WAITING_INVOICE = 'Waiting Invoice';
 
+    const STATUS_WAITING_INVOICE_USN = 'Waiting InvoiceUSN';
+
     const STATUS_WAITING_INVOICE_APPROVAL = 'Waiting Invoice Approval';
+
+    const STATUS_WAITING_INVOICE_APPROVAL_USN = 'Waiting Invoice ApprovalUSN';
 
     public function __construct(
         Account $account,
+        TranslateRepository $transrepository,
         string $value,
         StakeholdPlanReward $reward,
         Contract $contract,
@@ -74,6 +86,7 @@ class Payment extends AccountFinancialMovement
 
         $this->wasMade = false;
         $this->invoices = new ArrayCollection();
+
     }
 
     /**
@@ -163,24 +176,43 @@ class Payment extends AccountFinancialMovement
 
     public function getStatus(): string
     {
+
         if ($this->needsInvoice()) {
+                if (false === $this->hasInvoice()) {
 
-            if (false === $this->hasInvoice()) {
+                    return self::STATUS_WAITING_INVOICE;
+                } elseif (false === $this->isInvoiceApproved()) {
 
-                return self::STATUS_WAITING_INVOICE;
-
-            } elseif (false === $this->isInvoiceApproved()) {
-
-                return self::STATUS_WAITING_INVOICE_APPROVAL;
+                    return self::STATUS_WAITING_INVOICE_APPROVAL;
+                }
             }
 
+            if ($this->wasMade) {
+                return self::STATUS_MADE;
+            }
+
+            return self::STATUS_SCHEDULED;
+
+    }
+
+    public function getStatusUSN(): string
+    {
+        if ($this->needsInvoice()) {
+            if (false === $this->hasInvoice()) {
+
+                return self::STATUS_WAITING_INVOICE_USN;
+            } elseif (false === $this->isInvoiceApproved()) {
+
+                return self::STATUS_WAITING_INVOICE_APPROVAL_USN;
+            }
         }
 
         if ($this->wasMade) {
-            return self::STATUS_MADE;
+            return self::STATUS_MADE_USN;
         }
 
-        return self::STATUS_SCHEDULED;
+        return self::STATUS_SCHEDULED_USN;
+
     }
 
     public function canBeMade(): bool

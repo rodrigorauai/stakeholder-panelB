@@ -6,10 +6,13 @@ use App\Entity\Contract;
 use App\Entity\Person;
 use App\Form\ContractType;
 use App\Form\ContractSearchType;
+use App\Form\ContractTypeUSN;
+use App\Form\SearchTypeUSN;
 use App\Helper\ProfileHelper;
 use App\Helper\UploadHelper;
 use App\Repository\ContractRepository;
 use App\Repository\ConfigurationRepository;
+use App\Repository\TranslateRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,15 +27,18 @@ class ContractController extends AbstractController
 {
     /**
      * @Route("/contract", name="contract_index")
+     * @param Request $request
+     * @param ProfileHelper $profileHelper
+     * @param ContractRepository $repository
+     * @param ConfigurationRepository $crepository
+     * @param TranslateRepository $transrepository
+     * @return Response
      */
-    public function index(Request $request, ProfileHelper $profileHelper, ContractRepository $repository, ConfigurationRepository $crepository)
+    public function index(Request $request, ProfileHelper $profileHelper, ContractRepository $repository, ConfigurationRepository $crepository, TranslateRepository $transrepository)
     {
         /** @var Person $user */
         $user = $this->getUser();
         $profile = $profileHelper->getCurrentProfile();
-
-        $form = $this->createForm(ContractSearchType::class);
-        $form->handleRequest($request);
 
         $multipleOwners = false;
 
@@ -44,11 +50,26 @@ class ContractController extends AbstractController
             }
         }
 
+        $transconfig = $transrepository->findOneByActive();
+
+        $disableds = $transrepository->findByDisabled($transconfig->getId());
+
+        foreach ($disableds as $disable) {
+            if ($disable->getTranslate() == 'BRL' && $disable->getActive() == false) {
+                $form = $this->createForm(SearchTypeUSN::class);
+                $form->handleRequest($request);
+            } else {
+                $form = $this->createForm(ContractSearchType::class);
+                $form->handleRequest($request);
+            }
+        }
+
         $contracts = $repository->findUsingSearchForm($form, $accounts ?? null);
 
         $currency = $crepository->findOneByActive();
 
         return $this->render('contract/index.html.twig', [
+            'translates' => $disableds,
             'currency' => $currency->getLabel(),
             'contracts' => $contracts,
             'multipleOwners' => $multipleOwners,
@@ -65,10 +86,23 @@ class ContractController extends AbstractController
      * @Route("/contratos-de-patrocinio/{id}", name="contract__edit")
      * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
-    public function edit(Contract $contract, Request $request, EntityManagerInterface $entityManager, UploadHelper $helper)
+    public function edit(Contract $contract, Request $request, EntityManagerInterface $entityManager, UploadHelper $helper,
+                         TranslateRepository $transrepository)
     {
-        $form = $this->createForm(ContractType::class, $contract);
-        $form->handleRequest($request);
+        $transconfig = $transrepository->findOneByActive();
+
+        $disableds = $transrepository->findByDisabled($transconfig->getId());
+
+        foreach ($disableds as $disable) {
+            if ($disable->getTranslate() == 'BRL' && $disable->getActive() == false) {
+                $form = $this->createForm(ContractTypeUSN::class, $contract);
+                $form->handleRequest($request);
+            } else {
+                $form = $this->createForm(ContractType::class, $contract);
+                $form->handleRequest($request);
+            }
+        }
+
 
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var Contract $contract */
@@ -87,6 +121,7 @@ class ContractController extends AbstractController
         }
 
         return $this->render('contract/edit.html.twig', [
+            'translates' => $disableds,
             'contract' => $contract,
             'form' => $form->createView(),
         ]);
