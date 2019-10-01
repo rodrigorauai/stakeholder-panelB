@@ -4,9 +4,9 @@
 
 {% for translate in translates %}
     {% if translate.translate == 'BRL' %}
-        {% set title = 'Withdraw' %}
+        {% set title = 'Withdraw #' ~ withdraw.id ~ ' of ' ~ withdraw.account.owner.name %}
     {% else %}
-        {% set title = 'Retiradas' %}
+        {% set title = 'Retirada #' ~ withdraw.id ~ ' de ' ~ withdraw.account.owner.name %}
     {% endif %}
 {% endfor %}
 
