@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Form\ProfileSwitchType;
 use App\Helper\ProfileHelper;
+use App\Repository\TranslateRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,4 +35,35 @@ class ProfileSwitchController extends AbstractController
             'controller_name' => 'AccountSwitchController',
         ]);
     }
+
+    /**
+     * @param TranslateRepository $transrepository
+     * @return Response
+     */
+    public function editTranslate(TranslateRepository $transrepository)
+    {
+        $transconfig = $transrepository->findOneByActive();
+
+        $disableds = $transrepository->findByDisabled($transconfig->getId());
+
+        return $this->render('_components/drawer/profile-switcher--dialog.html.twig', [
+            'translates' => $disableds,
+        ]);
+    }
+
+    /**
+     * @param TranslateRepository $transrepository
+     * @return Response
+     */
+    public function editTranslateUSN(TranslateRepository $transrepository)
+    {
+        $transconfig = $transrepository->findOneByActive();
+
+        $disableds = $transrepository->findByDisabled($transconfig->getId());
+
+        return $this->render('_components/drawer/drawer.html.twig', [
+            'translates' => $disableds,
+        ]);
+    }
+
 }

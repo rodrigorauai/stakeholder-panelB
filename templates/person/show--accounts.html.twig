@@ -3,24 +3,72 @@
 {% set title = person.name|default(person.cpf|format_cpf) ~ ' - Contas de Patrocínio' %}
 {% set drawer_active_route = 'person__index' %}
 
-{% block title %}Contas de patrocínio de {{ person.name }}{% endblock %}
+{% for translate in translates %}
+    {% if translate.translate == 'BRL' %}
+        {% set title = person.name|default(person.cpf|format_cpf) ~ ' - Investment account' %}
+    {% else %}
+        {% set title = person.name|default(person.cpf|format_cpf) ~ ' - Contas de Patrocínio' %}
+    {% endif %}
+{% endfor %}
+
+{% block title %}
+    {% for translate in translates %}
+        {% if translate.translate == 'BRL' %}
+            Investment account of {{ person.name }}
+        {% else %}
+            Contas de patrocínio de {{ person.name }}
+        {% endif %}
+    {% endfor %}
+{% endblock %}
 
 {% block content %}
 
     {% include 'person/_tab-bar.html.twig' with { active_tab: 'person_account__index' } %}
 
-    <div class="container m-4">
+<div class="container m-4">
 
+{% for translate in translates %}
+    {% if translate.translate == 'BRL' %}
         <div class="mdc-list mdc-list--two-line mdc-list--avatar-list">
             <a class="mdc-list-item" href="{{ path('account__show', { id: person.account.id }) }}">
                 <span class="mdc-list-item__graphic material-icons">account_balance_wallet</span>
                 <span class="mdc-list-item__text">
-                        <span class="mdc-list-item__primary-text">Conta Pessoal</span>
-                        <span class="mdc-list-item__secondary-text">{# TODO: Solve spacing issue
-                          #}Saldo: {{ currency }} {{ person.account.balance|number_format(2, ',', '.') }} -
-                            {{ person.account.contracts.count }} contratos
+                <span class="mdc-list-item__primary-text">Personal account</span>
+                <span class="mdc-list-item__secondary-text">{# TODO: Solve spacing issue #}
+                    Balance: {{ currency }} {{ person.account.balance|number_format(2, ',', '.') }} -
+                    {{ person.account.contracts.count }} contracts
+                </span>
+            </span>
+            </a>
+
+            {% if person.companies|length > 0 %}
+                <div role="separator" class="mdc-list-divider"></div>
+                {% for company in person.companies %}
+                    <a class="mdc-list-item mdc-list-divider" href="{{ path('account__show', { id: company.account.id }) }}">
+                        <span class="mdc-list-item__graphic material-icons">account_balance_wallet</span>
+                        <span class="mdc-list-item__text">
+                        <span class="mdc-list-item__primary-text">Business account of {{ company.name }}</span>
+                        <span class="mdc-list-item__secondary-text">{# TODO: Solve spacing issue #}
+                                Balance: {{ currency }} {{ company.account.balance|number_format(2, ',', '.') }},
+                                {{ company.account.contracts.count }} contracts
+                            </span>
                         </span>
-                    </span>
+                    </a>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+    {% else %}
+        <div class="mdc-list mdc-list--two-line mdc-list--avatar-list">
+            <a class="mdc-list-item mdc-list-divider" href="{{ path('account__show', { id: person.account.id }) }}">
+                <span class="mdc-list-item__graphic material-icons">account_balance_wallet</span>
+                <span class="mdc-list-item__text">
+                <span class="mdc-list-item__primary-text">Conta Pessoal</span>
+                <span class="mdc-list-item__secondary-text">{# TODO: Solve spacing issue
+                  #}Saldo: {{ currency }} {{ person.account.balance|number_format(2, ',', '.') }} -
+                    {{ person.account.contracts.count }} contratos
+                </span>
+            </span>
             </a>
 
             {% if person.companies|length > 0 %}
@@ -31,18 +79,21 @@
                     <a class="mdc-list-item" href="{{ path('account__show', { id: company.account.id }) }}">
                         <span class="mdc-list-item__graphic material-icons">account_balance_wallet</span>
                         <span class="mdc-list-item__text">
-                            <span class="mdc-list-item__primary-text">Conta da empresa {{ company.name }}</span>
-                            <span class="mdc-list-item__secondary-text">{# TODO: Solve spacing issue
-                                #}Saldo: {{ currency }} {{ company.account.balance|number_format(2, ',', '.') }},
-                                {{ company.account.contracts.count }} contratos
-                            </span>
-                        </span>
+                    <span class="mdc-list-item__primary-text">Conta da empresa {{ company.name }}</span>
+                    <span class="mdc-list-item__secondary-text">{# TODO: Solve spacing issue
+                        #}Saldo: {{ currency }} {{ company.account.balance|number_format(2, ',', '.') }},
+                        {{ company.account.contracts.count }} contratos
+                    </span>
+                </span>
                     </a>
                 {% endfor %}
 
             {% endif %}
         </div>
+    {% endif %}
+{% endfor %}
 
-    </div>
+
+</div>
 
 {% endblock %}

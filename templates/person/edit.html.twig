@@ -1,8 +1,25 @@
 {% extends 'base.html.twig' %}
+
 {% set title = person.name|default(person.cpf|format_cpf) ~ ' - Dados Pessoais' %}
 {% set drawer_active_route = 'person__index' %}
 
-{% block title %}Dados pessoais de {{ person.name }}{% endblock %}
+{% for translate in translates %}
+    {% if translate.translate == 'BRL' %}
+        {% set title = person.name|default(person.cpf|format_cpf) ~ ' - Personal data' %}
+    {% else %}
+        {% set title = person.name|default(person.cpf|format_cpf) ~ ' - Dados Pessoais' %}
+    {% endif %}
+{% endfor %}
+
+{% block title %}
+    {% for translate in translates %}
+        {% if translate.translate == 'BRL' %}
+          Personal data of {{ person.name }}
+        {% else %}
+            Dados pessoais de {{ person.name }}
+        {% endif %}
+    {% endfor %}
+{% endblock %}
 
 {% block content %}
 

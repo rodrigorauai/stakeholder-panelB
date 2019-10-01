@@ -3,6 +3,14 @@
 {% set title = 'Planos' %}
 {% set drawer_active_route = 'stakehold_plan__index' %}
 
+{% for translate in translates %}
+    {% if translate.translate == 'BRL' %}
+        {% set title = 'Plans' %}
+    {% else %}
+        {% set title = 'Planos' %}
+    {% endif %}
+{% endfor %}
+
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
@@ -17,49 +25,105 @@
         {{ form_rest(form) }}
         {{ form_end(form) }}
     </div>
-    <div class="my-4 mx-2">
 
-        <div class="table-responsive">
-            <table class="table text-nowrap">
-                <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Nome Interno</th>
-                    <th scope="col">Nome Comercial</th>
-                    <th scope="col" class="text-right">Valor Mínimo</th>
-                    <th scope="col" class="text-right">Múltiplo</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for plan in plans %}
-                    <tr>
-                        <th scope="row">{{ plan.id }}</th>
-                        <td>
-                            <a href="{{ path('stakehold_plan__edit', { id: plan.id }) }}">
-                                {{ plan.administrativeName }}
-                            </a>
-                        </td>
-                        <td>{{ plan.commercialName }}</td>
-                        <td class="text-right">{{ currency }} {{ plan.minimumValue|number_format(2, ',', '.') }}</td>
-                        <td class="text-right">{{ currency }} {{ plan.valueMultiple|number_format(2, ',', '.') }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+    {% for translate in translates %}
+        {% if translate.translate == 'BRL' %}
+            <div class="my-4 mx-2">
+                <div class="table-responsive">
+                    <table class="table text-nowrap">
+                        <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Internal name</th>
+                            <th scope="col">Commercial name</th>
+                            <th scope="col" class="text-right">Minimum value</th>
+                            <th scope="col" class="text-right">Multiple</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for plan in plans %}
+                            <tr>
+                                <th scope="row">{{ plan.id }}</th>
+                                <td>
+                                    <a href="{{ path('stakehold_plan__edit', { id: plan.id }) }}">
+                                        {{ plan.administrativeName }}
+                                    </a>
+                                </td>
+                                <td>{{ plan.commercialName }}</td>
+                                <td class="text-right">{{ currency }} {{ plan.minimumValue|number_format(2, ',', '.') }}</td>
+                                <td class="text-right">{{ currency }} {{ plan.valueMultiple|number_format(2, ',', '.') }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
 
-        {% if plans|length == 0 %}
-            <p class="ml-4">Nenhum plano cadastrado.</p>
+                {% if plans|length == 0 %}
+                    <p class="ml-4">No plans registered.</p>
+                {% endif %}
+
+            </div>
+        {% else %}
+            <div class="my-4 mx-2">
+
+                <div class="table-responsive">
+                    <table class="table text-nowrap">
+                        <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Nome Interno</th>
+                            <th scope="col">Nome Comercial</th>
+                            <th scope="col" class="text-right">Valor Mínimo</th>
+                            <th scope="col" class="text-right">Múltiplo</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for plan in plans %}
+                            <tr>
+                                <th scope="row">{{ plan.id }}</th>
+                                <td>
+                                    <a href="{{ path('stakehold_plan__edit', { id: plan.id }) }}">
+                                        {{ plan.administrativeName }}
+                                    </a>
+                                </td>
+                                <td>{{ plan.commercialName }}</td>
+                                <td class="text-right">{{ currency }} {{ plan.minimumValue|number_format(2, ',', '.') }}</td>
+                                <td class="text-right">{{ currency }} {{ plan.valueMultiple|number_format(2, ',', '.') }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                {% if plans|length == 0 %}
+                    <p class="ml-4">Nenhum plano cadastrado.</p>
+                {% endif %}
+
+            </div>
         {% endif %}
+    {% endfor %}
 
-    </div>
 {% endblock %}
 
 {% block body_end %}
-    <div class="app-page-end">
-        <a class="mdc-fab mdc-fab--extended" href="{{ path('stakehold_plan__create') }}">
-            <span class="material-icons mdc-fab__icon">add</span>
-            <span class="mdc-fab__label">Criar Plano</span>
-        </a>
-    </div>
+
+    {% for translate in translates %}
+        {% if translate.translate == 'BRL' %}
+            <div class="app-page-end">
+                <a class="mdc-fab mdc-fab--extended" href="{{ path('stakehold_plan__create') }}">
+                    <span class="material-icons mdc-fab__icon">add</span>
+                    <span class="mdc-fab__label">Create Plan</span>
+                </a>
+            </div>
+        {% else %}
+            <div class="app-page-end">
+                <a class="mdc-fab mdc-fab--extended" href="{{ path('stakehold_plan__create') }}">
+                    <span class="material-icons mdc-fab__icon">add</span>
+                    <span class="mdc-fab__label">Criar Plano</span>
+                </a>
+            </div>
+        {% endif %}
+    {% endfor %}
+
+
 {% endblock %}

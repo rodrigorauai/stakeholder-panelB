@@ -5,10 +5,12 @@ namespace App\Controller;
 use App\Entity\Person;
 use App\Entity\Withdraw;
 use App\Form\ReceiptFileType;
+use App\Form\SearchTypeUSN;
 use App\Form\WithdrawReceiptType;
 use App\Form\WithdrawSearchType;
 use App\Helper\ProfileHelper;
 use App\Helper\UploadHelper;
+use App\Repository\TranslateRepository;
 use App\Repository\WithdrawRepository;
 use App\Repository\ConfigurationRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -27,26 +29,42 @@ class WithdrawController extends AbstractController
      * @param Request $request
      * @param WithdrawRepository $repository
      * @param ProfileHelper $profileHelper
+     * @param ConfigurationRepository $crepository
+     * @param TranslateRepository $transrepository
      * @return Response
-     * @Route("/retiradas", name="withdraw__index")
+     * @Route("/withdraw", name="withdraw__index")
      */
-    public function index(Request $request, WithdrawRepository $repository, ProfileHelper $profileHelper, ConfigurationRepository $crepository)
+    public function index(Request $request, WithdrawRepository $repository, ProfileHelper $profileHelper, ConfigurationRepository $crepository, TranslateRepository $transrepository)
     {
         /** @var Person $user */
         $user = $this->getUser();
         $profile = $profileHelper->getCurrentProfile();
 
-        $form = $this->createForm(WithdrawSearchType::class);
-        $form->handleRequest($request);
+
 
         if ($profile['id'] === ProfileHelper::PROFILE_STAKEHOLDER) {
             $accounts = $user->getAccounts();
+        }
+
+        $transconfig = $transrepository->findOneByActive();
+
+        $disableds = $transrepository->findByDisabled($transconfig->getId());
+
+        foreach ($disableds as $disable) {
+            if ($disable->getTranslate() == 'BRL' && $disable->getActive() == false) {
+                $form = $this->createForm(SearchTypeUSN::class);
+                $form->handleRequest($request);
+            } else {
+                $form = $this->createForm(WithdrawSearchType::class);
+                $form->handleRequest($request);
+            }
         }
 
         $withdraws = $repository->findUsingSearchForm($form, $accounts ?? null);
         $currency = $crepository->findOneByActive();
 
         return $this->render('withdraw/index.html.twig', [
+            'translates' => $disableds,
             'currency' => $currency->getLabel(),
             'withdraws' => $withdraws,
             'form' => $form->createView(),

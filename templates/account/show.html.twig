@@ -3,42 +3,95 @@
 {% set title = 'Conta de Patrocínio de ' ~ account.owner.name %}
 {% set drawer_active_route = 'person__index' %}
 
+{% for translate in translates %}
+    {% if translate.translate == 'BRL' %}
+        {% set title = 'Investment account of ' ~ account.owner.name %}
+    {% else %}
+        {% set title = 'Conta de Patrocínio de ' ~ account.owner.name %}
+    {% endif %}
+{% endfor %}
+
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-    <div class="container m-4">
-        <p>Saldo da conta: {{ currency }} {{ account.balance|number_format(2, ',', '.') }}</p>
-    </div>
 
-    <div class="m-4">
-        <h2>Contratos de Patrocínio</h2>
-
-        {% if account.contracts.count == 0 %}
-            <p>Nenhum contrato encontrado.</p>
-        {% endif %}
-
-        <div class="mdc-list mdc-list--two-line">
-            {% for contract in account.contracts %}
-                <a class="mdc-list-item" href="{{ path('contract__edit', { id: contract.id }) }}">
-                    <span class="material-icons mdc-list-item__graphic" aria-hidden="true">insert_drive_file</span>
-                    <span class="mdc-list-item__text">
-                        <span class="mdc-list-item__primary-text">{{ currency }} {{ contract.value|number_format(2, ',', '.') }}</span>
-                        <span class="mdc-list-item__secondary-text">{{ contract.plan.administrativeName }}
-                            - de {{ contract.executionDate.format('d/m/Y') }}
-                            a {{ contract.expirationDate.format('d/m/Y') }}
-                        </span>
-                    </span>
-                </a>
-            {% endfor %}
+{% for translate in translates %}
+    {% if translate.translate == 'BRL' %}
+        <div class="container m-4">
+            <p>Account balance: {{ currency }} {{ account.balance|number_format(2, ',', '.') }}</p>
         </div>
-    </div>
+        <div class="m-4">
+            <h2>Investment contracts</h2>
+
+            {% if account.contracts.count == 0 %}
+                <p>No contracts found.</p>
+            {% endif %}
+
+            <div class="mdc-list mdc-list--two-line">
+                {% for contract in account.contracts %}
+                    <a class="mdc-list-item" href="{{ path('contract__edit', { id: contract.id }) }}">
+                        <span class="material-icons mdc-list-item__graphic" aria-hidden="true">insert_drive_file</span>
+                        <span class="mdc-list-item__text">
+                    <span class="mdc-list-item__primary-text">{{ currency }} {{ contract.value|number_format(2, ',', '.') }}</span>
+                    <span class="mdc-list-item__secondary-text">{{ contract.plan.administrativeName }}
+                        - de {{ contract.executionDate.format('d/m/Y') }}
+                        a {{ contract.expirationDate.format('d/m/Y') }}
+                    </span>
+                </span>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        <div class="container m-4">
+            <p>Saldo da conta: {{ currency }} {{ account.balance|number_format(2, ',', '.') }}</p>
+        </div>
+        <div class="m-4">
+            <h2>Contratos de Patrocínio</h2>
+
+            {% if account.contracts.count == 0 %}
+                <p>Nenhum contrato encontrado.</p>
+            {% endif %}
+
+            <div class="mdc-list mdc-list--two-line">
+                {% for contract in account.contracts %}
+                    <a class="mdc-list-item" href="{{ path('contract__edit', { id: contract.id }) }}">
+                        <span class="material-icons mdc-list-item__graphic" aria-hidden="true">insert_drive_file</span>
+                        <span class="mdc-list-item__text">
+                    <span class="mdc-list-item__primary-text">{{ currency }} {{ contract.value|number_format(2, ',', '.') }}</span>
+                    <span class="mdc-list-item__secondary-text">{{ contract.plan.administrativeName }}
+                        - de {{ contract.executionDate.format('d/m/Y') }}
+                        a {{ contract.expirationDate.format('d/m/Y') }}
+                    </span>
+                </span>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}
+
 {% endblock %}
 
 {% block body_end %}
-    <div class="app-page-end">
-        <a class="mdc-fab mdc-fab--extended" href="{{ path('account__contract__create', { id: account.id }) }}">
-            <span class="material-icons mdc-fab__icon">add</span>
-            <span class="mdc-fab__label">Criar Contrato</span>
-        </a>
-    </div>
+
+    {% for translate in translates %}
+        {% if translate.translate == 'BRL' %}
+            <div class="app-page-end">
+                <a class="mdc-fab mdc-fab--extended" href="{{ path('account__contract__create', { id: account.id }) }}">
+                    <span class="material-icons mdc-fab__icon">add</span>
+                    <span class="mdc-fab__label">Create contract</span>
+                </a>
+            </div>
+        {% else %}
+            <div class="app-page-end">
+                <a class="mdc-fab mdc-fab--extended" href="{{ path('account__contract__create', { id: account.id }) }}">
+                    <span class="material-icons mdc-fab__icon">add</span>
+                    <span class="mdc-fab__label">Criar Contrato</span>
+                </a>
+            </div>
+        {% endif %}
+    {% endfor %}
+
+
 {% endblock %}
