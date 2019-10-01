@@ -74,7 +74,9 @@ class StakeholdPlanController extends AbstractController
      * @Route("/planos-de-patrocinio/adicionar", name="stakehold_plan__create")
      * @IsGranted({"ROLE_ADMINISTRATOR"})
      */
-    public function create(Request $request, EntityManagerInterface $entityManager, TranslateRepository $transrepository)
+    public function create(Request $request,
+                           EntityManagerInterface $entityManager,
+                           TranslateRepository $transrepository)
     {
         $transconfig = $transrepository->findOneByActive();
 
@@ -196,22 +198,35 @@ class StakeholdPlanController extends AbstractController
             if ($disable->getTranslate() == 'BRL' && $disable->getActive() == false) {
                 $form = $this->createForm(StakeholdPlanRewardTypeUSN::class);
                 $form->handleRequest($request);
+
+                if ($form->isSubmitted() && $form->isValid()) {
+                    /** @var StakeholdPlanReward $reward */
+                    $reward = $form->getData();
+                    $reward->setPlan($plan);
+
+                    $entityManager->persist($reward);
+                    $entityManager->flush();
+
+                    return $this->redirectToRoute('stakehold_plan__reward__index', ['id' => $plan->getId()], 303);
+                }
             } else {
                 $form = $this->createForm(StakeholdPlanRewardType::class);
                 $form->handleRequest($request);
+
+                if ($form->isSubmitted() && $form->isValid()) {
+                    /** @var StakeholdPlanReward $reward */
+                    $reward = $form->getData();
+                    $reward->setPlan($plan);
+
+                    $entityManager->persist($reward);
+                    $entityManager->flush();
+
+                    return $this->redirectToRoute('stakehold_plan__reward__index', ['id' => $plan->getId()], 303);
+                }
             }
         }
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            /** @var StakeholdPlanReward $reward */
-            $reward = $form->getData();
-            $reward->setPlan($plan);
 
-            $entityManager->persist($reward);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('stakehold_plan__reward__index', ['id' => $plan->getId()], 303);
-        }
 
         return $this->render('stakehold_plan/reward/form.html.twig', [
             'translates' => $disableds,

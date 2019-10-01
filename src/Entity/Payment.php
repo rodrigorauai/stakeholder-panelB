@@ -69,10 +69,6 @@ class Payment extends AccountFinancialMovement
     const STATUS_WAITING_INVOICE_APPROVAL = 'Waiting Invoice Approval';
 
     const STATUS_WAITING_INVOICE_APPROVAL_USN = 'Waiting Invoice ApprovalUSN';
-    /**
-     * @var TranslateRepository
-     */
-    private $transRepository;
 
     public function __construct(
         Account $account,
@@ -90,9 +86,6 @@ class Payment extends AccountFinancialMovement
 
         $this->wasMade = false;
         $this->invoices = new ArrayCollection();
-
-        $this->transRepository = $transrepository;
-        dd($this);
 
     }
 
@@ -183,7 +176,8 @@ class Payment extends AccountFinancialMovement
 
     public function getStatus(): string
     {
-            if ($this->needsInvoice()) {
+
+        if ($this->needsInvoice()) {
                 if (false === $this->hasInvoice()) {
 
                     return self::STATUS_WAITING_INVOICE;

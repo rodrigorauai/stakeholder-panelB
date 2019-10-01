@@ -103,7 +103,23 @@
                             <tr>
                                 <th scope="row">{{ withdraw.id }}</th>
                                 <td>
-                                    {{ withdraw.status|trans }}
+
+                                    {% for translate in translates %}
+                                        {% if translate.translate == 'BRL' %}
+                                            {% if withdraw.status == constant('STATUS_PENDING', payment) %}
+                                                Pending
+                                            {% elseif withdraw.status == constant('STATUS_EXECUTED', payment) %}
+                                                Executed
+                                            {% endif %}
+                                        {% else %}
+                                            {% if withdraw.status == constant('STATUS_PENDING', payment) %}
+                                                {{ withdraw.status|trans }}
+                                            {% elseif withdraw.status == constant('STATUS_EXECUTED', payment) %}
+                                                {{ withdraw.status|trans }}
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+
                                 </td>
                                 <td class="text-right">{{ currency }} {{ withdraw.value|number_format(2, ',', '.') }}</td>
                                 <td>{{ withdraw.account.owner.name }}</td>

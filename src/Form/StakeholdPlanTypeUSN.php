@@ -51,17 +51,17 @@ class StakeholdPlanTypeUSN extends AbstractType
                 'html5' => true,
             ])
             ->add('gracePeriod', IntegerType::class, [
-                'label' => 'Carência em meses',
+                'label' => 'Grace period in months',
             ])
             ->add('bestAcquisitionDay', IntegerType::class, [
-                'label' => 'Melhor dia de adesão',
+                'label' => 'Best day of membership',
                 'attr' => [
                     'min' => 1,
                     'max' => 28,
                 ],
             ])
             ->add('monthlyAdministrativeFee', NumberType::class, [
-                'label' => 'Porcentagem de taxa administrativa mensal',
+                'label' => 'Monthly Administrative Fee Percentage',
                 'scale' => 2,
                 'attr' => [
                     'step' => 0.01,
