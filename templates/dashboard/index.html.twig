@@ -153,7 +153,12 @@
                                                         <tbody>
                                                         {% for payment in dashboardHelper.lastPayments %}
                                                             <tr>
-                                                                <td class="text-success">+ {{ currency }} {{ payment.value|number_format(2, ',', '.') }}</td>
+                                                                {% if payment.value > 0 %}
+                                                                    <td class="text-success">+ {{ currency }} {{ payment.value|number_format(2, ',', '.') }}</td>
+                                                                {% else %}
+                                                                    <td class="text-danger">- {{ currency }} {{ payment.value|number_format(2, ',', '.') }}</td>
+                                                                {% endif %}
+
                                                                 <td>{{ payment.executionTimestamp|date('d/m/Y') }}</td>
                                                             </tr>
                                                         {% endfor %}
