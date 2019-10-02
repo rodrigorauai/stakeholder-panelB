@@ -72,7 +72,6 @@ class Payment extends AccountFinancialMovement
 
     public function __construct(
         Account $account,
-        TranslateRepository $transrepository,
         string $value,
         StakeholdPlanReward $reward,
         Contract $contract,

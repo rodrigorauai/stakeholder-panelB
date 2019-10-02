@@ -36,20 +36,6 @@ class ConfigurationController extends AbstractController
      */
     public function index(Request $request, ConfigurationRepository $repository)
     {
-//        $config = $repository->findOneByActive();
-//
-//        $disableds = $repository->findByDisabled($config->getId());
-//
-//        foreach ($disableds as $disable) {
-//            if ($disable->getTranslate() == 'BRL' && $disable->getActive() == false) {
-//                $form = $this->createForm(ConfigurationType::class, ConfigurationData::fromEntity($config));
-//                $form->handleRequest($request);
-//            } else {
-//                $form = $this->createForm(ConfigurationType::class);
-//                $form->handleRequest($request);
-//            }
-//        }
-
         $form = $this->createForm(ConfigurationType::class);
         $form->handleRequest($request);
 
