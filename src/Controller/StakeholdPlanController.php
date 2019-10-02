@@ -244,11 +244,24 @@ class StakeholdPlanController extends AbstractController
      * @Route("/planos-de-patrocinio/rendimentos/{id}", name="stakehold_plan__reward__edit")
      * @IsGranted({"ROLE_ADMINISTRATOR"})
      */
-    public function editReward(StakeholdPlanReward $reward, Request $request, EntityManagerInterface $entityManager)
+    public function editReward(StakeholdPlanReward $reward, Request $request, EntityManagerInterface $entityManager,
+                               TranslateRepository $transrepository)
     {
-        $form = $this->createForm(StakeholdPlanRewardType::class, $reward);
-        $form->handleRequest($request);
+        $transconfig = $transrepository->findOneByActive();
 
+        $disableds = $transrepository->findByDisabled($transconfig->getId());
+
+        foreach ($disableds as $disable) {
+            if ($disable->getTranslate() == 'BRL' && $disable->getActive() == false) {
+                $form = $this->createForm(StakeholdPlanRewardTypeUSN::class, $reward);
+                $form->handleRequest($request);
+
+            } else {
+                $form = $this->createForm(StakeholdPlanRewardType::class, $reward);
+                $form->handleRequest($request);
+            }
+
+        }
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($reward);
             $entityManager->flush();
@@ -257,6 +270,7 @@ class StakeholdPlanController extends AbstractController
         }
 
         return $this->render('stakehold_plan/reward/form.html.twig', [
+            'translates' => $disableds,
             'form' => $form->createView(),
             'plan' => $reward->getPlan(),
         ]);
