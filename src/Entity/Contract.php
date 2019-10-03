@@ -99,12 +99,16 @@ class Contract
     public function __construct(
         ?StakeholdPlan $plan,
         ?string $value,
+        ?string $yield,
+        ?string $last,
         ?DateTime $executionDate,
         ?DateTime $firstReturnDate,
         ?DateTime $expirationDate
     ) {
         $this->plan = $plan;
         $this->value = $value;
+        $this->yield = $yield;
+        $this->last = $last;
         $this->executionDate = $executionDate;
         $this->firstReturnDate = $firstReturnDate;
         $this->expirationDate = $expirationDate;
