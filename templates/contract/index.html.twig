@@ -41,6 +41,7 @@
                                         <th>Contractor</th>
                                     {% endif %}
                                     <th class="text-right">Value</th>
+                                    <th class="text-right">Accumulated Income</th>
                                     <th>Plan</th>
                                     <th class="text-center">Accession Date</th>
                                     <th class="text-center">Expiration Date</th>
@@ -54,6 +55,7 @@
                                             <td>{{ contract.account.owner.name }}</td>
                                         {% endif %}
                                         <td class="text-right">{{ currency }} {{ contract.value|number_format(2, ',', '.') }}</td>
+                                        <td class="text-right">{{ currency }} {{ contract.yield|number_format(2, ',', '.') }}</td>
                                         <td>{{ contract.plan.commercialName }}</td>
                                         <td class="text-center">{{ contract.executionDate|date('d/m/Y') }}</td>
                                         <td class="text-center">{{ contract.expirationDate|date('d/m/Y') }}</td>
@@ -98,6 +100,7 @@
                                         <th>Contratante</th>
                                     {% endif %}
                                     <th class="text-right">Valor</th>
+                                    <th class="text-right">Saldo Rendimento</th>
                                     <th>Plano</th>
                                     <th class="text-center">Data de Adesão</th>
                                     <th class="text-center">Data de Expiração</th>
@@ -111,6 +114,7 @@
                                             <td>{{ contract.account.owner.name }}</td>
                                         {% endif %}
                                         <td class="text-right">{{ currency }} {{ contract.value|number_format(2, ',', '.') }}</td>
+                                        <td class="text-right">{{ currency }} {{ contract.yield|number_format(2, ',', '.') }}</td>
                                         <td>{{ contract.plan.commercialName }}</td>
                                         <td class="text-center">{{ contract.executionDate|date('d/m/Y') }}</td>
                                         <td class="text-center">{{ contract.expirationDate|date('d/m/Y') }}</td>
