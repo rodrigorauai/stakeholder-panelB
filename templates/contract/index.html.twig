@@ -66,6 +66,13 @@
                                                 }) }}" target="_blank">Contract</a>
                                             {% endif %}
                                         </td>
+                                        <td>
+                                            {% if contract.digitizedContracts.count > 0 %}
+                                                <a href="{{ path('contract__digitized_contract__download', {
+                                                    id: contract.id
+                                                }) }}" target="_blank">Contract</a>
+                                            {% endif %}
+                                        </td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -124,6 +131,13 @@
                                                     id: contract.id
                                                 }) }}" target="_blank">Contrato</a>
                                             {% endif %}
+                                        </td>
+                                        <td>
+                                            {# {% if contract.yield > 0 %} #}
+                                                <a href="{{ path('request__yield__withdraw', {
+                                                    id: contract.id
+                                                }) }}" target="_blank">Saque dos Rendimentos</a>
+                                            {# {% endif %} #}
                                         </td>
                                     </tr>
                                 {% endfor %}

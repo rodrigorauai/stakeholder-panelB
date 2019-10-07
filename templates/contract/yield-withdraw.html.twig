@@ -1,0 +1,137 @@
+{% extends 'base.html.twig' %}
+{% set title = 'Retirada #' ~ contract.id ~ ' de ' ~ contract.account.owner.name %}
+{% set drawer_active_route = 'withdraw__index' %}
+
+{% for translate in translates %}
+    {% if translate.translate == 'BRL' %}
+        {% set title = 'Withdraw #' ~ contract.id ~ ' of ' ~ contract.account.owner.name %}
+    {% else %}
+        {% set title = 'Retirada #' ~ contract.id ~ ' de ' ~ contract.account.owner.name %}
+    {% endif %}
+{% endfor %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+
+    {% for translate in translates %}
+        {% if translate.translate == 'BRL' %}
+            <div class="container m-4">
+                <h3>Solicitation</h3>
+
+                <dl class="d-table">
+                    <div class="d-table-row">
+                        <dt class="d-table-cell">Status</dt>
+                        <dd class="d-table-cell">{{ withdraw.status|trans }}</dd>
+                    </div>
+
+                    <div class="d-table-row">
+                        <dt class="d-table-cell">Value</dt>
+                        <dd class="d-table-cell">{{ currency }} {{ withdraw.value|number_format(2, ',', '.') }}</dd>
+                    </div>
+
+                    <div class="d-table-row">
+                        <dt class="d-table-cell">Account Owner</dt>
+                        <dd class="d-table-cell">{{ withdraw.account.owner.name }}</dd>
+                    </div>
+
+                    <div class="d-table-row">
+                        <dt class="d-table-cell">Request Date</dt>
+                        <dd class="d-table-cell">{{ withdraw.requestTimestamp.format('d/m/Y H:i') }}</dd>
+                    </div>
+                </dl>
+            </div>
+
+            <div class="container m-4">
+
+                <h3>Bank data</h3>
+
+                {% set bankAccount = withdraw.account.owner.bankAccount %}
+
+                <dl class="d-table">
+
+                    <div class="d-table-row">
+                        <dt class="d-table-cell">Bank</dt>
+                        <dd class="d-table-cell">{{ bankAccount.bankCode }} - {{ bankAccount.bank }}</dd>
+                    </div>
+
+                    <div class="d-table-row">
+                        <dt class="d-table-cell">Agency</dt>
+                        <dd class="d-table-cell">{{ bankAccount.agency }}</dd>
+                    </div>
+
+                    <div class="d-table-row">
+                        <dt class="d-table-cell">Account</dt>
+                        <dd class="d-table-cell">{{ bankAccount.number }}</dd>
+                    </div>
+
+                    <div class="d-table-row">
+                        <dt class="d-table-cell">Title Name</dt>
+                        <dd class="d-table-cell">{{ bankAccount.holderName }}</dd>
+                    </div>
+
+                    <div class="d-table-row">
+                        <dt class="d-table-cell">Holder Document</dt>
+                        <dd class="d-table-cell">{{ bankAccount.holderDocumentNumber }}</dd>
+                    </div>
+                </dl>
+            </div>
+
+            <div class="container m-4">
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <div class="form-row button-container">
+                    {% include '_components/button/button.html.twig' with { label: 'Record Execution', type: 'submit', style: 'outlined'} only %}
+                </div>
+                {{ form_rest(form) }}
+                {{ form_end(form) }}
+            </div>
+        {% else %}
+
+            <div class="container m-4">
+                <h3>Solicitação de saque dos rendimentos</h3>
+
+                <dl class="d-table">
+                    <div class="d-table-row">
+                        <dt class="d-table-cell">Contrato</dt>
+                        <dd class="d-table-cell">{{ contract.id }}</dd>
+                    </div>
+
+                    <div class="d-table-row">
+                        <dt class="d-table-cell">Valor do contrato</dt>
+                        <dd class="d-table-cell">{{ currency }} {{ contract.value|number_format(2, ',', '.') }}</dd>
+                    </div>
+
+                    <div class="d-table-row">
+                        <dt class="d-table-cell">Saldo dos Rendimentos</dt>
+                        <dd class="d-table-cell">{{ currency }} {{ contract.yield|number_format(2, ',', '.') }}</dd>
+                    </div>
+
+                    <div class="d-table-row">
+                        <dt class="d-table-cell">Proprietário da Conta</dt>
+                        <dd class="d-table-cell">{{ contract.account.owner.name }}</dd>
+                    </div>
+
+                    <div class="d-table-row">
+                        <dt class="d-table-cell">Data de Solicitação</dt>
+                        <dd class="d-table-cell">{{ contract.executionDate.format('d/m/Y H:i') }}</dd>
+                    </div>
+                </dl>
+            </div>
+
+            <div class="container m-4">
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <div class="form-row button-container">
+                    {% include '_components/button/button.html.twig' with { label: 'Solicitar Saque', type: 'submit', style: 'outlined'} only %}
+                </div>
+                {{ form_rest(form) }}
+                {{ form_end(form) }}
+            </div>
+            
+        {% endif %}
+    {% endfor %}
+
+
+
+{% endblock %}
