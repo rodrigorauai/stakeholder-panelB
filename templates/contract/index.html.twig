@@ -68,9 +68,9 @@
                                         </td>
                                         <td>
                                             {% if contract.digitizedContracts.count > 0 %}
-                                                <a href="{{ path('contract__digitized_contract__download', {
+                                                <a href="{{ path('request__yield__withdraw', {
                                                     id: contract.id
-                                                }) }}" target="_blank">Contract</a>
+                                                }) }}" target="_blank">Yield withdraw</a>
                                             {% endif %}
                                         </td>
                                     </tr>
