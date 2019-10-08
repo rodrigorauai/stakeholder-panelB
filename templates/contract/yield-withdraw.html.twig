@@ -43,13 +43,19 @@
             </div>
 
             <div class="container m-4">
-                {{ form_start(form) }}
-                {{ form_widget(form) }}
-                <div class="form-row button-container">
-                    {% include '_components/button/button.html.twig' with { label: 'Request', type: 'submit', style: 'outlined'} only %}
-                </div>
-                {{ form_rest(form) }}
-                {{ form_end(form) }}
+                {% if contract.yield <= 0 %}
+                    <div>
+                        <p class="form-error text-danger">It's not possible to make the request. The yield is less than or equal to {{ currency }} 0,00</p>
+                    </div>
+                {% else %}
+                    {{ form_start(form) }}
+                    {{ form_widget(form) }}
+                    <div class="form-row button-container">
+                        {% include '_components/button/button.html.twig' with { label: 'Request', type: 'submit', style: 'outlined'} only %}
+                    </div>
+                    {{ form_rest(form) }}
+                    {{ form_end(form) }}
+                {% endif %}
             </div>
         {% else %}
 
@@ -80,13 +86,19 @@
             </div>
 
             <div class="container m-4">
-                {{ form_start(form) }}
-                {{ form_widget(form) }}
-                <div class="form-row button-container">
-                    {% include '_components/button/button.html.twig' with { label: 'Solicitar', type: 'submit', style: 'outlined'} only %}
-                </div>
-                {{ form_rest(form) }}
-                {{ form_end(form) }}
+                {% if contract.yield <= 0 %}
+                    <div>
+                        <p class="form-error text-danger">Não é possível fazer a solicitação. O saldo está menor ou igual a {{ currency }} 0,00</p>
+                    </div>
+                {% else %}
+                    {{ form_start(form) }}
+                    {{ form_widget(form) }}
+                    <div class="form-row button-container">
+                        {% include '_components/button/button.html.twig' with { label: 'Solicitar', type: 'submit', style: 'outlined'} only %}
+                    </div>
+                    {{ form_rest(form) }}
+                    {{ form_end(form) }}
+                {% endif %}
             </div>
             
         {% endif %}
