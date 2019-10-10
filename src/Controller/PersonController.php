@@ -9,6 +9,8 @@ use App\Entity\UploadedPersonFile;
 use App\Form\AddressType;
 use App\Form\AddressTypeUSN;
 use App\Form\BankAccountType;
+use App\Helper\ProfileHelper;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use App\Form\BankAccountTypeUSN;
 use App\Form\FileUploadType;
 use App\Form\FileUploadTypeUSN;
