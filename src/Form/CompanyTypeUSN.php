@@ -17,6 +17,7 @@ class CompanyTypeUSN extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Corporate name',
+                'attr' => ['maxlength' => 120]
             ])
             ->add('cnpj', TextType::class, [
                 'label' => 'National Registry of Legal Entities',
