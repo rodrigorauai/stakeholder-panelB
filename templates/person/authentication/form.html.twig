@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% set title = person.name ~ ' - Acesso' %}
+{% set drawer_active_route = 'person__index' %}
+
+{% for translate in translates %}
+    {% if translate.translate == 'BRL' %}
+        {% set title = person.name ~ ' - Access' %}
+    {% else %}
+        {% set title = person.name ~ ' - Acesso' %}
+    {% endif %}
+{% endfor %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    {% include 'person/_tab-bar.html.twig' with { active_tab: 'person__authentication__form' } %}
+
+    {% for translate in translates %}
+        {% if translate.translate == 'BRL' %}
+            <div class="container m-4">
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <div class="form-row">
+                    {% include '_components/button/button.html.twig' with { label: 'Send password setting email', type: 'submit', style: 'outlined'} only %}
+                </div>
+                {{ form_rest(form) }}
+                {{ form_end(form) }}
+            </div>
+        {% else %}
+            <div class="container m-4">
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <div class="form-row">
+                    {% include '_components/button/button.html.twig' with { label: 'Enviar e-mail de definição de senha', type: 'submit', style: 'outlined'} only %}
+                </div>
+                {{ form_rest(form) }}
+                {{ form_end(form) }}
+            </div>
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}
+

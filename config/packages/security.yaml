@@ -1,4 +1,12 @@
 security:
+    role_hierarchy:
+        ROLE_SYSTEM_ADMINISTRATOR: [ROLE_ADMINISTRATOR]
+
+        ROLE_ADMINISTRATOR: [ROLE_ADMINISTRATIVE_ASSISTANT]
+        ROLE_ADMINISTRATIVE_ASSISTANT: [ROLE_USER]
+
+        ROLE_STAKEHOLDER: [ROLE_USER]
+
     encoders:
         App\Entity\Person:
             algorithm: argon2i
@@ -33,6 +41,8 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/esqueci-minha-senha, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/definir-senha, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, roles: ROLE_USER }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }

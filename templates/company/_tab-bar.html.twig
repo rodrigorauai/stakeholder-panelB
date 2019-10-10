@@ -1,25 +1,65 @@
-{%
-    include '_components/tab-bar/tab-bar.html.twig' with
-    {
-        tabs: [
+
+{% for translate in translates %}
+    {% if translate.translate == 'BRL' %}
+        {%
+            include '_components/tab-bar/tab-bar.html.twig' with
             {
-                id: 'company__edit',
-                label: 'Dados da Empresa',
-                path: path('company__edit', { id: company.id }),
-            }, {
-                id: 'company_address__edit',
-                label: 'Endereço',
-                path: path('company_address__edit', { id: company.id }),
-            }, {
-                id: 'company_account__index',
-                label: 'Contas de Patrocínio',
-                path: path('company_account__index', { id: company.id }),
-            }, {
-                id: 'company__bank_account__edit',
-                label: 'Conta Bancária',
-                path: path('company__bank_account__edit', { id: company.id }),
-            },
-        ],
-        active_tab: active_tab|default('company__edit'),
-    }
-%}
+                tabs: [
+                {
+                    id: 'company__edit',
+                    label: 'Company data',
+                    path: path('company__edit', { id: company.id }),
+                }, {
+                    id: 'company_address__edit',
+                    label: 'Address',
+                    path: path('company_address__edit', { id: company.id }),
+                }, {
+                    id: 'company_account__index',
+                    label: 'Investment accounts',
+                    path: path('company_account__index', { id: company.id }),
+                }, {
+                    id: 'company__bank_account__edit',
+                    label: 'Bank account',
+                    path: path('company__bank_account__edit', { id: company.id }),
+                }, {
+                    id: 'company__file__index',
+                    label: 'Archive',
+                    path: path('company__file__index', { id: company.id }),
+                },
+            ],
+                active_tab: active_tab|default('company__edit'),
+            }
+        %}
+    {% else %}
+        {%
+            include '_components/tab-bar/tab-bar.html.twig' with
+            {
+                tabs: [
+                {
+                    id: 'company__edit',
+                    label: 'Dados da Empresa',
+                    path: path('company__edit', { id: company.id }),
+                }, {
+                    id: 'company_address__edit',
+                    label: 'Endereço',
+                    path: path('company_address__edit', { id: company.id }),
+                }, {
+                    id: 'company_account__index',
+                    label: 'Contas de Patrocínio',
+                    path: path('company_account__index', { id: company.id }),
+                }, {
+                    id: 'company__bank_account__edit',
+                    label: 'Conta Bancária',
+                    path: path('company__bank_account__edit', { id: company.id }),
+                }, {
+                    id: 'company__file__index',
+                    label: 'Arquivos',
+                    path: path('company__file__index', { id: company.id }),
+                },
+            ],
+                active_tab: active_tab|default('company__edit'),
+            }
+        %}
+    {% endif %}
+{% endfor %}
+

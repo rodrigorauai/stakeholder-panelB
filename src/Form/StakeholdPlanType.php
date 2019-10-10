@@ -62,6 +62,8 @@ class StakeholdPlanType extends AbstractType
             ])
             ->add('monthlyAdministrativeFee', NumberType::class, [
                 'label' => 'Porcentagem de taxa administrativa mensal',
+                'required' => false,
+                'empty_data' => '0,00',
                 'scale' => 2,
                 'attr' => [
                     'step' => 0.01,
