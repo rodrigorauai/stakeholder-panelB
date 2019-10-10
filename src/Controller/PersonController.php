@@ -355,14 +355,12 @@ class PersonController extends AbstractController
             }
         }
 
-
-
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var Account $account */
-            $account = $form->getData();
-            $account->setOwner($person);
+            /** @var BankAccount $bankAccount */
+            $bankAccount = $form->getData();
+            $bankAccount->setOwner($person);
 
-            $entityManager->persist($account);
+            $entityManager->persist($bankAccount);
             $entityManager->flush();
 
             return $this->redirectToRoute('person__bank_account__edit', ['id' => $person->getId()]);

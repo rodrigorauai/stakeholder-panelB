@@ -21,7 +21,7 @@ class BankAccount
 
     /**
      * @var Entity
-     * @ORM\OneToOne(targetEntity="Entity", inversedBy="account")
+     * @ORM\OneToOne(targetEntity="Entity", inversedBy="bankAccount")
      */
     private $owner;
 
