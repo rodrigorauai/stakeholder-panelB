@@ -18,19 +18,24 @@ class PersonTypeNew extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'label' => 'person.name__label',
+                'attr' => ['maxlength' => 80]
             ])
             ->add('cpf', TextType::class, [
                 'label' => 'CPF',
+                'attr' => ['maxlength' => 14]
             ])
             ->add('email', EmailType::class, [
                 'label' => 'person.email__label',
+                'attr' => ['maxlength' => 50]
             ])
             ->add('rg', TextType::class, [
                 'label' => 'RG',
+                'attr' => ['maxlength' => 12],
                 'required' => false,
             ])
             ->add('phone', TextType::class, [
                 'label' => 'Telefone',
+                'attr' => ['maxlength' => 15],
                 'required' => false,
             ])
             ->add('tradeRepresentative', EntityType::class, [
