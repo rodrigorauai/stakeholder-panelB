@@ -6,6 +6,7 @@ use App\Entity\StakeholdPlan;
 use App\Entity\StakeholdPlanReward;
 use App\Form\SearchTypeUSN;
 use App\Form\StakeholdPlanRewardType;
+use App\Helper\ProfileHelper;
 use App\Form\StakeholdPlanRewardTypeUSN;
 use App\Form\StakeholdPlanSearchType;
 use App\Form\StakeholdPlanType;
@@ -25,17 +26,25 @@ use Symfony\Component\Routing\Annotation\Route;
 class StakeholdPlanController extends AbstractController
 {
     /**
+     * @param ProfileHelper $profileSwitcher
      * @param Request $request
      * @param StakeholdPlanRepository $repository
      * @param ConfigurationRepository $crepository
      * @param TranslateRepository $transrepository
      * @return Response
      * @Route("/planos-de-patrocinio", name="stakehold_plan__index")
-     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT", "ROLE_STAKEHOLDER"})
      */
-    public function index(Request $request, StakeholdPlanRepository $repository, ConfigurationRepository $crepository, TranslateRepository $transrepository)
+    public function index(ProfileHelper $profileSwitcher, Request $request, StakeholdPlanRepository $repository, ConfigurationRepository $crepository, TranslateRepository $transrepository)
     {
         $plans = $repository->findAll();
+
+        $currentProfile = $profileSwitcher->getCurrentProfile();
+        switch ($currentProfile['id']) {
+
+            case ProfileHelper::PROFILE_STAKEHOLDER:
+                return $this->redirectToRoute('dashboard');
+        }
 
         $transconfig = $transrepository->findOneByActive();
 
