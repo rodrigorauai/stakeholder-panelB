@@ -60,9 +60,7 @@ class StakeholdPlanController extends AbstractController
             }
         }
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $plans = $repository->findUsingSearchForm($form);
-        }
+        $plans = $repository->findUsingSearchForm($form);
 
         $currency = $crepository->findOneByActive();
 

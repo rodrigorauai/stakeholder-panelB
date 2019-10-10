@@ -70,9 +70,7 @@ class CompanyController extends AbstractController
             }
         }
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $companies = $repository->findByExampleField($form);
-        }
+        $companies = $repository->findByExampleField($form);
 
         return $this->render('company/index.html.twig', [
             'translates' => $disableds,
