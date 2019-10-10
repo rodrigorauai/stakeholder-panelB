@@ -14,6 +14,7 @@ use App\Form\BankAccountTypeUSN;
 use App\Form\CompanyData;
 use App\Form\CompanySearchType;
 use App\Form\CompanyType;
+use App\Helper\ProfileHelper;
 use App\Form\CompanyTypeUSN;
 use App\Form\FileUploadType;
 use App\Form\FileUploadTypeUSN;
@@ -35,16 +36,25 @@ use Symfony\Component\Routing\Annotation\Route;
 class CompanyController extends AbstractController
 {
     /**
+     * @param ProfileHelper $profileSwitcher
      * @param Request $request
      * @param CompanyRepository $repository
      * @param TranslateRepository $transRepository
      * @return Response
      * @Route("/empresas", name="company__index")
-     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT", "ROLE_STAKEHOLDER"})
      */
-    public function index(Request $request, CompanyRepository $repository, TranslateRepository $transRepository)
+    public function index(ProfileHelper $profileSwitcher, Request $request, CompanyRepository $repository, TranslateRepository $transRepository)
     {
         $companies = $repository->findAll();
+
+        $currentProfile = $profileSwitcher->getCurrentProfile();
+        switch ($currentProfile['id']) {
+
+            case ProfileHelper::PROFILE_STAKEHOLDER:
+                return $this->redirectToRoute('dashboard');
+
+        }
 
         $transconfig = $transRepository->findOneByActive();
 
@@ -326,7 +336,6 @@ class CompanyController extends AbstractController
                 $form->handleRequest($request);
             }
         }
-
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
