@@ -80,7 +80,7 @@
                         <tbody>
                         {% for plan in plans %}
                             <tr>
-                                <th scope="row">{{ plan.id }}</th>
+                                <td>{{ plan.id }}</td>
                                 <td>
                                     <a href="{{ path('stakehold_plan__edit', { id: plan.id }) }}">
                                         {{ plan.administrativeName }}
