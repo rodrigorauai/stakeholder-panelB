@@ -17,9 +17,11 @@ class CompanyType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Razão Social',
+                'attr' => ['maxlength' => 120]
             ])
             ->add('cnpj', TextType::class, [
                 'label' => 'CNPJ',
+                'attr' => ['maxlength' => 18]
             ])
             ->add('manager', EntityType::class, [
                 'label' => 'Administrador',
