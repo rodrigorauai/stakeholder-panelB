@@ -3,44 +3,108 @@
 {% set title = 'Arquivos de ' ~ company.name %}
 {% set drawer_active_route = 'company__index' %}
 
-{% block title %}Arquivos de {{ company.name }}{% endblock %}
+{% for translate in translates %}
+    {% if translate.translate == 'BRL' %}
+        {% set title = 'Archives of ' ~ company.name %}
+    {% else %}
+        {% set title = 'Arquivos de ' ~ company.name %}
+    {% endif %}
+{% endfor %}
+
+{% block title %}
+
+    {% for translate in translates %}
+        {% if translate.translate == 'BRL' %}
+            Archives of {{ company.name }}
+        {% else %}
+            Arquivos de {{ company.name }}
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}
 
 {% block content %}
 
     {% include 'company/_tab-bar.html.twig' with { active_tab: 'company__file__index' } %}
 
-    <div class="container m-4">
+    {% for translate in translates %}
+        {% if translate.translate == 'BRL' %}
+            <div class="container m-4">
 
-        <div class="mdc-list mdc-list--two-line mdc-list--avatar-list">
+                <div class="mdc-list mdc-list--two-line mdc-list--avatar-list">
 
-            {% for file in company.files %}
+                    {% for file in company.files %}
 
-            <a class="mdc-list-item" href="{{ path('company__file__download', { id: file.id }) }}" target="_blank">
-                <span class="mdc-list-item__graphic material-icons">attach_file</span>
-                <span class="mdc-list-item__text">
+                        <a class="mdc-list-item" href="{{ path('company__file__download', { id: file.id }) }}" target="_blank">
+                            <span class="mdc-list-item__graphic material-icons">attach_file</span>
+                            <span class="mdc-list-item__text">
+                    <span class="mdc-list-item__primary-text">{{ file.name }}</span>
+                    <span class="mdc-list-item__secondary-text">Attached on {{ file.uploadTimestamp.format('d/m/Y') }}
+                        for {{ file.uploader.name }}
+                    </span>
+                </span>
+                        </a>
+
+                    {% endfor %}
+
+                    {% if company.files.count == 0 %}
+                        <p>No files found.</p>
+                    {% endif %}
+                </div>
+
+            </div>
+
+        {% else %}
+            <div class="container m-4">
+
+                <div class="mdc-list mdc-list--two-line mdc-list--avatar-list">
+
+                    {% for file in company.files %}
+
+                        <a class="mdc-list-item" href="{{ path('company__file__download', { id: file.id }) }}" target="_blank">
+                            <span class="mdc-list-item__graphic material-icons">attach_file</span>
+                            <span class="mdc-list-item__text">
                     <span class="mdc-list-item__primary-text">{{ file.name }}</span>
                     <span class="mdc-list-item__secondary-text">Anexado em {{ file.uploadTimestamp.format('d/m/Y') }}
                         por {{ file.uploader.name }}
                     </span>
                 </span>
-            </a>
+                        </a>
 
-            {% endfor %}
+                    {% endfor %}
 
-            {% if company.files.count == 0 %}
-                <p>Nenhum arquivo encontrado.</p>
-            {% endif %}
-        </div>
+                    {% if company.files.count == 0 %}
+                        <p>Nenhum arquivo encontrado.</p>
+                    {% endif %}
+                </div>
 
-    </div>
+            </div>
+
+        {% endif %}
+    {% endfor %}
+
 
 {% endblock %}
 
 {% block body_end %}
-    <div class="app-page-end">
-        <a class="mdc-fab mdc-fab--extended" href="{{ path('company__file__form', { id: company.id }) }}">
-            <span class="material-icons mdc-fab__icon">add</span>
-            <span class="mdc-fab__label">Anexar Arquivo</span>
-        </a>
-    </div>
+
+    {% for translate in translates %}
+        {% if translate.translate == 'BRL' %}
+            <div class="app-page-end">
+                <a class="mdc-fab mdc-fab--extended" href="{{ path('company__file__form', { id: company.id }) }}">
+                    <span class="material-icons mdc-fab__icon">add</span>
+                    <span class="mdc-fab__label">Attach file</span>
+                </a>
+            </div>
+        {% else %}
+            <div class="app-page-end">
+                <a class="mdc-fab mdc-fab--extended" href="{{ path('company__file__form', { id: company.id }) }}">
+                    <span class="material-icons mdc-fab__icon">add</span>
+                    <span class="mdc-fab__label">Anexar Arquivo</span>
+                </a>
+            </div>
+        {% endif %}
+    {% endfor %}
+
+
 {% endblock %}

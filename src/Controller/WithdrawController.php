@@ -5,11 +5,16 @@ namespace App\Controller;
 use App\Entity\Person;
 use App\Entity\Withdraw;
 use App\Form\ReceiptFileType;
+use App\Form\ReceiptFileTypeUSN;
+use App\Form\SearchTypeUSN;
 use App\Form\WithdrawReceiptType;
+use App\Form\WithdrawReceiptTypeUSN;
 use App\Form\WithdrawSearchType;
 use App\Helper\ProfileHelper;
 use App\Helper\UploadHelper;
+use App\Repository\TranslateRepository;
 use App\Repository\WithdrawRepository;
+use App\Repository\ConfigurationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,25 +31,43 @@ class WithdrawController extends AbstractController
      * @param Request $request
      * @param WithdrawRepository $repository
      * @param ProfileHelper $profileHelper
+     * @param ConfigurationRepository $crepository
+     * @param TranslateRepository $transrepository
      * @return Response
-     * @Route("/retiradas", name="withdraw__index")
+     * @Route("/withdraw", name="withdraw__index")
      */
-    public function index(Request $request, WithdrawRepository $repository, ProfileHelper $profileHelper)
+    public function index(Request $request, WithdrawRepository $repository, ProfileHelper $profileHelper, ConfigurationRepository $crepository, TranslateRepository $transrepository)
     {
         /** @var Person $user */
         $user = $this->getUser();
         $profile = $profileHelper->getCurrentProfile();
 
-        $form = $this->createForm(WithdrawSearchType::class);
-        $form->handleRequest($request);
+
 
         if ($profile['id'] === ProfileHelper::PROFILE_STAKEHOLDER) {
             $accounts = $user->getAccounts();
         }
 
+        $transconfig = $transrepository->findOneByActive();
+
+        $disableds = $transrepository->findByDisabled($transconfig->getId());
+
+        foreach ($disableds as $disable) {
+            if ($disable->getTranslate() == 'BRL' && $disable->getActive() == false) {
+                $form = $this->createForm(SearchTypeUSN::class);
+                $form->handleRequest($request);
+            } else {
+                $form = $this->createForm(WithdrawSearchType::class);
+                $form->handleRequest($request);
+            }
+        }
+
         $withdraws = $repository->findUsingSearchForm($form, $accounts ?? null);
+        $currency = $crepository->findOneByActive();
 
         return $this->render('withdraw/index.html.twig', [
+            'translates' => $disableds,
+            'currency' => $currency->getLabel(),
             'withdraws' => $withdraws,
             'form' => $form->createView(),
         ]);
@@ -63,10 +86,24 @@ class WithdrawController extends AbstractController
         Withdraw $withdraw,
         Request $request,
         EntityManagerInterface $entityManager,
-        UploadHelper $uploadHelper
+        UploadHelper $uploadHelper,
+        ConfigurationRepository $crepository,
+        TranslateRepository $transrepository
     ) {
-        $form = $this->createForm(WithdrawReceiptType::class, null);
-        $form->handleRequest($request);
+        $transconfig = $transrepository->findOneByActive();
+
+        $disableds = $transrepository->findByDisabled($transconfig->getId());
+
+        foreach ($disableds as $disable) {
+            if ($disable->getTranslate() == 'BRL' && $disable->getActive() == false) {
+                $form = $this->createForm(WithdrawReceiptTypeUSN::class, null);
+                $form->handleRequest($request);
+            } else {
+                $form = $this->createForm(WithdrawReceiptType::class, null);
+                $form->handleRequest($request);
+            }
+        }
+
 
         if ($form->isSubmitted() && $form->isValid()) {
             $file = $form->get('receiptFile')->getData();
@@ -80,7 +117,11 @@ class WithdrawController extends AbstractController
             return $this->redirectToRoute('withdraw__register_execution', ['id' => $withdraw->getId()], 303);
         }
 
+        $currency = $crepository->findOneByActive();
+
         return $this->render('withdraw/execution/form.html.twig', [
+            'translates' => $disableds,
+            'currency' => $currency->getLabel(),
             'withdraw' => $withdraw,
             'form' => $form->createView(),
         ]);
@@ -91,8 +132,13 @@ class WithdrawController extends AbstractController
      * @return BinaryFileResponse
      * @Route("/retiradas/{id}/comprovante-de-transferencia", name="withdraw__receipt__download")
      */
-    public function downloadReceipt(Withdraw $withdraw)
+    public function downloadReceipt(Withdraw $withdraw, TranslateRepository $transrepository)
     {
+        $transconfig = $transrepository->findOneByActive();
+
+        $disableds = $transrepository->findByDisabled($transconfig->getId());
+
+
         if ($withdraw->getReceipts()->count() === 0) {
             throw new NotFoundHttpException();
         }
@@ -107,16 +153,28 @@ class WithdrawController extends AbstractController
      * @param EntityManagerInterface $entityManager
      * @return RedirectResponse|Response
      * @Route("/retiradas/{id}/comprovante-de-transferencia/editar", name="withdraw__receipt__add")
-     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSSISTANT"})
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSSISTANT", "ROLE_ADMINISTRATOR"})
      */
     public function addReceipt(
         Withdraw $withdraw,
         Request $request,
         UploadHelper $helper,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        TranslateRepository $transrepository
     ) {
-        $form = $this->createForm(ReceiptFileType::class);
-        $form->handleRequest($request);
+        $transconfig = $transrepository->findOneByActive();
+
+        $disableds = $transrepository->findByDisabled($transconfig->getId());
+
+        foreach ($disableds as $disable) {
+            if ($disable->getTranslate() == 'BRL' && $disable->getActive() == false) {
+                $form = $this->createForm(ReceiptFileTypeUSN::class);
+                $form->handleRequest($request);
+            } else {
+                $form = $this->createForm(ReceiptFileType::class);
+                $form->handleRequest($request);
+            }
+        }
 
         if ($form->isSubmitted() && $form->isValid()) {
             $file = $form->get('file')->getData();
@@ -129,6 +187,7 @@ class WithdrawController extends AbstractController
         }
 
         return $this->render('withdraw/receipt/add.html.twig', [
+            'translates' => $disableds,
             'withdraw' => $withdraw,
             'form' => $form->createView(),
         ]);

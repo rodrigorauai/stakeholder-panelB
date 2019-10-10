@@ -29,3 +29,12 @@ services:
     App\Helper\UploadHelper:
         arguments:
             $privatePath: '%kernel.project_dir%/var/uploads'
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+    App\Helper\EmailHelper:
+        arguments:
+            $fromAddress: '%env(MAILER_SENDER_ADDRESS)%'
+            $fromName: '%env(MAILER_SENDER_NAME)%'
+            $replyToAddress: '%env(MAILER_REPLY_TO_ADDRESS)%'
+            $replyToName: '%env(MAILER_REPLY_TO_NAME)%'

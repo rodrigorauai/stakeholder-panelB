@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}AdInvest - Entrar{% endblock %}
+{% block title %}Entrar{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -12,19 +12,22 @@
     <div class="login-container">
 
         <form method="post">
-            {% if error %}
-                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-            {% endif %}
 
             <section class="header">
                 <h1 class="mt-0">
-                    <img id="logo" src="{{ asset('static/img/logo-adinvest-302px.png') }}" alt="AdInvest">
+                    <img id="logo" src="{{ asset('static/img/logo-branca-300px.png') }}" alt="Logo" style="color: transparent">
                 </h1>
             </section>
 
             <div class="login-background">
 
                 <div class="form-row">
+                    {% if error %}
+                        <div>
+                            <p class="form-error text-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+                        </div>
+                    {% endif %}
+
                     <div class="mdc-text-field mdc-text-field--outlined">
                         <input type="text" class="mdc-text-field__input" value="{{ last_username }}"
                                name="email" id="inputEmail" required autofocus

@@ -45,7 +45,7 @@ class WithdrawRepository extends ServiceEntityRepository
                 $qb
                     ->join('withdraw.account', 'account')
                     ->join('account.owner', 'owner')
-                    ->andWhere(
+                    ->where(
                         $qb->expr()->orX(
                             $qb->expr()->eq('withdraw.id', ':queryString'),
                             $qb->expr()->like('owner.name', ':containingQueryString')

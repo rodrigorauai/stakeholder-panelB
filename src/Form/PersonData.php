@@ -10,7 +10,7 @@ namespace App\Form;
 
 use App\Entity\Person;
 use App\Validator\CpfFormat;
-use App\Validator\CpfNumber;
+use App\Validator\UniqueUser;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class PersonData
@@ -27,7 +27,6 @@ class PersonData
     /**
      * @Assert\NotBlank()
      * @CpfFormat()
-     * @CpfNumber()
      */
     public $cpf;
 

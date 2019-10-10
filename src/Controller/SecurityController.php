@@ -3,12 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Person;
+use App\Helper\PasswordHelper;
 use App\Repository\AuthenticationTokenRepository;
 use App\Repository\PersonRepository;
-use App\Security\AuthenticationTokenManager;
+use App\Repository\TranslateRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\NamedAddress;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -47,25 +46,43 @@ class SecurityController extends AbstractController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+        return $this->render('security/login.html.twig', [
+            'last_username' => $lastUsername,
+            'error' => $error]);
     }
 
     /**
      * @param Request $request
-     * @param AuthenticationTokenManager $manager
      * @param PersonRepository $repository
+     * @param PasswordHelper $helper
      * @return RedirectResponse|Response
-     * @throws Exception
      * @Route("/esqueci-minha-senha", name="password_recovery")
      */
-    public function passwordRecovery(Request $request, AuthenticationTokenManager $manager, PersonRepository $repository)
+    public function passwordRecovery(Request $request, PersonRepository $repository,
+                                     PasswordHelper $helper,
+                                     TranslateRepository $transrepository)
     {
-        $form = $this->createFormBuilder()
-            ->add('email', EmailType::class, ['label' => 'Seu e-mail', 'required' => true,])
-            ->setMethod('post')
-            ->getForm();
+        $transconfig = $transrepository->findOneByActive();
 
-        $form->handleRequest($request);
+        $disableds = $transrepository->findByDisabled($transconfig->getId());
+
+        foreach ($disableds as $disable) {
+            if ($disable->getTranslate() == 'BRL' && $disable->getActive() == false) {
+                $form = $this->createFormBuilder()
+                    ->add('email', EmailType::class, ['label' => 'Your email', 'required' => true,])
+                    ->setMethod('post')
+                    ->getForm();
+
+                $form->handleRequest($request);
+            } else {
+                $form = $this->createFormBuilder()
+                    ->add('email', EmailType::class, ['label' => 'Seu e-mail', 'required' => true,])
+                    ->setMethod('post')
+                    ->getForm();
+
+                $form->handleRequest($request);
+            }
+        }
 
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var null|Person $user */
@@ -74,27 +91,13 @@ class SecurityController extends AbstractController
             if (!$user) {
                 $this->addFlash('error', 'Não foi possível encontrar uma conta com o seu e-mail.');
             } else {
-                $email = (new TemplatedEmail())
-                    ->from(new NamedAddress('sistema@adinvest.com', 'AdInvest'))
-                    ->to($user->getEmail())
-                    ->replyTo('rafaelsouza@adinvest.com')
-                    ->subject('Redefinição de Senha - AdInvest')
-                    ->htmlTemplate('_emails/password-recovery.html.twig')
-                    ->context([
-                        'user' => $user,
-                        'token' => $manager->generateAuthenticationToken($user),
-                    ]);
 
                 try {
-                    $sent = true;
-                    $this->mailer->send($email);
-                } catch (TransportExceptionInterface $exception) {
-                    $sent = false;
-                }
-
-                if ($sent) {
+                    $helper->sendPasswordDefinitionEmail($user);
                     $this->addFlash('success', 'Em breve você receberá em seu e-mail um link para redefinir sua senha.');
-                } else {
+                } catch (TransportExceptionInterface $exception) {
+                    $this->addFlash('error', 'Não foi possível enviar o e-mail de redefinição de senha.');
+                } catch (Exception $exception) {
                     $this->addFlash('error', 'Não foi possível enviar o e-mail de redefinição de senha.');
                 }
 
@@ -103,6 +106,7 @@ class SecurityController extends AbstractController
         }
 
         return $this->render('security/password-recovery.html.twig', [
+            'translates' => $disableds,
             'form' => $form->createView()
         ]);
     }
@@ -112,6 +116,7 @@ class SecurityController extends AbstractController
      * @param AuthenticationTokenRepository $tokenRepository
      * @param UserPasswordEncoderInterface $encoder
      * @param EntityManagerInterface $entityManager
+     * @param TranslateRepository $transrepository
      * @return RedirectResponse|Response
      * @Route("/definir-senha", name="password_definition")
      */
@@ -120,8 +125,13 @@ class SecurityController extends AbstractController
         AuthenticationTokenRepository
         $tokenRepository,
         UserPasswordEncoderInterface $encoder,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        TranslateRepository $transrepository
     ) {
+        $transconfig = $transrepository->findOneByActive();
+
+        $disableds = $transrepository->findByDisabled($transconfig->getId());
+
         $tokenString = $request->query->get('token');
         $userId = $request->query->get('user');
 
@@ -133,12 +143,23 @@ class SecurityController extends AbstractController
             throw new AccessDeniedHttpException();
         }
 
-        $form = $this->createFormBuilder()
-            ->add('password', PasswordType::class, ['label' => 'Crie uma senha', 'required' => true])
-            ->add('password_confirmation', PasswordType::class, ['label' => 'Confirme sua senha', 'required' => true])
-            ->getForm();
+        foreach ($disableds as $disable) {
+            if ($disable->getTranslate() == 'BRL' && $disable->getActive() == false) {
+                $form = $this->createFormBuilder()
+                    ->add('password', PasswordType::class, ['label' => 'Create a password', 'required' => true])
+                    ->add('password_confirmation', PasswordType::class, ['label' => 'Confirm your password', 'required' => true])
+                    ->getForm();
 
-        $form->handleRequest($request);
+                $form->handleRequest($request);
+            } else {
+                $form = $this->createFormBuilder()
+                    ->add('password', PasswordType::class, ['label' => 'Crie uma senha', 'required' => true])
+                    ->add('password_confirmation', PasswordType::class, ['label' => 'Confirme sua senha', 'required' => true])
+                    ->getForm();
+
+                $form->handleRequest($request);
+            }
+        }
 
         if ($form->isSubmitted() && $form->isValid()) {
             $password = $form->get('password')->getData();
@@ -159,6 +180,7 @@ class SecurityController extends AbstractController
         }
 
         return $this->render('security/password-definition.html.twig', [
+            'translates' => $disableds,
             'form' => $form->createView(),
         ]);
     }

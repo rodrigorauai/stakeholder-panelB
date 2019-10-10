@@ -1,25 +1,62 @@
 {% extends 'base.html.twig' %}
+
 {% set title = person.name|default(person.cpf|format_cpf) ~ ' - Endereço' %}
 {% set drawer_active_route = 'person__index' %}
 
-{% block title %}Endereço de {{ person.name }}{% endblock %}
+{% for translate in translates %}
+    {% if translate.translate == 'BRL' %}
+        {% set title = person.name|default(person.cpf|format_cpf) ~ ' - Address' %}
+    {% else %}
+        {% set title = person.name|default(person.cpf|format_cpf) ~ ' - Endereço' %}
+    {% endif %}
+{% endfor %}
+
+{% block title %}
+    {% for translate in translates %}
+        {% if translate.translate == 'BRL' %}
+            Address of {{ person.name }}
+        {% else %}
+            Endereço de {{ person.name }}
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}
 
 {% block content %}
 
     {% include 'person/_tab-bar.html.twig' with { active_tab: 'person_address__edit' } %}
 
-    <div class="container m-4">
-        {% if person.address is null %}
-            <p>Endereço não informado.</p>
+    {% for translate in translates %}
+        {% if translate.translate == 'BRL' %}
+            <div class="container m-4">
+                {% if person.address is null %}
+                    <p>Address not entered.</p>
+                {% endif %}
+
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <div class="form-row button-container">
+                    {% include '_components/button/button.html.twig' with { label: 'Save edits', type: 'submit', style: 'outlined'} only %}
+                </div>
+                {{ form_rest(form) }}
+                {{ form_end(form) }}
+            </div>
+        {% else %}
+            <div class="container m-4">
+                {% if person.address is null %}
+                    <p>Endereço não informado.</p>
+                {% endif %}
+
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <div class="form-row button-container">
+                    {% include '_components/button/button.html.twig' with { label: 'Salvar Alterações', type: 'submit', style: 'outlined'} only %}
+                </div>
+                {{ form_rest(form) }}
+                {{ form_end(form) }}
+
+            </div>
         {% endif %}
+    {% endfor %}
 
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <div class="form-row button-container">
-            {% include '_components/button/button.html.twig' with { label: 'Salvar Alterações', type: 'submit', style: 'outlined'} only %}
-        </div>
-        {{ form_rest(form) }}
-        {{ form_end(form) }}
-
-    </div>
 {% endblock %}
