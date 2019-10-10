@@ -21,7 +21,7 @@ class CompanyType extends AbstractType
             ])
             ->add('cnpj', TextType::class, [
                 'label' => 'CNPJ',
-                'attr' => ['maxlength' => 14]
+                'attr' => ['maxlength' => 18]
             ])
             ->add('manager', EntityType::class, [
                 'label' => 'Administrador',
