@@ -1,0 +1,47 @@
+.mdc-card {
+  overflow: hidden;
+}
+
+.dashboard-card--dark {
+  background-color: #00589f;
+  color: #ffffff;
+
+  .dashboard-card__heading-text,
+  .dashboard-card__footer {
+    color: rgba(255, 255, 255, 0.8);
+  }
+}
+
+.dashboard-card--heading {
+  padding: 16px 16px 3px;
+
+  h2 {
+    margin: 0;
+  }
+}
+
+.dashboard-card--body {
+  margin: 3px 16px 16px;
+}
+
+.dashboard-card__footer {
+  padding: 8px 16px 8px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+  .material-icons {
+    vertical-align: middle;
+    margin-right: 10px;
+  }
+
+  .dashboard-card__footer-text {
+    vertical-align: middle;
+  }
+}
+
+.dashboard-chart {
+  height: 200px;
+}
+
+.mdc-card__actions {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}

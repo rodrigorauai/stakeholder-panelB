@@ -1,35 +1,19 @@
 {% set active = drawer_active_route|default('withdraw__index') %}
 
-{% set items = [
-    {
-        route: 'withdraw__index',
-        icon: 'attach_money',
-        label: 'Retiradas',
-    }, {
-        route: 'payment__index',
-        icon: 'rotate_left',
-        label: 'Rendimentos',
-    }, {
-        route: 'stakehold_plan__index',
-        icon: 'assignment',
-        label: 'Planos de Patrocínio',
-    }, {
-        route: 'person__index',
-        icon: 'people',
-        label: 'Pessoas',
-    }, {
-        route: 'company__index',
-        icon: 'store_mall_directory',
-        label: 'Empresas',
-    },
-] %}
+{% set items = navigation.drawerLinks %}
 
 <aside class="mdc-drawer mdc-drawer--dismissible">
     <div class="mdc-drawer__header">
         <div class="mdc-drawer__header__content">
             <h3 class="mdc-drawer__title">
-                <img src="{{ asset('static/img/logo-adinvest.png') }}" alt="AdInvest">
+                <img id="logo" src="{{ asset('static/img/logo-branca-150px.png') }}" alt="Logo" style="color: transparent">
             </h3>
+            {% if profileSwitcher.multipleProfiles %}
+                <button class="account-switcher">
+                    {{ profileSwitcher.currentProfile.label }}
+                    <i class="material-icons account-switcher--icon">arrow_drop_down</i>
+                </button>
+            {% endif %}
         </div>
     </div>
     <div class="mdc-drawer__content">
