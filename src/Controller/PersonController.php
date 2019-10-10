@@ -9,7 +9,7 @@ use App\Entity\UploadedPersonFile;
 use App\Form\AddressType;
 use App\Form\AddressTypeUSN;
 use App\Form\BankAccountType;
-use App\Helper\ProfileHelper
+use App\Helper\ProfileHelper;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use App\Form\BankAccountTypeUSN;
 use App\Form\FileUploadType;
@@ -273,44 +273,6 @@ class PersonController extends AbstractController
 
         return $this->render('person/authentication/form.html.twig', [
             'translates' => $disableds,
-            'person' => $person,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @param Person $person
-     * @param Request $request
-     * @param PasswordHelper $helper
-     * @param LoggerInterface $logger
-     * @return Response
-     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
-     * @Route("/pessoas/{id}/acesso", name="person__authentication__form")
-     */
-    public function authentication(Person $person, Request $request, PasswordHelper $helper, LoggerInterface $logger)
-    {
-        $form = $this->createFormBuilder()
-            ->add('sendPasswordDefinitionEmail', HiddenType::class, [
-                'data' => true,
-            ])
-            ->getForm();
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            try {
-                $helper->sendPasswordDefinitionEmail($person);
-                $this->addFlash('success', 'E-mail enviado.');
-            } catch (TransportExceptionInterface $exception) {
-                $this->addFlash('error', 'Não foi possível enviar o e-mail de definição de senha.');
-                $logger->error($exception->getMessage());
-            } catch (Exception $exception) {
-                $this->addFlash('error', 'Não foi possível enviar o e-mail de definição de senha.');
-                $logger->error($exception->getMessage());
-            }
-        }
-
-        return $this->render('person/authentication/form.html.twig', [
             'person' => $person,
             'form' => $form->createView(),
         ]);
