@@ -9,8 +9,6 @@ use App\Entity\UploadedPersonFile;
 use App\Form\AddressType;
 use App\Form\AddressTypeUSN;
 use App\Form\BankAccountType;
-use App\Helper\ProfileHelper
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use App\Form\BankAccountTypeUSN;
 use App\Form\FileUploadType;
 use App\Form\FileUploadTypeUSN;
@@ -30,21 +28,17 @@ use App\Repository\ConfigurationRepository;
 use App\Repository\TranslateRepository;
 use App\Validator\UniqueUserValidator;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Mapping\UniqueConstraint;
 use Exception;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints\Email;
-use Symfony\Component\Validator\Constraints\EmailValidator;
 
 class PersonController extends AbstractController
 {
@@ -59,27 +53,15 @@ class PersonController extends AbstractController
     }
 
     /**
-     * @param ProfileHelper $profileSwitcher
      * @param Request $request
      * @param PersonRepository $repository
      * @param TranslateRepository $transrepository
      * @return Response
      * @Route("/pessoas", name="person__index")
-     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT", "ROLE_STAKEHOLDER"})
+     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
-    public function index(ProfileHelper $profileSwitcher, Request $request, PersonRepository $repository, TranslateRepository $transrepository)
+    public function index(Request $request, PersonRepository $repository, TranslateRepository $transrepository)
     {
-        $form = $this->createForm(PersonSearchType::class);
-        $form->handleRequest($request);
-
-        $people = $repository->findUsingSearchForm($form);
-
-        $currentProfile = $profileSwitcher->getCurrentProfile();
-        switch ($currentProfile['id']) {
-
-            case ProfileHelper::PROFILE_STAKEHOLDER:
-                return $this->redirectToRoute('dashboard');
-        }
 
         $transconfig = $transrepository->findOneByActive();
 
@@ -116,6 +98,7 @@ class PersonController extends AbstractController
     public function create(Request $request, PasswordHelper $helper, LoggerInterface $logger,
                            TranslateRepository $transrepository)
     {
+
         $transconfig = $transrepository->findOneByActive();
 
         $disableds = $transrepository->findByDisabled($transconfig->getId());
@@ -281,44 +264,6 @@ class PersonController extends AbstractController
     /**
      * @param Person $person
      * @param Request $request
-     * @param PasswordHelper $helper
-     * @param LoggerInterface $logger
-     * @return Response
-     * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
-     * @Route("/pessoas/{id}/acesso", name="person__authentication__form")
-     */
-    public function authentication(Person $person, Request $request, PasswordHelper $helper, LoggerInterface $logger)
-    {
-        $form = $this->createFormBuilder()
-            ->add('sendPasswordDefinitionEmail', HiddenType::class, [
-                'data' => true,
-            ])
-            ->getForm();
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            try {
-                $helper->sendPasswordDefinitionEmail($person);
-                $this->addFlash('success', 'E-mail enviado.');
-            } catch (TransportExceptionInterface $exception) {
-                $this->addFlash('error', 'Não foi possível enviar o e-mail de definição de senha.');
-                $logger->error($exception->getMessage());
-            } catch (Exception $exception) {
-                $this->addFlash('error', 'Não foi possível enviar o e-mail de definição de senha.');
-                $logger->error($exception->getMessage());
-            }
-        }
-
-        return $this->render('person/authentication/form.html.twig', [
-            'person' => $person,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @param Person $person
-     * @param Request $request
      * @param EntityManagerInterface $entityManager
      * @return RedirectResponse|Response
      * @throws Exception
@@ -470,6 +415,7 @@ class PersonController extends AbstractController
             }
         }
 
+
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
 
@@ -490,7 +436,7 @@ class PersonController extends AbstractController
 
     /**
      * @param UploadedPersonFile $file
-     * @return BinaryFileResponse|RedirectResponse
+     * @return BinaryFileResponse
      * @Route("/pessoas/arquivos/{id}", name="person__file__download")
      * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
@@ -511,7 +457,7 @@ class PersonController extends AbstractController
         $transconfig = $transRepository->findOneByActive();
 
         $disableds = $transRepository->findByDisabled($transconfig->getId());
-      
+
         $userRoles = array_merge(
             ['ROLE_USER', 'ROLE_STAKEHOLDER'],
             $person->getRoles()
@@ -522,7 +468,6 @@ class PersonController extends AbstractController
         foreach ($userRoles as $role) {
             $formData[strtolower(str_replace('ROLE_', 'IS_', $role))] = true;
         }
-
 
         foreach ($disableds as $disable) {
             if ($disable->getTranslate() == 'BRL' && $disable->getActive() == false) {
@@ -539,7 +484,6 @@ class PersonController extends AbstractController
             $userRoles = ['ROLE_USER', 'ROLE_STAKEHOLDER'];
 
             foreach ($form->getData() as $authorization => $isGranted) {
-
                 if (!$isGranted) continue;
 
                 $userRoles[] = strtoupper(preg_replace('/is_/', 'role_', $authorization));
@@ -557,4 +501,5 @@ class PersonController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
 }
