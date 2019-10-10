@@ -22,7 +22,7 @@ class PersonType extends AbstractType
             ])
             ->add('cpf', TextType::class, [
                 'label' => 'CPF',
-                'attr' => ['maxlength' => 11]
+                'attr' => ['maxlength' => 14]
             ])
             ->add('email', EmailType::class, [
                 'label' => 'person.email__label',
@@ -30,7 +30,7 @@ class PersonType extends AbstractType
             ])
             ->add('rg', TextType::class, [
                 'label' => 'RG',
-                'attr' => ['maxlength' => 11],
+                'attr' => ['maxlength' => 12],
                 'required' => false,
             ])
             ->add('phone', TextType::class, [
