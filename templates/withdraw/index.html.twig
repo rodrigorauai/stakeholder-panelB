@@ -25,7 +25,6 @@
         {{ form_end(form) }}
     </div>
     <div class="my-4 mx-2">
-
         {% for translate in translates %}
             {% if translate.translate == 'BRL' %}
                 <div class="table-responsive">
@@ -43,7 +42,7 @@
                         <tbody>
                         {% for withdraw in withdraws %}
                             <tr>
-                                <th scope="row">{{ withdraw.id }}</th>
+                                <td>{{ withdraw.id }}</td>
                                 <td>
                                     {% for translate in translates %}
                                         {% if translate.translate == 'BRL' %}
@@ -117,7 +116,7 @@
                         <tbody>
                         {% for withdraw in withdraws %}
                             <tr>
-                                <th scope="row">{{ withdraw.id }}</th>
+                                <td>{{ withdraw.id }}</td>
                                 <td>{{ withdraw.status|trans }}</td>
                                 <td class="text-right">{{ currency }} {{ withdraw.value|number_format(2, ',', '.') }}</td>
                                 <td>{{ withdraw.account.owner.name }}</td>
