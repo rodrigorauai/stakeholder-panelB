@@ -20,7 +20,7 @@ class StakeholdPlanRewardType extends AbstractType
                 'scale' => 2,
                 'html5' => true,
                 'attr' => [
-                    'min' =>-99.99,
+                    'min' => -99.99,
                     'max' => 99.99,
                     'step' => 0.01,
                 ],
