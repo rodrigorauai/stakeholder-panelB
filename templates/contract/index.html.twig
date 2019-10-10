@@ -67,11 +67,9 @@
                                             {% endif %}
                                         </td>
                                         <td>
-                                            {% if contract.digitizedContracts.count > 0 %}
-                                                <a href="{{ path('request__yield__withdraw', {
-                                                    id: contract.id
-                                                }) }}" target="_blank">Yield withdraw</a>
-                                            {% endif %}
+                                            <a href="{{ path('request__yield__withdraw', {
+                                                id: contract.id
+                                            }) }}" target="_blank">Yield withdraw</a>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -133,11 +131,9 @@
                                             {% endif %}
                                         </td>
                                         <td>
-                                            {# {% if contract.yield > 0 %} #}
-                                                <a href="{{ path('request__yield__withdraw', {
-                                                    id: contract.id
-                                                }) }}" target="_blank">Saque dos Rendimentos</a>
-                                            {# {% endif %} #}
+                                            <a href="{{ path('request__yield__withdraw', {
+                                                id: contract.id
+                                            }) }}" target="_blank">Saque dos Rendimentos</a>
                                         </td>
                                     </tr>
                                 {% endfor %}
