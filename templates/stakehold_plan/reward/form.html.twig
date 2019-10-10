@@ -3,18 +3,43 @@
 {% set title = 'Adicionar Rendimento do Plano ' ~ plan.administrativeName %}
 {% set drawer_active_route = 'stakehold_plan__index' %}
 
+{% for translate in translates %}
+    {% if translate.translate == 'BRL' %}
+        {% set title = 'Add Plan Yield ' ~ plan.administrativeName %}
+    {% else %}
+        {% set title = 'Adicionar Rendimento do Plano ' ~ plan.administrativeName %}
+    {% endif %}
+{% endfor %}
+
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-    <div class="container m-4">
-        <p>Informe os dados do novo rendimento.</p>
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <div class="form-row button-container">
-            {% include '_components/button/button.html.twig' with { label: 'Adicionar Rendimento', type: 'submit', style: 'outlined'} only %}
-        </div>
-        {{ form_rest(form) }}
-        {{ form_end(form) }}
-    </div>
+
+    {% for translate in translates %}
+        {% if translate.translate == 'BRL' %}
+            <div class="container m-4">
+                <p>Enter new yield data.</p>
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <div class="form-row button-container">
+                    {% include '_components/button/button.html.twig' with { label: 'Add income', type: 'submit', style: 'outlined'} only %}
+                </div>
+                {{ form_rest(form) }}
+                {{ form_end(form) }}
+            </div>
+        {% else %}
+            <div class="container m-4">
+                <p>Informe os dados do novo rendimento.</p>
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <div class="form-row button-container">
+                    {% include '_components/button/button.html.twig' with { label: 'Adicionar Rendimento', type: 'submit', style: 'outlined'} only %}
+                </div>
+                {{ form_rest(form) }}
+                {{ form_end(form) }}
+            </div>
+        {% endif %}
+    {% endfor %}
+
 {% endblock %}
 

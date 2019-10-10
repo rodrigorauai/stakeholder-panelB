@@ -1,29 +1,80 @@
-{%
-    include '_components/tab-bar/tab-bar.html.twig' with
-    {
-        tabs: [
+{% for translate in translates %}
+    {% if translate.translate == 'BRL' %}
+        {%
+            include '_components/tab-bar/tab-bar.html.twig' with
             {
-                id: 'person__edit',
-                label: 'Dados Pessoais',
-                path: path('person__edit', { id: person.id }),
-            }, {
-                id: 'person_address__edit',
-                label: 'Endereço',
-                path: path('person_address__edit', { id: person.id }),
-            }, {
-                id: 'person_account__index',
-                label: 'Contas de Patrocínio',
-                path: path('person_account__index', { id: person.id }),
-            }, {
-                id: 'person__bank_account__edit',
-                label: 'Conta Bancária',
-                path: path('person__bank_account__edit', { id: person.id }),
-            }, {
-                id: 'person__file__index',
-                label: 'Arquivos',
-                path: path('person__file__index', { id: person.id }),
-            },
-        ],
-        active_tab: active_tab|default('person__edit'),
-    }
-%}
+                tabs: [
+                {
+                    id: 'person__edit',
+                    label: 'Personal data',
+                    path: path('person__edit', { id: person.id }),
+                }, {
+                    id: 'person__authentication__form',
+                    label: 'Access',
+                    path: path('person__authentication__form', { id: person.id }),
+                }, {
+                    id: 'person_address__edit',
+                    label: 'Address',
+                    path: path('person_address__edit', { id: person.id }),
+                }, {
+                    id: 'person_account__index',
+                    label: 'Investment account',
+                    path: path('person_account__index', { id: person.id }),
+                }, {
+                    id: 'person__bank_account__edit',
+                    label: 'Bank account',
+                    path: path('person__bank_account__edit', { id: person.id }),
+                }, {
+                    id: 'person__file__index',
+                    label: 'Files',
+                    path: path('person__file__index', { id: person.id }),
+                }, {
+                    id: 'person__role__index',
+                    label: 'Positions',
+                    path: path('person__role__index', { id: person.id }),
+                }
+            ],
+                active_tab: active_tab|default('person__edit'),
+            }
+        %}
+    {% else %}
+        {%
+            include '_components/tab-bar/tab-bar.html.twig' with
+            {
+                tabs: [
+                {
+                    id: 'person__edit',
+                    label: 'Dados Pessoais',
+                    path: path('person__edit', { id: person.id }),
+                }, {
+                    id: 'person__authentication__form',
+                    label: 'acesso',
+                    path: path('person__authentication__form', { id: person.id }),
+                }, {
+                    id: 'person_address__edit',
+                    label: 'Endereço',
+                    path: path('person_address__edit', { id: person.id }),
+                }, {
+                    id: 'person_account__index',
+                    label: 'Contas de investimentos',
+                    path: path('person_account__index', { id: person.id }),
+                }, {
+                    id: 'person__bank_account__edit',
+                    label: 'Conta Bancária',
+                    path: path('person__bank_account__edit', { id: person.id }),
+                }, {
+                    id: 'person__file__index',
+                    label: 'Arquivos',
+                    path: path('person__file__index', { id: person.id }),
+                }, {
+                    id: 'person__role__index',
+                    label: 'Cargos',
+                    path: path('person__role__index', { id: person.id }),
+                }
+            ],
+                active_tab: active_tab|default('person__edit'),
+            }
+        %}
+    {% endif %}
+{% endfor %}
+

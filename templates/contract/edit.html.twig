@@ -3,38 +3,82 @@
 {% set title = "Contrato #" ~ contract.id ~ ' com ' ~ contract.account.owner.name %}
 {% set drawer_active_route = 'person__index' %}
 
+{% for translate in translates %}
+    {% if translate.translate == 'BRL' %}
+        {% set title = "Contract #" ~ contract.id ~ ' with ' ~ contract.account.owner.name %}
+    {% else %}
+        {% set title = "Contrato #" ~ contract.id ~ ' com ' ~ contract.account.owner.name %}
+    {% endif %}
+{% endfor %}
+
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
 
-    <div class="container m-4">
-        {{ form_start(form) }}
-        {{ form_row(form.plan) }}
-        {{ form_row(form.value) }}
-        {{ form_row(form.executionDate) }}
-        {{ form_row(form.firstReturnDate) }}
-        {{ form_row(form.expirationDate) }}
-        {{ form_row(form.isEntitledToRefund) }}
+    {% for translate in translates %}
+        {% if translate.translate == 'BRL' %}
+            <div class="container m-4">
+                {{ form_start(form) }}
+                {{ form_row(form.plan) }}
+                {{ form_row(form.value) }}
+                {{ form_row(form.executionDate) }}
+                {{ form_row(form.firstReturnDate) }}
+                {{ form_row(form.expirationDate) }}
+                {{ form_row(form.isEntitledToRefund) }}
 
-        {% if contract.digitizedContracts.count > 0 %}
-            <hr class="mb-4" />
+                {% if contract.digitizedContracts.count > 0 %}
+                    <hr class="mb-4" />
 
-            <a href="{{ path('contract__digitized_contract__download', { id: contract.id }) }}">
-                Visualizar contrato digitalizado
-            </a>
+                    <a href="{{ path('contract__digitized_contract__download', { id: contract.id }) }}">
+                        View scanned contract
+                    </a>
 
-            <hr class="my-4" />
+                    <hr class="my-4" />
 
-            {{ form_row(form.contractFile, { label: 'Atualizar Contrato', required: false }) }}
+                    {{ form_row(form.contractFile, { label: 'Update contract', required: false }) }}
+                {% endif %}
+
+                {{ form_rest(form) }}
+
+                <div class="form-row button-container">
+                    {% include '_components/button/button.html.twig' with { label: 'Save changes', type: 'submit', style: 'outlined'} only %}
+                </div>
+                {{ form_end(form) }}
+            </div>
+
+        {% else %}
+            <div class="container m-4">
+                {{ form_start(form) }}
+                {{ form_row(form.plan) }}
+                {{ form_row(form.value) }}
+                {{ form_row(form.executionDate) }}
+                {{ form_row(form.firstReturnDate) }}
+                {{ form_row(form.expirationDate) }}
+                {{ form_row(form.isEntitledToRefund) }}
+
+                {% if contract.digitizedContracts.count > 0 %}
+                    <hr class="mb-4" />
+
+                    <a href="{{ path('contract__digitized_contract__download', { id: contract.id }) }}">
+                        Visualizar contrato digitalizado
+                    </a>
+
+                    <hr class="my-4" />
+
+                    {{ form_row(form.contractFile, { label: 'Atualizar Contrato', required: false }) }}
+                {% endif %}
+
+                {{ form_rest(form) }}
+
+                <div class="form-row button-container">
+                    {% include '_components/button/button.html.twig' with { label: 'Salvar Alterações', type: 'submit', style: 'outlined'} only %}
+                </div>
+                {{ form_end(form) }}
+            </div>
+
         {% endif %}
+    {% endfor %}
 
-        {{ form_rest(form) }}
-
-        <div class="form-row button-container">
-            {% include '_components/button/button.html.twig' with { label: 'Salvar Alterações', type: 'submit', style: 'outlined'} only %}
-        </div>
-        {{ form_end(form) }}
-    </div>
 
 {% endblock %}
 
