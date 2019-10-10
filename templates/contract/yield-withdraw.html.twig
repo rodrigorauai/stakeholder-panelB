@@ -4,9 +4,9 @@
 
 {% for translate in translates %}
     {% if translate.translate == 'BRL' %}
-        {% set title = 'Withdraw #' ~ contract.id ~ ' of ' ~ contract.account.owner.name %}
+        {% set title = 'Yield withdraw request. Contract #' ~ contract.id ~ ' of ' ~ contract.account.owner.name %}
     {% else %}
-        {% set title = 'Retirada #' ~ contract.id ~ ' de ' ~ contract.account.owner.name %}
+        {% set title = 'Solicitação de saque dos rendimentos. Contrato #' ~ contract.id ~ ' de ' ~ contract.account.owner.name %}
     {% endif %}
 {% endfor %}
 
