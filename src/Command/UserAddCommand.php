@@ -49,6 +49,7 @@ class UserAddCommand extends Command
         $email = $input->getArgument('email');
 
         $user = new Person($name, $email);
+        $user->setRoles(['ROLE_SYSTEM_ADMINISTRATOR']);
 
         if ($password = $input->getOption('password')) {
             $user->setPassword($this->encoder->encodePassword($user, $password));

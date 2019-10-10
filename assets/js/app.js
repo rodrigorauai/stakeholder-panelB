@@ -69,3 +69,13 @@ if (element) {
         }
     });
 }
+
+let accountSwitcherList = document.getElementById('profile_switch_activeProfile_list');
+
+if (accountSwitcherList) {
+    accountSwitcherList.querySelectorAll('.mdc-list-item').forEach(function (element) {
+        element.addEventListener('click', function () {
+            element.querySelector('.mdc-radio__native-control').checked = 'checked';
+        })
+    })
+}

@@ -28,8 +28,12 @@ class BankAccountType extends AbstractType
             ->add('number', TextType::class, [
                 'label' => 'Número da Conta',
             ])
-            ->add('type', TextType::class, [
+            ->add('type', ChoiceType::class, [
                 'label' => 'Tipo da Conta',
+                'choices' => [
+                    'Conta Poupança' => 'poupanca',
+                    'Conta Corrente' => 'corrente',
+                ],
                 'required' => false,
             ])
             ->add('naturalPerson', ChoiceType::class, [

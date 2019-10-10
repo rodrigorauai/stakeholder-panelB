@@ -2,67 +2,236 @@
 {% set title = 'Rendimentos' %}
 {% set drawer_active_route = 'payment__index' %}
 
+{% for translate in translates %}
+    {% if translate.translate == 'BRL' %}
+        {% set title = 'Income' %}
+    {% else %}
+        {% set title = 'Rendimentos' %}
+    {% endif %}
+{% endfor %}
+
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-    <div class="my-4 mx-2">
-        <div class="table-responsive">
-            <table class="table text-nowrap">
-                <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Status</th>
-                    <th scope="col" class="text-right">Valor</th>
-                    <th class="col">Proveniência</th>
-                    <th class="col">Nota Fiscal</th>
-                    <th scope="col">Beneficiário</th>
-                    <th scope="col">Data de Realização</th>
-                    <th scope="col">Data de Divulgação</th>
-                    <th scope="col">Contrato</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for payment in payments %}
-                    <tr>
-                        <td>{{ payment.id }}</td>
-                        <td>
-                            {% if payment.status == constant('STATUS_WAITING_INVOICE', payment) %}
-                                <a href="{{ path('payment__invoice__edit', { id: payment.id }) }}">
-                                    {{ payment.status|trans }}
-                                </a>
-                            {% else %}
-                                {{ payment.status|trans }}
-                            {% endif %}
-                        </td>
-                        <td class="text-right">R$ {{ payment.value|number_format(2, ',', '.') }}</td>
-                        <td>{{ payment.provenance|trans }}</td>
-                        <td>
-                            {% if payment.hasInvoice %}
-                                <a href="{{ payment.invoiceUrl }}" target="_blank">
-                                    Nota Fiscal
-                                    <span class="material-icons icon-small align-supper">open_in_new</span></a>
-                                <a class="mdc-icon-button ml-2" href="{{ path('payment__invoice__edit', { id: payment.id }) }}">
-                                    <span class="material-icons align-text-bottom">edit</span>
-                                </a>
-                            {% endif %}
-                        </td>
-                        <td>
-                            <a href="{{ path('person_show', { id: payment.beneficiary.owner.id }) }}">
-                                {{ payment.beneficiary.owner.name}}
-                            </a>
-                        </td>
-                        <td>{{ payment.reward.paymentDueDate.format('d/m/Y') }}</td>
-                        <td>{{ payment.reward.disclosureDate.format('d/m/Y') }}</td>
-                        <td>
-                            <a href={{ path('contract__edit', { id: payment.contract.id }) }}>
-                                Contrato no valor de R${{ payment.contract.value|number_format(2, ',', '.') }}
-                                no {{ payment.contract.plan.administrativeName }}
-                            </a>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+    <div class="container m-4" style="float:right;">
+        {{ form_start(form) }}
+        {{ form_row(form.queryString, {
+            attr: {
+                autofocus: '',
+            }
+        }) }}
+        {{ form_widget(form) }}
+        {{ form_rest(form) }}
+        {{ form_end(form) }}
     </div>
+
+    {% for translate in translates %}
+        {% if translate.translate == 'BRL' %}
+            <div class="my-4 mx-2">
+                <div class="table-responsive">
+                    <table class="table text-nowrap">
+                        <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Status</th>
+                            <th scope="col" class="text-right">Value</th>
+                            <th scope="col">Percentage</th>
+                            <th class="col">Provenance</th>
+                            <th class="col">Invoice</th>
+                            <th scope="col">Recipient</th>
+                            <th scope="col">Date of Realization</th>
+                            <th scope="col">Release date</th>
+                            <th scope="col">Contract</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+
+                        {% for payment in payments %}
+                            <tr>
+                                <td>{{ payment.id }}</td>
+                                <td>
+                                    {% for translate in translates %}
+                                        {% if translate.translate == 'BRL' %}
+                                            {% if payment.status == constant('STATUS_WAITING_INVOICE', payment) %}
+                                                <a href="{{ path('payment__invoice', { id: payment.id }) }}">
+                                                    Waiting Invoice
+                                                </a>
+                                            {% elseif payment.status == constant('STATUS_WAITING_INVOICE_APPROVAL', payment) %}
+                                                <a {% if profileSwitcher.accessingAsAdministrator %} href="{{ path('payment__invoice__review', { id: payment.id }) }}" {% endif %}>
+                                                    Waiting Invoice Approval
+                                                </a>
+                                            {% elseif payment.status == constant('STATUS_MADE', payment) %}
+                                                Made
+                                            {% elseif payment.status == constant('STATUS_SCHEDULED', payment) %}
+                                                Scheduled
+                                            {% endif %}
+                                        {% else %}
+                                            {% if payment.status == constant('STATUS_WAITING_INVOICE', payment) %}
+                                                <a href="{{ path('payment__invoice', { id: payment.id }) }}">
+                                                    {{ payment.status|trans }}
+                                                </a>
+                                            {% elseif payment.status == constant('STATUS_WAITING_INVOICE_APPROVAL', payment) %}
+                                                <a {% if profileSwitcher.accessingAsAdministrator %} href="{{ path('payment__invoice__review', { id: payment.id }) }}" {% endif %}>
+                                                    {{ payment.status|trans }}
+                                                </a>
+                                            {% else %}
+                                                {{ payment.status|trans }}
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+
+                                <td class="text-right">{{ currency }} {{ payment.value|number_format(2, ',', '.') }}</td>
+                                <td>{{ payment.reward.rate|number_format(2, ',', '.') }} %</td>
+
+                                <td>
+                                    {% for translate in translates %}
+                                        {% if translate.translate == 'BRL' %}
+                                            {% if payment.provenance == constant('PROVENANCE_CO_PARTICIPATION', payment) %}
+                                                    Income
+                                            {% elseif payment.provenance == constant('PROVENANCE_COMMISSION', payment) %}
+                                                    Commission
+                                            {% endif %}
+
+                                        {% else %}
+                                            {% if payment.provenance == constant('PROVENANCE_CO_PARTICIPATION', payment) %}
+                                                <a href="{{ path('payment__invoice', { id: payment.id }) }}">
+                                                    {{ payment.provenance|trans }}
+                                                </a>
+                                            {% elseif payment.provenance == constant('PROVENANCE_CO_PARTICIPATION', payment) %}
+                                                <a {% if profileSwitcher.accessingAsAdministrator %} href="{{ path('payment__invoice__review', { id: payment.id }) }}" {% endif %}>
+                                                    {{ payment.provenance|trans }}
+                                                </a>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+
+
+                                </td>
+                                <td>
+                                    {% if payment.hasInvoice %}
+                                        <a href="{{ payment.invoice.url }}" target="_blank">
+                                            Invoice
+                                            <span class="material-icons icon-small align-supper">open_in_new</span></a>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if profileSwitcher.accessingAsAdministrator %}
+                                        {% if payment.beneficiary.owner.cnpj %}
+                                            <a href="{{ path('company__edit', { id: payment.beneficiary.owner.id }) }}">
+                                                {{ payment.beneficiary.owner.name}}
+                                            </a>
+                                        {% else %}
+                                            <a href="{{ path('person_show', { id: payment.beneficiary.owner.id }) }}">
+                                                {{ payment.beneficiary.owner.name}}
+                                            </a>
+                                        {% endif %}
+                                    {% else %}
+                                        {{ payment.beneficiary.owner.name }}
+                                    {% endif %}
+                                </td>
+                                <td>{{ payment.reward.paymentDueDate.format('d/m/Y') }}</td>
+                                <td>{{ payment.reward.disclosureDate.format('d/m/Y') }}</td>
+                                <td>
+                                    <a {% if profileSwitcher.accessingAsAdministrator %} href={{ path('contract__edit', { id: payment.contract.id }) }} {% endif %}>
+                                        Contract worth {{ currency }}{{ payment.contract.value|number_format(2, ',', '.') }}
+                                        in {{ payment.contract.plan.administrativeName }}
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                {% if payments|length == 0 %}
+                    <p>No yields found!</p>
+                {% endif %}
+
+            </div>
+
+        {% else %}
+            <div class="my-4 mx-2">
+                <div class="table-responsive">
+                    <table class="table text-nowrap">
+                        <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Status</th>
+                            <th scope="col" class="text-right">Valor</th>
+                            <th scope="col">Porcentagem</th>
+                            <th class="col">Proveniência</th>
+                            <th class="col">Nota Fiscal</th>
+                            <th scope="col">Beneficiário</th>
+                            <th scope="col">Data de Realização</th>
+                            <th scope="col">Data de Divulgação</th>
+                            <th scope="col">Contrato</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for payment in payments %}
+                            <tr>
+                                <td>{{ payment.id }}</td>
+                                <td>
+                                    {% if payment.status == constant('STATUS_WAITING_INVOICE', payment) %}
+                                        <a href="{{ path('payment__invoice', { id: payment.id }) }}">
+                                            {{ payment.status|trans }}
+                                        </a>
+                                    {% elseif payment.status == constant('STATUS_WAITING_INVOICE_APPROVAL', payment) %}
+                                        <a {% if profileSwitcher.accessingAsAdministrator %} href="{{ path('payment__invoice__review', { id: payment.id }) }}" {% endif %}>
+                                            {{ payment.status|trans }}
+                                        </a>
+                                    {% else %}
+                                        {{ payment.status|trans }}
+                                    {% endif %}
+                                </td>
+
+                                <td class="text-right">{{ currency }} {{ payment.value|number_format(2, ',', '.') }}</td>
+                                <td>{{ payment.reward.rate|number_format(2, ',', '.') }} %</td>
+                                <td>{{ payment.provenance|trans }}</td>
+                                <td>
+                                    {% if payment.hasInvoice %}
+                                        <a href="{{ payment.invoice.url }}" target="_blank">
+                                            Nota Fiscal
+                                            <span class="material-icons icon-small align-supper">open_in_new</span></a>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if profileSwitcher.accessingAsAdministrator %}
+                                        {% if payment.beneficiary.owner.cnpj %}
+                                            <a href="{{ path('company__edit', { id: payment.beneficiary.owner.id }) }}">
+                                                {{ payment.beneficiary.owner.name}}
+                                            </a>
+                                        {% else %}
+                                            <a href="{{ path('person_show', { id: payment.beneficiary.owner.id }) }}">
+                                                {{ payment.beneficiary.owner.name}}
+                                            </a>
+                                        {% endif %}
+                                    {% else %}
+                                        {{ payment.beneficiary.owner.name }}
+                                    {% endif %}
+                                </td>
+                                <td>{{ payment.reward.paymentDueDate.format('d/m/Y') }}</td>
+                                <td>{{ payment.reward.disclosureDate.format('d/m/Y') }}</td>
+                                <td>
+                                    <a {% if profileSwitcher.accessingAsAdministrator %} href={{ path('contract__edit', { id: payment.contract.id }) }} {% endif %}>
+                                        Contrato no valor de {{ currency }}{{ payment.contract.value|number_format(2, ',', '.') }}
+                                        no {{ payment.contract.plan.administrativeName }}
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                {% if payments|length == 0 %}
+                    <p>Nenhum rendimento encontrado</p>
+                {% endif %}
+
+            </div>
+        {% endif %}
+    {% endfor %}
+
 {% endblock %}
