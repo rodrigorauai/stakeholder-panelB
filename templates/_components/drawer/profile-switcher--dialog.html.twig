@@ -4,27 +4,57 @@
      aria-modal="true"
      aria-labelledby="account-switcher--dialog-title"
      aria-describedby="account-switcher--dialog-content">
-    <div class="mdc-dialog__container">
-        <div class="mdc-dialog__surface">
-            {{ form_start(profileSwitcher.formView) }}
-            {# Title cannot contain leading whitespace due to mdc-typography-baseline-top() #}
-            <h2 class="mdc-dialog__title" id="account-switcher--dialog-title">Qual perfil você gostaria de acessar?</h2>
-            <div class="mdc-dialog__content" id="account-switcher--dialog-content">
 
-                {{ form_widget(profileSwitcher.formView) }}
+    {% for translate in translates %}
+        {% if translate.translate == 'BRL' %}
+            <div class="mdc-dialog__container">
+                <div class="mdc-dialog__surface">
+                    {{ form_start(profileSwitcher.formView) }}
+                    {# Title cannot contain leading whitespace due to mdc-typography-baseline-top() #}
+                    <h2 class="mdc-dialog__title" id="account-switcher--dialog-title">Which profile would you like to access?</h2>
+                    <div class="mdc-dialog__content" id="account-switcher--dialog-content">
 
+                        {{ form_widget(profileSwitcher.formView) }}
+
+                    </div>
+                    <footer class="mdc-dialog__actions">
+                        <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="close">
+                            <span class="mdc-button__label">Cancel</span>
+                        </button>
+                        <button type="submit" class="mdc-button mdc-dialog__button">
+                            <span class="mdc-button__label">OK</span>
+                        </button>
+                    </footer>
+
+                    {{ form_end(profileSwitcher.formView, { render_rest: false }) }}
+                </div>
             </div>
-            <footer class="mdc-dialog__actions">
-                <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="close">
-                    <span class="mdc-button__label">Cancelar</span>
-                </button>
-                <button type="submit" class="mdc-button mdc-dialog__button">
-                    <span class="mdc-button__label">OK</span>
-                </button>
-            </footer>
+            <div class="mdc-dialog__scrim"></div>
+        {% else %}
+            <div class="mdc-dialog__container">
+                <div class="mdc-dialog__surface">
+                    {{ form_start(profileSwitcher.formView) }}
+                    {# Title cannot contain leading whitespace due to mdc-typography-baseline-top() #}
+                    <h2 class="mdc-dialog__title" id="account-switcher--dialog-title">Qual perfil você gostaria de acessar?</h2>
+                    <div class="mdc-dialog__content" id="account-switcher--dialog-content">
 
-            {{ form_end(profileSwitcher.formView, { render_rest: false }) }}
-        </div>
-    </div>
-    <div class="mdc-dialog__scrim"></div>
+                        {{ form_widget(profileSwitcher.formView) }}
+
+                    </div>
+                    <footer class="mdc-dialog__actions">
+                        <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="close">
+                            <span class="mdc-button__label">Cancelar</span>
+                        </button>
+                        <button type="submit" class="mdc-button mdc-dialog__button">
+                            <span class="mdc-button__label">OK</span>
+                        </button>
+                    </footer>
+
+                    {{ form_end(profileSwitcher.formView, { render_rest: false }) }}
+                </div>
+            </div>
+            <div class="mdc-dialog__scrim"></div>
+        {% endif %}
+    {% endfor %}
+
 </div>

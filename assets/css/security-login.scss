@@ -1,4 +1,5 @@
 html, body {
+  overflow: hidden;
   display: grid;
   height: 100%;
   background-color: #0575e6;
@@ -6,7 +7,7 @@ html, body {
 
 .login-container {
   width: 330px;
-  margin: auto;
+  margin: 180px auto;
 }
 
 .header {

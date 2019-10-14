@@ -1,13 +1,23 @@
 import {MDCDrawer} from "@material/drawer/component";
+import {MDCDialog} from "@material/dialog/component";
 
 function InitDrawer(element)
 {
     let drawer;
 
+    let accountSwitcherButton = element.querySelector('.account-switcher');
+    let accountSwitcherDialog = new MDCDialog(document.querySelector('#account-switcher--dialog'));
+
+    if (accountSwitcherButton) {
+        accountSwitcherButton.addEventListener('click', function () {
+            accountSwitcherDialog.open();
+        });
+    }
+
     const mobileClass = "mdc-drawer--modal";
     const desktopClass = "mdc-drawer--dismissible";
 
-    const isMobile = window.matchMedia(`(max-width: 720px)`);
+    const isMobile = window.matchMedia(`(max-width: 1024px)`);
 
     const mobileOverlay = document.createElement("div");
     mobileOverlay.classList.add("mdc-drawer-scrim");

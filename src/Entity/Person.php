@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Form\PersonData;
+use App\Form\PersonNew;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -67,6 +68,21 @@ class Person extends Entity implements UserInterface
     private $files;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PaymentInvoice", mappedBy="revisor")
+     */
+    private $revisedInvoices;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PaymentInvoice", mappedBy="submittor")
+     */
+    private $sentInvoices;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\AuthenticationToken", mappedBy="user")
+     */
+    private $authenticationTokens;
+
+    /**
      * Person constructor.
      * @param string $name
      * @param string $email
@@ -77,9 +93,12 @@ class Person extends Entity implements UserInterface
 
         $this->email = $email;
         $this->files = new ArrayCollection();
+        $this->revisedInvoices = new ArrayCollection();
+        $this->sentInvoices = new ArrayCollection();
+        $this->authenticationTokens = new ArrayCollection();
     }
 
-    public static function fromDataObject(PersonData $data)
+    public static function fromDataObject(PersonNew $data)
     {
         $person = new Person($data->name, $data->email);
 
@@ -170,6 +189,11 @@ class Person extends Entity implements UserInterface
     public function setPhone(?string $phone)
     {
         $this->phone = $phone;
+    }
+
+    public function getCnpj(): ?string
+    {
+        return null;
     }
 
     /**
@@ -271,6 +295,110 @@ class Person extends Entity implements UserInterface
             // set the owning side to null (unless already changed)
             if ($file->getPerson() === $this) {
                 $file->setPerson(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getAccounts()
+    {
+        $accounts = [$this->account];
+
+        foreach ($this->getCompanies() as $company) {
+            $accounts[] = $company->getAccount();
+        }
+
+        return $accounts;
+    }
+
+    /**
+     * @return Collection|PaymentInvoice[]
+     */
+    public function getRevisedInvoices(): Collection
+    {
+        return $this->revisedInvoices;
+    }
+
+    public function addRevisedInvoice(PaymentInvoice $revisedInvoice): self
+    {
+        if (!$this->revisedInvoices->contains($revisedInvoice)) {
+            $this->revisedInvoices[] = $revisedInvoice;
+            $revisedInvoice->setRevisor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRevisedInvoice(PaymentInvoice $revisedInvoice): self
+    {
+        if ($this->revisedInvoices->contains($revisedInvoice)) {
+            $this->revisedInvoices->removeElement($revisedInvoice);
+            // set the owning side to null (unless already changed)
+            if ($revisedInvoice->getRevisor() === $this) {
+                $revisedInvoice->setRevisor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PaymentInvoice[]
+     */
+    public function getSentInvoices(): Collection
+    {
+        return $this->sentInvoices;
+    }
+
+    public function addSentInvoice(PaymentInvoice $sentInvoice): self
+    {
+        if (!$this->sentInvoices->contains($sentInvoice)) {
+            $this->sentInvoices[] = $sentInvoice;
+            $sentInvoice->setSubmittor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSentInvoice(PaymentInvoice $sentInvoice): self
+    {
+        if ($this->sentInvoices->contains($sentInvoice)) {
+            $this->sentInvoices->removeElement($sentInvoice);
+            // set the owning side to null (unless already changed)
+            if ($sentInvoice->getSubmittor() === $this) {
+                $sentInvoice->setSubmittor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|AuthenticationToken[]
+     */
+    public function getAuthenticationTokens(): Collection
+    {
+        return $this->authenticationTokens;
+    }
+
+    public function addAuthenticationToken(AuthenticationToken $authenticationToken): self
+    {
+        if (!$this->authenticationTokens->contains($authenticationToken)) {
+            $this->authenticationTokens[] = $authenticationToken;
+            $authenticationToken->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAuthenticationToken(AuthenticationToken $authenticationToken): self
+    {
+        if ($this->authenticationTokens->contains($authenticationToken)) {
+            $this->authenticationTokens->removeElement($authenticationToken);
+            // set the owning side to null (unless already changed)
+            if ($authenticationToken->getUser() === $this) {
+                $authenticationToken->setUser(null);
             }
         }
 

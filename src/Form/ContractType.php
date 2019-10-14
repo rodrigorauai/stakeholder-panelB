@@ -51,7 +51,7 @@ class ContractType extends AbstractType
                 'mapped' => false,
             ])
             ->add('isEntitledToRefund', CheckboxType::class, [
-                'label' => 'Direito a rembolso',
+                'label' => 'Direito ao reembolso',
             ])
         ;
     }
