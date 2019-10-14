@@ -5,6 +5,7 @@ namespace App\Helper;
 
 use App\Entity\Person;
 use App\Form\ProfileSwitchType;
+use App\Repository\TranslateRepository;
 use Exception;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -51,14 +52,29 @@ class ProfileHelper
         ]
     ];
 
+    public $availableProfilesUSN = [
+        self::PROFILE_STAKEHOLDER => [
+            'id'    => self::PROFILE_STAKEHOLDER,
+            'label' => 'Partner',
+            'roles' => ['ROLE_USER', 'ROLE_STAKEHOLDER'],
+        ],
+        self::PROFILE_ADMINISTRATOR => [
+            'id'    => self::PROFILE_ADMINISTRATOR,
+            'label' => 'Administrative',
+            'roles' => ['ROLE_ADMINISTRATIVE_ASSISTANT', 'ROLE_ADMINISTRATOR', 'ROLE_SYSTEM_ADMINISTRATOR'],
+        ]
+    ];
+
     public function __construct(
         TokenStorageInterface $tokenStorage,
         SessionInterface $session,
-        FormFactoryInterface $formFactory)
+        FormFactoryInterface $formFactory,
+        TranslateRepository $transrepository)
     {
         $this->tokenStorage = $tokenStorage;
         $this->session = $session;
         $this->formFactory = $formFactory;
+        $this->transrepository = $transrepository;
     }
 
     public function hasMultipleProfiles(): bool
@@ -68,23 +84,44 @@ class ProfileHelper
 
     public function getProfiles(): array
     {
-        if (empty($this->profiles)) {
-            /** @var Person $user */
-            $user = $this->tokenStorage->getToken()->getUser();
+        $transconfig = $this->transrepository->findOneByActive();
 
-            foreach ($this->availableProfiles as $profile) {
+        $disableds = $this->transrepository->findByDisabled($transconfig->getId());
 
-                foreach ($profile['roles'] as $role) {
+        foreach ($disableds as $disable) {
+            if ($disable->getTranslate() == 'BRL' && $disable->getActive() == false) {
+                if (empty($this->profiles)) {
+                    /** @var Person $user */
+                    $user = $this->tokenStorage->getToken()->getUser();
 
-                    if (in_array($role, $user->getRoles())) {
-                        $this->profiles[] = $profile;
-                        continue 2;
+                    foreach ($this->availableProfilesUSN as $profile) {
+
+                        foreach ($profile['roles'] as $role) {
+
+                            if (in_array($role, $user->getRoles())) {
+                                $this->profiles[] = $profile;
+                                continue 2;
+                            }
+                        }
                     }
-
                 }
+            } else {
+                if (empty($this->profiles)) {
+                    /** @var Person $user */
+                    $user = $this->tokenStorage->getToken()->getUser();
 
+                    foreach ($this->availableProfiles as $profile) {
+
+                        foreach ($profile['roles'] as $role) {
+
+                            if (in_array($role, $user->getRoles())) {
+                                $this->profiles[] = $profile;
+                                continue 2;
+                            }
+                        }
+                    }
+                }
             }
-
         }
 
         return $this->profiles;
@@ -92,9 +129,22 @@ class ProfileHelper
 
     public function getCurrentProfile(): array
     {
-        $profile = $this->session->get(self::SESSION_CURRENT_PROFILE_KEY, 'stakeholder');
+        $transconfig = $this->transrepository->findOneByActive();
 
-        return $this->availableProfiles[$profile];
+        $disableds = $this->transrepository->findByDisabled($transconfig->getId());
+
+        foreach ($disableds as $disable) {
+            if ($disable->getTranslate() == 'BRL' && $disable->getActive() == false) {
+
+                $profile = $this->session->get(self::SESSION_CURRENT_PROFILE_KEY, 'stakeholder');
+                return $this->availableProfilesUSN[$profile];
+            } else {
+
+                $profile = $this->session->get(self::SESSION_CURRENT_PROFILE_KEY, 'stakeholder');
+                return $this->availableProfiles[$profile];
+            }
+        }
+
     }
 
     /**

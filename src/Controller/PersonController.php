@@ -7,16 +7,27 @@ use App\Entity\Address;
 use App\Entity\Person;
 use App\Entity\UploadedPersonFile;
 use App\Form\AddressType;
+use App\Form\AddressTypeUSN;
 use App\Form\BankAccountType;
+use App\Helper\ProfileHelper;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use App\Form\BankAccountTypeUSN;
 use App\Form\FileUploadType;
+use App\Form\FileUploadTypeUSN;
 use App\Form\PersonData;
 use App\Form\PersonRolesType;
+use App\Form\PersonRolesTypeUSN;
 use App\Form\PersonSearchType;
 use App\Form\PersonType;
 use App\Form\PersonTypeNew;
+use App\Form\PersonTypeNewUSN;
+use App\Form\PersonTypeUSN;
+use App\Form\SearchTypeUSN;
 use App\Helper\PasswordHelper;
 use App\Helper\UploadHelper;
 use App\Repository\PersonRepository;
+use App\Repository\ConfigurationRepository;
+use App\Repository\TranslateRepository;
 use App\Validator\UniqueUserValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -46,18 +57,32 @@ class PersonController extends AbstractController
     /**
      * @param Request $request
      * @param PersonRepository $repository
+     * @param TranslateRepository $transrepository
      * @return Response
      * @Route("/pessoas", name="person__index")
      * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
-    public function index(Request $request, PersonRepository $repository)
+    public function index(Request $request, PersonRepository $repository, TranslateRepository $transrepository)
     {
-        $form = $this->createForm(PersonSearchType::class);
-        $form->handleRequest($request);
+
+        $transconfig = $transrepository->findOneByActive();
+
+        $disableds = $transrepository->findByDisabled($transconfig->getId());
+
+        foreach ($disableds as $disable) {
+            if ($disable->getTranslate() == 'BRL' && $disable->getActive() == false) {
+                $form = $this->createForm(SearchTypeUSN::class);
+                $form->handleRequest($request);
+            } else {
+                $form = $this->createForm(PersonSearchType::class);
+                $form->handleRequest($request);
+            }
+        }
 
         $people = $repository->findUsingSearchForm($form);
 
         return $this->render('person/index.html.twig', [
+            'translates' => $disableds,
             'controller_name' => 'UserController',
             'people' => $people,
             'form' => $form->createView(),
@@ -72,10 +97,23 @@ class PersonController extends AbstractController
      * @Route("/pessoas/adicionar", name="person_create")
      * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
-    public function create(Request $request, PasswordHelper $helper, LoggerInterface $logger)
+    public function create(Request $request, PasswordHelper $helper, LoggerInterface $logger,
+                           TranslateRepository $transrepository)
     {
-        $form = $this->createForm(PersonTypeNew::class);
-        $form->get('sendPasswordDefinitionEmail')->setData(true);
+
+        $transconfig = $transrepository->findOneByActive();
+
+        $disableds = $transrepository->findByDisabled($transconfig->getId());
+
+        foreach ($disableds as $disable) {
+            if ($disable->getTranslate() == 'BRL' && $disable->getActive() == false) {
+                $form = $this->createForm(PersonTypeNewUSN::class);
+                $form->get('sendPasswordDefinitionEmail')->setData(true);
+            } else {
+                $form = $this->createForm(PersonTypeNew::class);
+                $form->get('sendPasswordDefinitionEmail')->setData(true);
+            }
+        }
 
         $form->handleRequest($request);
 
@@ -108,6 +146,7 @@ class PersonController extends AbstractController
         }
 
         return $this->render('person/form.html.twig', [
+            'translates' => $disableds,
             'form' => $form->createView(),
         ]);
     }
@@ -129,14 +168,27 @@ class PersonController extends AbstractController
      * @param Person $person
      * @param Request $request
      * @param EntityManagerInterface $entityManager
+     * @param TranslateRepository $transrepository
      * @return Response
      * @Route("/pessoas/{id}/dados-pessoais", name="person__edit")
      * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
-    public function edit(Person $person, Request $request, EntityManagerInterface $entityManager)
+    public function edit(Person $person, Request $request, EntityManagerInterface $entityManager, TranslateRepository $transrepository)
     {
-        $form = $this->createForm(PersonType::class, PersonData::fromEntity($person));
-        $form->handleRequest($request);
+        $transconfig = $transrepository->findOneByActive();
+
+        $disableds = $transrepository->findByDisabled($transconfig->getId());
+
+        foreach ($disableds as $disable) {
+            if ($disable->getTranslate() == 'BRL' && $disable->getActive() == false) {
+                $form = $this->createForm(PersonTypeUSN::class, PersonData::fromEntity($person));
+                $form->handleRequest($request);
+            } else {
+                $form = $this->createForm(PersonType::class, PersonData::fromEntity($person));
+                $form->handleRequest($request);
+            }
+        }
+
 
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -152,8 +204,20 @@ class PersonController extends AbstractController
         }
 
         return $this->render('person/edit.html.twig', [
+            'translates' => $disableds,
             'person' => $person,
             'form' => $form->createView(),
+        ]);
+    }
+
+    public function editTranslate(TranslateRepository $transrepository)
+    {
+        $transconfig = $transrepository->findOneByActive();
+
+        $disableds = $transrepository->findByDisabled($transconfig->getId());
+
+        return $this->render('person/_tab-bar.html.twig', [
+            'translates' => $disableds,
         ]);
     }
 
@@ -165,7 +229,7 @@ class PersonController extends AbstractController
      * @return Response
      * @Route("/pessoas/{id}/acesso", name="person__authentication__form")
      */
-    public function authentication(Person $person, Request $request, PasswordHelper $helper, LoggerInterface $logger)
+    public function authentication(Person $person, Request $request, PasswordHelper $helper, LoggerInterface $logger, TranslateRepository $transrepository)
     {
         $form = $this->createFormBuilder()
             ->add('sendPasswordDefinitionEmail', HiddenType::class, [
@@ -174,6 +238,10 @@ class PersonController extends AbstractController
             ->getForm();
 
         $form->handleRequest($request);
+
+        $transconfig = $transrepository->findOneByActive();
+
+        $disableds = $transrepository->findByDisabled($transconfig->getId());
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
@@ -189,6 +257,7 @@ class PersonController extends AbstractController
         }
 
         return $this->render('person/authentication/form.html.twig', [
+            'translates' => $disableds,
             'person' => $person,
             'form' => $form->createView(),
         ]);
@@ -203,12 +272,23 @@ class PersonController extends AbstractController
      * @Route("/pessoas/{id}/endereco", name="person_address__edit")
      * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
-    public function editAddress(Person $person, Request $request, EntityManagerInterface $entityManager)
+    public function editAddress(Person $person, Request $request, EntityManagerInterface $entityManager, TranslateRepository $transrepository)
     {
         $address = $person->getAddress();
 
-        $form = $this->createForm(AddressType::class, $address);
-        $form->handleRequest($request);
+        $transconfig = $transrepository->findOneByActive();
+
+        $disableds = $transrepository->findByDisabled($transconfig->getId());
+
+        foreach ($disableds as $disable) {
+            if ($disable->getTranslate() == 'BRL' && $disable->getActive() == false) {
+                $form = $this->createForm(AddressTypeUSN::class, $address);
+                $form->handleRequest($request);
+            } else {
+                $form = $this->createForm(AddressType::class, $address);
+                $form->handleRequest($request);
+            }
+        }
 
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var Address $address */
@@ -222,6 +302,7 @@ class PersonController extends AbstractController
         }
 
         return $this->render('person/edit--address.html.twig', [
+            'translates' => $disableds,
             'person' => $person,
             'form' => $form->createView(),
         ]);
@@ -229,13 +310,23 @@ class PersonController extends AbstractController
 
     /**
      * @param Person $person
+     * @param ConfigurationRepository $repository
+     * @param TranslateRepository $transrepository
      * @return Response
      * @Route("/pessoas/{id}/contas-de-patrocinio", name="person_account__index")
      * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
-    public function showAccounts(Person $person)
+    public function showAccounts(Person $person, ConfigurationRepository $repository, TranslateRepository $transrepository)
     {
+        $currency = $repository->findOneByActive();
+
+        $transconfig = $transrepository->findOneByActive();
+
+        $disableds = $transrepository->findByDisabled($transconfig->getId());
+
         return $this->render('person/show--accounts.html.twig', [
+            'translates' => $disableds,
+            'currency' => $currency->getLabel(),
             'person' => $person,
         ]);
     }
@@ -248,23 +339,35 @@ class PersonController extends AbstractController
      * @Route("/pessoas/{id}/conta-bancaria", name="person__bank_account__edit")
      * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
-    public function editBankAccount(Person $person, Request $request, EntityManagerInterface $entityManager)
+    public function editBankAccount(Person $person, Request $request, EntityManagerInterface $entityManager, TranslateRepository $transrepository)
     {
-        $form = $this->createForm(BankAccountType::class, $person->getBankAccount());
-        $form->handleRequest($request);
+        $transconfig = $transrepository->findOneByActive();
+
+        $disableds = $transrepository->findByDisabled($transconfig->getId());
+
+        foreach ($disableds as $disable) {
+            if ($disable->getTranslate() == 'BRL' && $disable->getActive() == false) {
+                $form = $this->createForm(BankAccountTypeUSN::class, $person->getBankAccount());
+                $form->handleRequest($request);
+            } else {
+                $form = $this->createForm(BankAccountType::class, $person->getBankAccount());
+                $form->handleRequest($request);
+            }
+        }
 
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var Account $account */
-            $account = $form->getData();
-            $account->setOwner($person);
+            /** @var BankAccount $bankAccount */
+            $bankAccount = $form->getData();
+            $bankAccount->setOwner($person);
 
-            $entityManager->persist($account);
+            $entityManager->persist($bankAccount);
             $entityManager->flush();
 
             return $this->redirectToRoute('person__bank_account__edit', ['id' => $person->getId()]);
         }
 
         return $this->render('person/bank-account/edit.html.twig', [
+            'translates' => $disableds,
             'person' => $person,
             'form' => $form->createView(),
         ]);
@@ -276,9 +379,14 @@ class PersonController extends AbstractController
      * @Route("/pessoas/{id}/arquivos", name="person__file__index")
      * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
-    public function uploadIndex(Person $person)
+    public function uploadIndex(Person $person, TranslateRepository $transRepository)
     {
+        $transconfig = $transRepository->findOneByActive();
+
+        $disableds = $transRepository->findByDisabled($transconfig->getId());
+
         return $this->render('person/file/index.html.twig', [
+            'translates' => $disableds,
             'person' => $person,
         ]);
     }
@@ -291,10 +399,22 @@ class PersonController extends AbstractController
      * @Route("/pessoas/{id}/arquivos/novo", name="person__file__form")
      * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
-    public function uploadForm(Person $person, Request $request, UploadHelper $helper)
+    public function uploadForm(Person $person, Request $request, UploadHelper $helper, TranslateRepository $transRepository)
     {
-        $form = $this->createForm(FileUploadType::class);
-        $form->handleRequest($request);
+        $transconfig = $transRepository->findOneByActive();
+
+        $disableds = $transRepository->findByDisabled($transconfig->getId());
+
+        foreach ($disableds as $disable) {
+            if ($disable->getTranslate() == 'BRL' && $disable->getActive() == false) {
+                $form = $this->createForm(FileUploadTypeUSN::class);
+                $form->handleRequest($request);
+            } else {
+                $form = $this->createForm(FileUploadType::class);
+                $form->handleRequest($request);
+            }
+        }
+
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
@@ -308,6 +428,7 @@ class PersonController extends AbstractController
         }
 
         return $this->render('person/file/form.html.twig', [
+            'translates' => $disableds,
             'person' => $person,
             'form' => $form->createView(),
         ]);
@@ -331,8 +452,12 @@ class PersonController extends AbstractController
      * @Route("/pessoas/{id}/cargos", name="person__role__index")
      * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
-    public function roleIndex(Person $person, Request $request)
+    public function roleIndex(Person $person, Request $request, TranslateRepository $transRepository)
     {
+        $transconfig = $transRepository->findOneByActive();
+
+        $disableds = $transRepository->findByDisabled($transconfig->getId());
+
         $userRoles = array_merge(
             ['ROLE_USER', 'ROLE_STAKEHOLDER'],
             $person->getRoles()
@@ -344,15 +469,21 @@ class PersonController extends AbstractController
             $formData[strtolower(str_replace('ROLE_', 'IS_', $role))] = true;
         }
 
-        $form = $this->createForm(PersonRolesType::class, $formData);
-        $form->handleRequest($request);
+        foreach ($disableds as $disable) {
+            if ($disable->getTranslate() == 'BRL' && $disable->getActive() == false) {
+                $form = $this->createForm(PersonRolesTypeUSN::class, $formData);
+                $form->handleRequest($request);
+            } else {
+                $form = $this->createForm(PersonRolesType::class, $formData);
+                $form->handleRequest($request);
+            }
+        }
+
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $userRoles = ['ROLE_USER', 'ROLE_STAKEHOLDER'];
 
             foreach ($form->getData() as $authorization => $isGranted) {
-
                 if (!$isGranted) continue;
 
                 $userRoles[] = strtoupper(preg_replace('/is_/', 'role_', $authorization));
@@ -365,8 +496,10 @@ class PersonController extends AbstractController
         }
 
         return $this->render('person/role/index.html.twig', [
+            'translates' => $disableds,
             'person' => $person,
             'form' => $form->createView(),
         ]);
     }
+
 }

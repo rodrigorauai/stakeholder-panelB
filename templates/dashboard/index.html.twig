@@ -20,155 +20,42 @@
 {% block content %}
 
     <div class="mdc-layout-grid">
-        <div class="mdc-layout-grid__inner">
-
-            <div class="mdc-layout-grid__cell--span-12">
+        {% for translate in translates %}
+            {% if translate.translate == 'BRL' %}
                 <div class="mdc-layout-grid__inner">
 
-                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-mobile mdc-layout-grid__cell--span-3-tablet mdc-layout-grid__cell--span-4-desktop">
-                        <div class="mdc-card dashboard-card dashboard-card--dark">
-                            <div class="dashboard-card--heading">
-                                <h2 class="dashboard-card__heading-text mdc-typography--subtitle2">Valor Total de Patrocínio</h2>
-                            </div>
-                            <div class="dashboard-card--body">
-                                <span class="mdc-typography--headline5">R$ {{ dashboardHelper.totalInvestment|number_format(2, ',', '.') }}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-mobile mdc-layout-grid__cell--span-3-tablet mdc-layout-grid__cell--span-4-desktop">
-                        <div class="mdc-card dashboard-card dashboard-card--dark">
-                            <div class="dashboard-card--heading">
-                                <h2 class="dashboard-card__heading-text mdc-typography--subtitle2">Rendimentos Acumulados</h2>
-                            </div>
-                            <div class="dashboard-card--body">
-                                <span class="mdc-typography--headline5">R$ {{ dashboardHelper.totalCoParticipation|number_format(2, ',', '.') }}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-mobile mdc-layout-grid__cell--span-2-tablet mdc-layout-grid__cell--span-4-desktop">
-                        <div class="mdc-card dashboard-card">
-                            <div class="dashboard-card--heading">
-                                <h2 class="dashboard-card__heading-text mdc-typography--subtitle2">Retorno</h2>
-                            </div>
-                            <div class="dashboard-card--body">
-                                <span class="mdc-typography--headline5">{{ dashboardHelper.returnRate|number_format(2, ',', '.') }}%</span>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="mdc-layout-grid__cell--span-12"><div class="mdc-layout-grid__inner">
-
-                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8">
+                    <div class="mdc-layout-grid__cell--span-12">
                         <div class="mdc-layout-grid__inner">
 
-                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-                                <div class="mdc-card dashboard-card">
-                                    <div class="dashboard-card--heading dashboard-card--dark">
-                                        <h2 class="dashboard-card__heading-text mdc-typography--subtitle2">Rendimentos Totais Acumulados</h2>
-                                    </div>
-                                    <div class="dashboard-card--body">
-                                        <div id="dashboard-chart__total-return-by-month"
-                                             class="dashboard-chart"
-                                             data-x-column-type="date"
-                                             data-x-column-label="Período"
-                                             data-x-column-format="short"
-                                             data-y-column-type="number"
-                                             data-y-column-label="Rendimentos"
-                                             data-y-column-format="dd MMM, yyyy"
-                                             data-set-path="{{ path('dashboard_chart__total_return_by_date') }}">
-                                            <div class="text-center">
-                                                <img src="static/img/loading-200px.gif" alt="Carregando" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-                                <div class="mdc-card dashboard-card">
-                                    <div class="dashboard-card--heading dashboard-card--dark">
-                                        <h2 class="dashboard-card__heading-text mdc-typography--subtitle2">Rendimentos por Data</h2>
-                                    </div>
-                                    <div class="dashboard-card--body">
-                                        <div id="dashboard-chart__total-return-by-month"
-                                             class="dashboard-chart"
-                                             data-x-column-type="date"
-                                             data-x-column-label="Período"
-                                             data-x-column-format="short"
-                                             data-y-column-type="number"
-                                             data-y-column-label="Rendimentos"
-                                             data-y-column-format="dd MMM, yyyy"
-                                             data-set-path="{{ path('dashboard_chart__return_by_date') }}">
-                                            <div class="text-center">
-                                                <img src="static/img/loading-200px.gif" alt="Carregando" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4  mdc-layout-grid__cell--span-8-tablet">
-                        <div class="mdc-layout-grid__inner">
-
-                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-mobile mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-12-desktop">
+                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-mobile mdc-layout-grid__cell--span-3-tablet mdc-layout-grid__cell--span-4-desktop">
                                 <div class="mdc-card dashboard-card dashboard-card--dark">
                                     <div class="dashboard-card--heading">
-                                        <h2 class="dashboard-card__heading-text mdc-typography--subtitle2">Valor estimado do próximo rendimento</h2>
+                                        <h2 class="dashboard-card__heading-text mdc-typography--subtitle2">Total amount of sponsorship</h2>
                                     </div>
                                     <div class="dashboard-card--body">
-                                        <span class="mdc-typography--headline5">{{ dashboardHelper.nextPayment is not null ? dashboardHelper.nextPayment['value']|number_format(2, ',',' .') : 'Sem informação'}}</span>
-                                    </div>
-                                    <div class="dashboard-card__footer">
-                                        <span class="material-icons">today</span>
-                                        <span class="dashboard-card__footer-text">{{ dashboardHelper.nextPayment is not null ? dashboardHelper.nextPayment['dueDate']|date('d/m/Y') : '--'}}</span>
+                                        <span class="mdc-typography--headline5">{{ currency }} {{ dashboardHelper.totalInvestment|number_format(2, ',', '.') }}</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-mobile mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-12-desktop">
-                                <div class="mdc-card dashboard-card">
-                                    <div class="dashboard-card--heading dashboard-card--dark">
-                                        <h2 class="dashboard-card__heading-text mdc-typography--subtitle2">Últimos Rendimentos</h2>
+                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-mobile mdc-layout-grid__cell--span-3-tablet mdc-layout-grid__cell--span-4-desktop">
+                                <div class="mdc-card dashboard-card dashboard-card--dark">
+                                    <div class="dashboard-card--heading">
+                                        <h2 class="dashboard-card__heading-text mdc-typography--subtitle2">Accumulated Income</h2>
                                     </div>
                                     <div class="dashboard-card--body">
-                                        <div class="table-responsive">
-                                            <table class="table m-0">
-                                                <thead>
-                                                <tr>
-                                                    <th>Valor</th>
-                                                    <th>Data</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                {% for payment in dashboardHelper.lastPayments %}
-                                                    <tr>
-                                                        <td class="text-success">+ R$ {{ payment.value|number_format(2, ',', '.') }}</td>
-                                                        <td>{{ payment.executionTimestamp|date('d/m/Y') }}</td>
-                                                    </tr>
-                                                {% endfor %}
-                                                </tbody>
-                                            </table>
-
-                                            {% if dashboardHelper.lastPayments|length == 0 %}
-                                                <p class="mb-0">Nenhum rendimento encontrado.</p>
-                                            {% endif %}
-                                        </div>
+                                        <span class="mdc-typography--headline5">{{ currency }} {{ dashboardHelper.totalCoParticipation|number_format(2, ',', '.') }}</span>
                                     </div>
-                                    <div class="mdc-card__actions">
-                                        <a class="mdc-button mdc-card__action mdc-card__action--button"
-                                           href="{{ path('payment__index') }}"
-                                        >
-                                            <span class="mdc-button__label">Ver Todos</span>
-                                        </a>
+                                </div>
+                            </div>
+
+                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-mobile mdc-layout-grid__cell--span-2-tablet mdc-layout-grid__cell--span-4-desktop">
+                                <div class="mdc-card dashboard-card">
+                                    <div class="dashboard-card--heading">
+                                        <h2 class="dashboard-card__heading-text mdc-typography--subtitle2">Return</h2>
+                                    </div>
+                                    <div class="dashboard-card--body">
+                                        <span class="mdc-typography--headline5">{{ dashboardHelper.returnRate|number_format(2, ',', '.') }}%</span>
                                     </div>
                                 </div>
                             </div>
@@ -176,11 +63,289 @@
                         </div>
                     </div>
 
+                    <div class="mdc-layout-grid__cell--span-12"><div class="mdc-layout-grid__inner">
+
+                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8">
+                                <div class="mdc-layout-grid__inner">
+
+                                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                                        <div class="mdc-card dashboard-card">
+                                            <div class="dashboard-card--heading dashboard-card--dark">
+                                                <h2 class="dashboard-card__heading-text mdc-typography--subtitle2">Accumulated total income</h2>
+                                            </div>
+                                            <div class="dashboard-card--body">
+                                                <div id="dashboard-chart__total-return-by-month"
+                                                     class="dashboard-chart"
+                                                     data-x-column-type="date"
+                                                     data-x-column-label="Período"
+                                                     data-x-column-format="short"
+                                                     data-y-column-type="number"
+                                                     data-y-column-label="Rendimentos"
+                                                     data-y-column-format="dd MMM, yyyy"
+                                                     data-set-path="{{ path('dashboard_chart__total_return_by_date') }}">
+                                                    <div class="text-center">
+                                                        <img src="static/img/loading-200px.gif" alt="Loading" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                                        <div class="mdc-card dashboard-card">
+                                            <div class="dashboard-card--heading dashboard-card--dark">
+                                                <h2 class="dashboard-card__heading-text mdc-typography--subtitle2">Income by date</h2>
+                                            </div>
+                                            <div class="dashboard-card--body">
+                                                <div id="dashboard-chart__total-return-by-month"
+                                                     class="dashboard-chart"
+                                                     data-x-column-type="date"
+                                                     data-x-column-label="Período"
+                                                     data-x-column-format="short"
+                                                     data-y-column-type="number"
+                                                     data-y-column-label="Rendimentos"
+                                                     data-y-column-format="dd MMM, yyyy"
+                                                     data-set-path="{{ path('dashboard_chart__return_by_date') }}">
+                                                    <div class="text-center">
+                                                        <img src="static/img/loading-200px.gif" alt="Load" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4  mdc-layout-grid__cell--span-8-tablet">
+                                <div class="mdc-layout-grid__inner">
+
+                                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-mobile mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-12-desktop">
+                                        <div class="mdc-card dashboard-card dashboard-card--dark">
+                                            <div class="dashboard-card--heading">
+                                                <h2 class="dashboard-card__heading-text mdc-typography--subtitle2">Estimated value of next yield</h2>
+                                            </div>
+                                            <div class="dashboard-card--body">
+                                                <span class="mdc-typography--headline5">{{ dashboardHelper.nextPayment is not null ? dashboardHelper.nextPayment['value']|number_format(2, ',',' .') : 'No information'}}</span>
+                                            </div>
+                                            <div class="dashboard-card__footer">
+                                                <span class="material-icons">today</span>
+                                                <span class="dashboard-card__footer-text">{{ dashboardHelper.nextPayment is not null ? dashboardHelper.nextPayment['dueDate']|date('d/m/Y') : '--'}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-mobile mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-12-desktop">
+                                        <div class="mdc-card dashboard-card">
+                                            <div class="dashboard-card--heading dashboard-card--dark">
+                                                <h2 class="dashboard-card__heading-text mdc-typography--subtitle2">Last Income</h2>
+                                            </div>
+                                            <div class="dashboard-card--body">
+                                                <div class="table-responsive">
+                                                    <table class="table m-0">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>Value</th>
+                                                            <th>Date</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% for payment in dashboardHelper.lastPayments %}
+                                                            <tr>
+                                                                <td class="text-success">+ {{ currency }} {{ payment.value|number_format(2, ',', '.') }}</td>
+                                                                <td>{{ payment.executionTimestamp|date('d/m/Y') }}</td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                        </tbody>
+                                                    </table>
+
+                                                    {% if dashboardHelper.lastPayments|length == 0 %}
+                                                        <p class="mb-0">No yields found.</p>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="mdc-card__actions">
+                                                <a class="mdc-button mdc-card__action mdc-card__action--button"
+                                                   href="{{ path('payment__index') }}">
+                                                    <span class="mdc-button__label">See all</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
                 </div>
+            {% else %}
+                <div class="mdc-layout-grid__inner">
 
-            </div>
+                    <div class="mdc-layout-grid__cell--span-12">
+                        <div class="mdc-layout-grid__inner">
 
-        </div>
+                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-mobile mdc-layout-grid__cell--span-3-tablet mdc-layout-grid__cell--span-4-desktop">
+                                <div class="mdc-card dashboard-card dashboard-card--dark">
+                                    <div class="dashboard-card--heading">
+                                        <h2 class="dashboard-card__heading-text mdc-typography--subtitle2">Valor Total de Patrocínio</h2>
+                                    </div>
+                                    <div class="dashboard-card--body">
+                                        <span class="mdc-typography--headline5">{{ currency }} {{ dashboardHelper.totalInvestment|number_format(2, ',', '.') }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-mobile mdc-layout-grid__cell--span-3-tablet mdc-layout-grid__cell--span-4-desktop">
+                                <div class="mdc-card dashboard-card dashboard-card--dark">
+                                    <div class="dashboard-card--heading">
+                                        <h2 class="dashboard-card__heading-text mdc-typography--subtitle2">Rendimentos Acumulados</h2>
+                                    </div>
+                                    <div class="dashboard-card--body">
+                                        <span class="mdc-typography--headline5">{{ currency }} {{ dashboardHelper.totalCoParticipation|number_format(2, ',', '.') }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-mobile mdc-layout-grid__cell--span-2-tablet mdc-layout-grid__cell--span-4-desktop">
+                                <div class="mdc-card dashboard-card">
+                                    <div class="dashboard-card--heading">
+                                        <h2 class="dashboard-card__heading-text mdc-typography--subtitle2">Retorno</h2>
+                                    </div>
+                                    <div class="dashboard-card--body">
+                                        <span class="mdc-typography--headline5">{{ dashboardHelper.returnRate|number_format(2, ',', '.') }}%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="mdc-layout-grid__cell--span-12"><div class="mdc-layout-grid__inner">
+
+                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8">
+                                <div class="mdc-layout-grid__inner">
+
+                                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                                        <div class="mdc-card dashboard-card">
+                                            <div class="dashboard-card--heading dashboard-card--dark">
+                                                <h2 class="dashboard-card__heading-text mdc-typography--subtitle2">Rendimentos Totais Acumulados</h2>
+                                            </div>
+                                            <div class="dashboard-card--body">
+                                                <div id="dashboard-chart__total-return-by-month"
+                                                     class="dashboard-chart"
+                                                     data-x-column-type="date"
+                                                     data-x-column-label="Período"
+                                                     data-x-column-format="short"
+                                                     data-y-column-type="number"
+                                                     data-y-column-label="Rendimentos"
+                                                     data-y-column-format="dd MMM, yyyy"
+                                                     data-set-path="{{ path('dashboard_chart__total_return_by_date') }}">
+                                                    <div class="text-center">
+                                                        <img src="static/img/loading-200px.gif" alt="Carregando" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                                        <div class="mdc-card dashboard-card">
+                                            <div class="dashboard-card--heading dashboard-card--dark">
+                                                <h2 class="dashboard-card__heading-text mdc-typography--subtitle2">Rendimentos por Data</h2>
+                                            </div>
+                                            <div class="dashboard-card--body">
+                                                <div id="dashboard-chart__total-return-by-month"
+                                                     class="dashboard-chart"
+                                                     data-x-column-type="date"
+                                                     data-x-column-label="Período"
+                                                     data-x-column-format="short"
+                                                     data-y-column-type="number"
+                                                     data-y-column-label="Rendimentos"
+                                                     data-y-column-format="dd MMM, yyyy"
+                                                     data-set-path="{{ path('dashboard_chart__return_by_date') }}">
+                                                    <div class="text-center">
+                                                        <img src="static/img/loading-200px.gif" alt="Carregando" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4  mdc-layout-grid__cell--span-8-tablet">
+                                <div class="mdc-layout-grid__inner">
+
+                                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-mobile mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-12-desktop">
+                                        <div class="mdc-card dashboard-card dashboard-card--dark">
+                                            <div class="dashboard-card--heading">
+                                                <h2 class="dashboard-card__heading-text mdc-typography--subtitle2">Valor estimado do próximo rendimento</h2>
+                                            </div>
+                                            <div class="dashboard-card--body">
+                                                <span class="mdc-typography--headline5">{{ dashboardHelper.nextPayment is not null ? dashboardHelper.nextPayment['value']|number_format(2, ',',' .') : 'Sem informação'}}</span>
+                                            </div>
+                                            <div class="dashboard-card__footer">
+                                                <span class="material-icons">today</span>
+                                                <span class="dashboard-card__footer-text">{{ dashboardHelper.nextPayment is not null ? dashboardHelper.nextPayment['dueDate']|date('d/m/Y') : '--'}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-mobile mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-12-desktop">
+                                        <div class="mdc-card dashboard-card">
+                                            <div class="dashboard-card--heading dashboard-card--dark">
+                                                <h2 class="dashboard-card__heading-text mdc-typography--subtitle2">Últimos Rendimentos</h2>
+                                            </div>
+                                            <div class="dashboard-card--body">
+                                                <div class="table-responsive">
+                                                    <table class="table m-0">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>Valor</th>
+                                                            <th>Data</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% for payment in dashboardHelper.lastPayments %}
+                                                            <tr>
+                                                                <td class="text-success">+ {{ currency }} {{ payment.value|number_format(2, ',', '.') }}</td>
+                                                                <td>{{ payment.executionTimestamp|date('d/m/Y') }}</td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                        </tbody>
+                                                    </table>
+
+                                                    {% if dashboardHelper.lastPayments|length == 0 %}
+                                                        <p class="mb-0">Nenhum rendimento encontrado.</p>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="mdc-card__actions">
+                                                <a class="mdc-button mdc-card__action mdc-card__action--button"
+                                                   href="{{ path('payment__index') }}"
+                                                >
+                                                    <span class="mdc-button__label">Ver Todos</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            {% endif %}
+        {% endfor %}
     </div>
 
 {% endblock %}

@@ -1,0 +1,43 @@
+{% block content %}
+{% for translate in translates %}
+
+    {% if translate.translate == 'BRL' %}
+        {% include '_components/tab-bar/tab-bar.html.twig' with
+            {
+                tabs: [
+                {
+                    id: 'configuration',
+                    label: 'Currency',
+                    path: path('configuration')
+                },
+                {
+                    id: 'translate',
+                    label: 'Language',
+                    path: path('translate')
+                }
+            ],
+                active_tab: active_tab|default('configuration'),
+            }
+        %}
+    {% else %}
+        {% include '_components/tab-bar/tab-bar.html.twig' with
+            {
+                tabs: [
+                {
+                    id: 'configuration',
+                    label: 'Moeda',
+                    path: path('configuration')
+                },
+                {
+                    id: 'translate',
+                    label: 'Idioma',
+                    path: path('translate')
+                }
+            ],
+                active_tab: active_tab|default('configuration'),
+            }
+        %}
+    {% endif %}
+
+{% endfor %}
+{% endblock %}

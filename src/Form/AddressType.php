@@ -87,7 +87,8 @@ class AddressType extends AbstractType
                     $form->get('district')->getData(),
                     $form->get('city')->getData(),
                     $form->get('state')->getData(),
-                    $form->get('country')->getData()
+                    $form->get('country')->getData(),
+                    $form->get('complement')->getData()
                 );
 
                 return $address;

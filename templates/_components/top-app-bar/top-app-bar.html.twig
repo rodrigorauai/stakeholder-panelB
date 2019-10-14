@@ -4,28 +4,56 @@
             <button class="material-icons mdc-top-app-bar__navigation-icon">menu</button>
             <span class="mdc-top-app-bar__title">{{ title|default('') }}</span>
         </section>
-        <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
-            <div class="mdc-menu-surface--anchor">
-                <button id="account-menu-toggle" class="material-icons mdc-top-app-bar__action-item" aria-label="Account menu">more_vert</button>
-                <div id="account-menu" class="mdc-menu mdc-menu-surface">
-                    <ul class="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical" tabindex="-1">
-                        <a class="btn-link" href="{{ path('configuration') }}">
-                            <li class="mdc-list-item" role="menuitem">
-                                <span class="material-icons">settings</span>
-                                <span class="mdc-list-item__text" id="margin-item">Configuração</span>
-                            </li>
-                        </a>
-                    </ul>
-                    <ul class="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical" tabindex="-1">
-                        <a class="btn-link" href="{{ path('logout') }}">
-                            <li class="mdc-list-item" role="menuitem">
-                                <span class="material-icons">power_settings_new</span>
-                                <span class="mdc-list-item__text" id="margin-item">Sair</span>
-                            </li>
-                        </a>
-                    </ul>
-                </div>
-            </div>
-        </section>
+        {% for translate in translates %}
+            {% if translate.translate == 'BRL' %}
+                <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
+                    <div class="mdc-menu-surface--anchor">
+                        <button id="account-menu-toggle" class="material-icons mdc-top-app-bar__action-item" aria-label="Account menu">more_vert</button>
+                        <div id="account-menu" class="mdc-menu mdc-menu-surface">
+                            <ul class="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical" tabindex="-1">
+                                <a class="btn-link" href="{{ path('configuration') }}">
+                                    <li class="mdc-list-item" role="menuitem">
+                                        <span class="material-icons">settings</span>
+                                        <span class="mdc-list-item__text" id="margin-item">Configuration</span>
+                                    </li>
+                                </a>
+                            </ul>
+                            <ul class="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical" tabindex="-1">
+                                <a class="btn-link" href="{{ path('logout') }}">
+                                    <li class="mdc-list-item" role="menuitem">
+                                        <span class="material-icons">power_settings_new</span>
+                                        <span class="mdc-list-item__text" id="margin-item">Exit</span>
+                                    </li>
+                                </a>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            {% else %}
+                <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
+                    <div class="mdc-menu-surface--anchor">
+                        <button id="account-menu-toggle" class="material-icons mdc-top-app-bar__action-item" aria-label="Account menu">more_vert</button>
+                        <div id="account-menu" class="mdc-menu mdc-menu-surface">
+                            <ul class="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical" tabindex="-1">
+                                <a class="btn-link" href="{{ path('configuration') }}">
+                                    <li class="mdc-list-item" role="menuitem">
+                                        <span class="material-icons">settings</span>
+                                        <span class="mdc-list-item__text" id="margin-item">Configuração</span>
+                                    </li>
+                                </a>
+                            </ul>
+                            <ul class="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical" tabindex="-1">
+                                <a class="btn-link" href="{{ path('logout') }}">
+                                    <li class="mdc-list-item" role="menuitem">
+                                        <span class="material-icons">power_settings_new</span>
+                                        <span class="mdc-list-item__text" id="margin-item">Sair</span>
+                                    </li>
+                                </a>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            {% endif %}
+        {% endfor %}
     </div>
 </header>

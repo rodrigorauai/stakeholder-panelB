@@ -3,67 +3,137 @@
 {% set title = 'Contratos' %}
 {% set drawer_active_route = 'contract_index' %}
 
+{% for translate in translates %}
+    {% if translate.translate == 'BRL' %}
+        {% set title = 'Contracts' %}
+    {% else %}
+        {% set title = 'Contratos' %}
+    {% endif %}
+{% endfor %}
+
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
 
     <div class="mdc-layout-grid">
-        <div class="mdc-layout-grid__inner">
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-                <div class="container" style="float:right;">
-                    {{ form_start(form) }}
-                    {{ form_row(form.queryString, {
-                        attr: {
-                            autofocus: '',
-                        }
-                    }) }}
-                    {{ form_widget(form) }}
-                    {{ form_rest(form) }}
-                    {{ form_end(form) }}
-                </div>
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th>ID</th>
-                            {% if multipleOwners %}
-                                <th>Contratante</th>
-                            {% endif %}
-                            <th class="text-right">Valor</th>
-                            <th>Plano</th>
-                            <th class="text-center">Data de Adesão</th>
-                            <th class="text-center">Data de Expiração</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for contract in contracts  %}
-                            <tr>
-                                <td>{{ contract.id }}</td>
-                                {% if multipleOwners %}
-                                    <td>{{ contract.account.owner.name }}</td>
-                                {% endif %}
-                                <td class="text-right">R$ {{ contract.value|number_format(2, ',', '.') }}</td>
-                                <td>{{ contract.plan.commercialName }}</td>
-                                <td class="text-center">{{ contract.executionDate|date('d/m/Y') }}</td>
-                                <td class="text-center">{{ contract.expirationDate|date('d/m/Y') }}</td>
-                                <td>
-                                    {% if contract.digitizedContracts.count > 0 %}
-                                        <a href="{{ path('contract__digitized_contract__download', {
-                                            id: contract.id
-                                        }) }}" target="_blank">Contrato</a>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
 
-                {% if contracts|length == 0 %}
-                    <p>Nenhum contrato encontrado</p>
-                {% endif %}
-            </div>
-        </div>
+        {% for translate in translates %}
+            {% if translate.translate == 'BRL' %}
+                <div class="mdc-layout-grid__inner">
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                        <div class="container" style="float:right;">
+                            {{ form_start(form) }}
+                            {{ form_row(form.queryString, {
+                                attr: {
+                                    autofocus: '',
+                                }
+                            }) }}
+                            {{ form_widget(form) }}
+                            {{ form_rest(form) }}
+                            {{ form_end(form) }}
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    {% if multipleOwners %}
+                                        <th>Contractor</th>
+                                    {% endif %}
+                                    <th class="text-right">Value</th>
+                                    <th>Plan</th>
+                                    <th class="text-center">Accession Date</th>
+                                    <th class="text-center">Expiration Date</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for contract in contracts  %}
+                                    <tr>
+                                        <td>{{ contract.id }}</td>
+                                        {% if multipleOwners %}
+                                            <td>{{ contract.account.owner.name }}</td>
+                                        {% endif %}
+                                        <td class="text-right">{{ currency }} {{ contract.value|number_format(2, ',', '.') }}</td>
+                                        <td>{{ contract.plan.commercialName }}</td>
+                                        <td class="text-center">{{ contract.executionDate|date('d/m/Y') }}</td>
+                                        <td class="text-center">{{ contract.expirationDate|date('d/m/Y') }}</td>
+                                        <td>
+                                            {% if contract.digitizedContracts.count > 0 %}
+                                                <a href="{{ path('contract__digitized_contract__download', {
+                                                    id: contract.id
+                                                }) }}" target="_blank">Contract</a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {% if contracts|length == 0 %}
+                            <p>No contracts found</p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% else %}
+                <div class="mdc-layout-grid__inner">
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                        <div class="container" style="float:right;">
+                            {{ form_start(form) }}
+                            {{ form_row(form.queryString, {
+                                attr: {
+                                    autofocus: '',
+                                }
+                            }) }}
+                            {{ form_widget(form) }}
+                            {{ form_rest(form) }}
+                            {{ form_end(form) }}
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    {% if multipleOwners %}
+                                        <th>Contratante</th>
+                                    {% endif %}
+                                    <th class="text-right">Valor</th>
+                                    <th>Plano</th>
+                                    <th class="text-center">Data de Adesão</th>
+                                    <th class="text-center">Data de Expiração</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for contract in contracts  %}
+                                    <tr>
+                                        <td>{{ contract.id }}</td>
+                                        {% if multipleOwners %}
+                                            <td>{{ contract.account.owner.name }}</td>
+                                        {% endif %}
+                                        <td class="text-right">{{ currency }} {{ contract.value|number_format(2, ',', '.') }}</td>
+                                        <td>{{ contract.plan.commercialName }}</td>
+                                        <td class="text-center">{{ contract.executionDate|date('d/m/Y') }}</td>
+                                        <td class="text-center">{{ contract.expirationDate|date('d/m/Y') }}</td>
+                                        <td>
+                                            {% if contract.digitizedContracts.count > 0 %}
+                                                <a href="{{ path('contract__digitized_contract__download', {
+                                                    id: contract.id
+                                                }) }}" target="_blank">Contrato</a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {% if contracts|length == 0 %}
+                            <p>Nenhum contrato encontrado</p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
     </div>
 
 {% endblock %}
