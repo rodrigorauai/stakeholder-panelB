@@ -10,13 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
 class UploadedDigitizedContractFile extends UploadedFile
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Contract", inversedBy="digitizedContracts")
      */
     private $contract;
@@ -26,11 +19,6 @@ class UploadedDigitizedContractFile extends UploadedFile
         parent::__construct($path, $uploader);
 
         $this->contract = $contract;
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     public function getContract(): ?Contract

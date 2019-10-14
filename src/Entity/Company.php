@@ -23,6 +23,11 @@ class Company extends Entity
      */
     private $managers;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\UploadedCompanyFile", mappedBy="company")
+     */
+    private $files;
+
     public function __construct(string $name, string $cnpj)
     {
         parent::__construct($name);
@@ -30,6 +35,7 @@ class Company extends Entity
         $this->cnpj = $cnpj;
 
         $this->managers = new ArrayCollection();
+        $this->files = new ArrayCollection();
     }
 
     public static function fromDataObject(CompanyData $data)
@@ -90,5 +96,36 @@ class Company extends Entity
     public function getDocumentNumber(): string
     {
         return $this->cnpj;
+    }
+
+    /**
+     * @return Collection|UploadedCompanyFile[]
+     */
+    public function getFiles(): Collection
+    {
+        return $this->files;
+    }
+
+    public function addFile(UploadedCompanyFile $file): self
+    {
+        if (!$this->files->contains($file)) {
+            $this->files[] = $file;
+            $file->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFile(UploadedCompanyFile $file): self
+    {
+        if ($this->files->contains($file)) {
+            $this->files->removeElement($file);
+            // set the owning side to null (unless already changed)
+            if ($file->getCompany() === $this) {
+                $file->setCompany(null);
+            }
+        }
+
+        return $this;
     }
 }

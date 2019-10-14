@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\StakeholdPlan;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\Form\FormInterface;
 
 /**
  * @method StakeholdPlan|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,32 +20,32 @@ class StakeholdPlanRepository extends ServiceEntityRepository
         parent::__construct($registry, StakeholdPlan::class);
     }
 
-    // /**
-    //  * @return StakeholdingPlan[] Returns an array of StakeholdingPlan objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @param FormInterface $form
+     * @return StakeholdPlan[]
+     */
+    public function findUsingSearchForm(FormInterface $form)
     {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $qb = $this->createQueryBuilder('plan');
+        $qb
+            ->select('plan')
+            ->orderBy('plan.id', 'DESC');
 
-    /*
-    public function findOneBySomeField($value): ?StakeholdingPlan
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        if ($form->isSubmitted() && $form->isValid()) {
+            $qb
+                ->where(
+                    $qb->expr()->orX(
+                        $qb->expr()->eq('plan.id', ':queryString'),
+                        $qb->expr()->like('plan.administrativeName', ':containingQueryString'),
+                        $qb->expr()->like('plan.commercialName', ':containingQueryString')
+                    )
+                )
+                ->setParameters([
+                    'queryString' => $form->get('queryString')->getData(),
+                    'containingQueryString' => '%'.$form->get('queryString')->getData().'%',
+                ]);
+        }
+
+        return $qb->getQuery()->getResult();
     }
-    */
 }

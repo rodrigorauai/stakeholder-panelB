@@ -13,6 +13,7 @@ use App\Entity\Company;
 use App\Entity\Person;
 use App\Validator\CnpjFormat;
 use App\Validator\CnpjNumbers;
+use App\Validator\UniqueCnpj;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class CompanyData
@@ -27,6 +28,7 @@ class CompanyData
      * @Assert\NotBlank()
      * @CnpjFormat()
      * @CnpjNumbers()
+     * @UniqueCnpj()
      */
     public $cnpj;
 

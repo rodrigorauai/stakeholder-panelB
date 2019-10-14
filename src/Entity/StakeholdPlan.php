@@ -88,7 +88,6 @@ class StakeholdPlan
 
     /**
      * @ORM\Column(type="decimal", precision=4, scale=2)
-     * @Assert\NotBlank()
      * @Assert\Type(type="numeric")
      * @Assert\Length(max="11", maxMessage="Utilize até 2 inteiros e 2 decimais")
      * @Assert\Range(min="0.00", max="99,99")

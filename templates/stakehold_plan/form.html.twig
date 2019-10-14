@@ -3,23 +3,52 @@
 {% set title = 'Cadastrar Plano' %}
 {% set drawer_active_route = 'stakehold_plan__index' %}
 
+{% for translate in translates %}
+    {% if translate.translate == 'BRL' %}
+        {% set title = 'Register plan' %}
+    {% else %}
+        {% set title = 'Cadastrar Plano' %}
+    {% endif %}
+{% endfor %}
+
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-    <div class="container m-4">
-        <p>Informe os dados do novo plano de patrocínio.</p>
-        {{ form_start(form) }}
-        {{ form_row(form.commercialName, {
-            attr: {
-                autofocus: ''
-            }
-        }) }}
-        {{ form_widget(form) }}
-        <div class="form-row button-container">
-            {% include '_components/button/button.html.twig' with { label: 'Cadastrar Plano', type: 'submit', style: 'outlined'} only %}
-        </div>
-        {{ form_rest(form) }}
-        {{ form_end(form) }}
-    </div>
+    {% for translate in translates %}
+        {% if translate.translate == 'BRL' %}
+            <div class="container m-4">
+                <p>Enter data for new sponsorship plan.</p>
+                {{ form_start(form) }}
+                {{ form_row(form.commercialName, {
+                    attr: {
+                        autofocus: ''
+                    }
+                }) }}
+                {{ form_widget(form) }}
+                <div class="form-row button-container">
+                    {% include '_components/button/button.html.twig' with { label: 'Register plan', type: 'submit', style: 'outlined'} only %}
+                </div>
+                {{ form_rest(form) }}
+                {{ form_end(form) }}
+            </div>
+        {% else %}
+            <div class="container m-4">
+                <p>Informe os dados do novo plano de patrocínio.</p>
+                {{ form_start(form) }}
+                {{ form_row(form.commercialName, {
+                    attr: {
+                        autofocus: ''
+                    }
+                }) }}
+                {{ form_widget(form) }}
+                <div class="form-row button-container">
+                    {% include '_components/button/button.html.twig' with { label: 'Cadastrar Plano', type: 'submit', style: 'outlined'} only %}
+                </div>
+                {{ form_rest(form) }}
+                {{ form_end(form) }}
+            </div>
+        {% endif %}
+    {% endfor %}
+
 {% endblock %}
 
