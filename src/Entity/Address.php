@@ -109,11 +109,9 @@ class Address
      */
     public function setEntity(Entity $entity)
     {
-        if ($this->entity) {
-            throw new Exception('This address already belongs to a person');
-        }
-
         $this->entity = $entity;
+
+        return $this;
     }
 
     public function getEntity(): ?Entity
