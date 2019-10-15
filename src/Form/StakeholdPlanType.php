@@ -4,6 +4,8 @@ namespace App\Form;
 
 use App\Entity\StakeholdPlan;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -70,6 +72,25 @@ class StakeholdPlanType extends AbstractType
                 ],
                 'html5' => true,
             ])
+//            ->add('rate', CheckboxType::class, [
+//                'label' => 'Multa',
+//            ])
+            ->add('monthlyRate', DateType::class, [
+                'label' => 'Término da multa',
+                'format' => DateType::HTML5_FORMAT,
+                'html5' => true,
+                'widget' => 'single_text',
+            ])
+            ->add('monthlyPercenteRate', NumberType::class, [
+                'label' => 'Porcentagem da multa mensal',
+                'scale' => 2,
+                'attr' => [
+                    'step' => 0.01,
+                    'min' => -99.99,
+                    'max' => 99.99,
+                ],
+                'html5' => true,
+            ])
         ;
     }
 
@@ -87,7 +108,9 @@ class StakeholdPlanType extends AbstractType
                     $form->get('monthlyCommission')->getData(),
                     $form->get('gracePeriod')->getData(),
                     $form->get('bestAcquisitionDay')->getData(),
-                    $form->get('monthlyAdministrativeFee')->getData()
+                    $form->get('monthlyAdministrativeFee')->getData(),
+                    $form->get('monthlyRate')->getData(),
+                    $form->get('monthlyPercenteRate')->getData()
                 );
 
                 return $plan;

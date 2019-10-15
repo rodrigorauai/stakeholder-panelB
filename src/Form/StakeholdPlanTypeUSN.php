@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\StakeholdPlan;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -70,6 +71,32 @@ class StakeholdPlanTypeUSN extends AbstractType
                 ],
                 'html5' => true,
             ])
+            ->add('monthlyAdministrativeFee', NumberType::class, [
+                'label' => 'Monthly Administrative Fee Percentage',
+                'scale' => 2,
+                'attr' => [
+                    'step' => 0.01,
+                    'min' => -99.99,
+                    'max' => 99.99,
+                ],
+                'html5' => true,
+            ])
+            ->add('monthlyRate', DateType::class, [
+                'label' => 'End of rate',
+                'format' => DateType::HTML5_FORMAT,
+                'html5' => true,
+                'widget' => 'single_text',
+            ])
+            ->add('monthlyPercenteRate', NumberType::class, [
+                'label' => 'Monthly fine percentage',
+                'scale' => 2,
+                'attr' => [
+                    'step' => 0.01,
+                    'min' => -99.99,
+                    'max' => 99.99,
+                ],
+                'html5' => true,
+            ])
         ;
     }
 
@@ -87,7 +114,9 @@ class StakeholdPlanTypeUSN extends AbstractType
                     $form->get('monthlyCommission')->getData(),
                     $form->get('gracePeriod')->getData(),
                     $form->get('bestAcquisitionDay')->getData(),
-                    $form->get('monthlyAdministrativeFee')->getData()
+                    $form->get('monthlyAdministrativeFee')->getData(),
+                    $form->get('monthlyRate')->getData(),
+                    $form->get('monthlyPercenteRate')->getData()
                 );
 
                 return $plan;

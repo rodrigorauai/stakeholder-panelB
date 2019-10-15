@@ -86,20 +86,32 @@ class StakeholdPlanController extends AbstractController
             if ($disable->getTranslate() == 'BRL' && $disable->getActive() == false) {
                 $form = $this->createForm(StakeholdPlanTypeUSN::class);
                 $form->handleRequest($request);
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $plan = $form->getData();
+
+                    $entityManager->persist($plan);
+                    $entityManager->flush();
+
+                    return $this->redirectToRoute('stakehold_plan__index');
+                }
             } else {
                 $form = $this->createForm(StakeholdPlanType::class);
                 $form->handleRequest($request);
+
+                if ($form->isSubmitted() && $form->isValid()) {
+
+                    $plan = $form->getData();
+
+                    $entityManager->persist($plan);
+                    $entityManager->flush();
+
+                    return $this->redirectToRoute('stakehold_plan__index');
+                }
+
             }
         }
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $plan = $form->getData();
 
-            $entityManager->persist($plan);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('stakehold_plan__index');
-        }
 
         return $this->render('stakehold_plan/form.html.twig', [
             'translates' => $disableds,

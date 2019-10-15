@@ -11,7 +11,9 @@ namespace App\EntityListener;
 
 use App\Entity\Contract;
 use App\Entity\Payment;
+use App\Entity\StakeholdPlan;
 use App\Entity\StakeholdPlanReward;
+use DateTime;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreFlushEventArgs;
 use Doctrine\ORM\Mapping as ORM;
@@ -23,11 +25,15 @@ class StakeholdPlanRewardListener
      * @ORM\PrePersist()
      * @param StakeholdPlanReward $reward
      * @param LifecycleEventArgs $args
+     * @param StakeholdPlan $plan
+     * @throws \Exception
      */
-    public function prePersist(StakeholdPlanReward $reward, LifecycleEventArgs $args)
+    public function prePersist(StakeholdPlanReward $reward, LifecycleEventArgs $args, StakeholdPlan $plan)
     {
         $plan = $reward->getPlan();
         $contracts = $plan->getContracts();
+
+        $nextRate = new DateTime();
 
         /** @var Contract $contract */
         foreach ($contracts as $contract) {
@@ -38,9 +44,18 @@ class StakeholdPlanRewardListener
             $yield = $contract->getYield();
             $last = $contract->getLast();
 
+            $monthlyRate = $plan->getMonthlyRate();
+            $percenteRate = $plan->getMonthlyPercenteRate();
+
             if ( $last < $inicial_value ) {
 
-                $value = bcmul(bcdiv($rate, '100', 4), $last, 2);
+                if ($monthlyRate > $nextRate) {
+                    $valueResult = bcmul(bcdiv($rate, 100, 4), $last, 2);
+                    $value = bcmul(bcdiv($percenteRate, 100, 4), $valueResult, 2);
+                } else {
+                    $value = bcmul(bcdiv($rate, 100, 4), $last, 2);
+                }
+
                 $new_value = number_format(($last + $value), 2, ".", "");
 
                 $contract->setYield(number_format(($yield+$value), 2, ".", ""));
@@ -48,7 +63,7 @@ class StakeholdPlanRewardListener
 
             } else if ( $last >= $inicial_value ) {
 
-                $value = bcmul(bcdiv($rate, '100', 4), $inicial_value, 2);
+                $value = bcmul(bcdiv($rate, 100, 4), $inicial_value, 2);
                 $new_value = number_format(($last + $value), 2, ".", "");
 
                 $contract->setYield(number_format(($yield+$value), 2, ".", ""));
