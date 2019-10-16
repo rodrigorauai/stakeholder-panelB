@@ -75,6 +75,7 @@ class AccountController extends AbstractController
         $defaultExpiration->modify('last day of this month');
 
         $contract = new Contract(null, null, "0.00", "0.00", new DateTime(), null, $defaultExpiration);
+        // dd($contract);
 
         foreach ($disableds as $disable) {
             if ($disable->getTranslate() == 'BRL' && $disable->getActive() == false) {
@@ -90,7 +91,7 @@ class AccountController extends AbstractController
             /** @var Contract $contract */
             $contract = $form->getData();
             $contract->setYield("0.00");
-            $contract->setLast($form->getData()->getValue());
+            $contract->setLast(number_format(($form->getData()->getValue()), 2, ".", ""));
             $contract->setAccount($account);
 
             $file = $form->get('contractFile')->getData();
