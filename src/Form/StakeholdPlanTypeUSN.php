@@ -45,7 +45,7 @@ class StakeholdPlanTypeUSN extends AbstractType
                 'scale' => 2,
                 'attr' => [
                     'step' => 0.01,
-                    'min' => 0.00,
+                    'min' => -99.99,
                     'max' => 99.99,
                 ],
                 'html5' => true,
@@ -65,7 +65,7 @@ class StakeholdPlanTypeUSN extends AbstractType
                 'scale' => 2,
                 'attr' => [
                     'step' => 0.01,
-                    'min' => 0.00,
+                    'min' => -99.99,
                     'max' => 99.99,
                 ],
                 'html5' => true,

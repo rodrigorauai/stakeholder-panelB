@@ -233,8 +233,6 @@ class StakeholdPlanController extends AbstractController
             }
         }
 
-
-
         return $this->render('stakehold_plan/reward/form.html.twig', [
             'translates' => $disableds,
             'plan' => $plan,

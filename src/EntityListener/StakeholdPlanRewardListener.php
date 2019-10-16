@@ -33,7 +33,29 @@ class StakeholdPlanRewardListener
         foreach ($contracts as $contract) {
             // Co-participation (Plan's reward)
 
-            $value = bcmul(bcdiv($reward->getRate(), '100', 4), $contract->getValue(), 2);
+            $rate = $reward->getRate();
+            $inicial_value = $contract->getValue();
+            $yield = $contract->getYield();
+            $last = $contract->getLast();
+
+            if ( $last < $inicial_value ) {
+
+                $value = bcmul(bcdiv($rate, '100', 4), $last, 2);
+                $new_value = number_format(($last + $value), 2, ".", "");
+
+                $contract->setYield(number_format(($yield+$value), 2, ".", ""));
+                $contract->setLast($new_value);
+
+            } else if ( $last >= $inicial_value ) {
+
+                $value = bcmul(bcdiv($rate, '100', 4), $inicial_value, 2);
+                $new_value = number_format(($last + $value), 2, ".", "");
+
+                $contract->setYield(number_format(($yield+$value), 2, ".", ""));
+                $contract->setLast($new_value);
+
+            }
+            $args->getObjectManager()->persist($contract);
 
             $payment = new Payment(
                 $contract->getAccount(),
@@ -60,6 +82,7 @@ class StakeholdPlanRewardListener
                 $args->getObjectManager()->persist($commission);
             }
         }
+        // dd('a');
     }
 
     /**

@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+{% set title = 'Retirada #' ~ contract.id ~ ' de ' ~ contract.account.owner.name %}
+{% set drawer_active_route = 'withdraw__index' %}
+
+{% for translate in translates %}
+    {% if translate.translate == 'BRL' %}
+        {% set title = 'Yield withdraw request. Contract #' ~ contract.id ~ ' of ' ~ contract.account.owner.name %}
+    {% else %}
+        {% set title = 'Solicitação de saque dos rendimentos. Contrato #' ~ contract.id ~ ' de ' ~ contract.account.owner.name %}
+    {% endif %}
+{% endfor %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+
+    {% for translate in translates %}
+        {% if translate.translate == 'BRL' %}
+            <div class="container m-4">
+                <h3>Yield Withdraw Request</h3>
+
+                <dl class="d-table">
+                    <div class="d-table-row">
+                        <dt class="d-table-cell">Contract</dt>
+                        <dd class="d-table-cell">{{ contract.id }}</dd>
+                    </div>
+
+                    <div class="d-table-row">
+                        <dt class="d-table-cell">Contract value</dt>
+                        <dd class="d-table-cell">{{ currency }} {{ contract.value|number_format(2, ',', '.') }}</dd>
+                    </div>
+
+                    <div class="d-table-row">
+                        <dt class="d-table-cell">Yield balance</dt>
+                        <dd class="d-table-cell">{{ currency }} {{ contract.yield|number_format(2, ',', '.') }}</dd>
+                    </div>
+
+                    <div class="d-table-row">
+                        <dt class="d-table-cell">Request Date</dt>
+                        <dd class="d-table-cell">{{ contract.executionDate.format('d/m/Y H:i') }}</dd>
+                    </div>
+                </dl>
+            </div>
+
+            <div class="container m-4">
+                {% if contract.yield <= 0 %}
+                    <div>
+                        <p class="form-error text-danger">It's not possible to make the request. The yield is less than or equal to {{ currency }} 0,00</p>
+                    </div>
+                {% else %}
+                    {{ form_start(form) }}
+                    {{ form_widget(form) }}
+                    <div class="form-row button-container">
+                        {% include '_components/button/button.html.twig' with { label: 'Request', type: 'submit', style: 'outlined'} only %}
+                    </div>
+                    {{ form_rest(form) }}
+                    {{ form_end(form) }}
+                {% endif %}
+            </div>
+        {% else %}
+
+            <div class="container m-4">
+                <h3>Solicitação de saque dos rendimentos</h3>
+
+                <dl class="d-table">
+                    <div class="d-table-row">
+                        <dt class="d-table-cell">Contrato</dt>
+                        <dd class="d-table-cell">{{ contract.id }}</dd>
+                    </div>
+
+                    <div class="d-table-row">
+                        <dt class="d-table-cell">Valor do contrato</dt>
+                        <dd class="d-table-cell">{{ currency }} {{ contract.value|number_format(2, ',', '.') }}</dd>
+                    </div>
+
+                    <div class="d-table-row">
+                        <dt class="d-table-cell">Saldo dos Rendimentos</dt>
+                        <dd class="d-table-cell">{{ currency }} {{ contract.yield|number_format(2, ',', '.') }}</dd>
+                    </div>
+
+                    <div class="d-table-row">
+                        <dt class="d-table-cell">Data de Solicitação</dt>
+                        <dd class="d-table-cell">{{ contract.executionDate.format('d/m/Y H:i') }}</dd>
+                    </div>
+                </dl>
+            </div>
+
+            <div class="container m-4">
+                {% if contract.yield <= 0 %}
+                    <div>
+                        <p class="form-error text-danger">Não é possível fazer a solicitação. O saldo está menor ou igual a {{ currency }} 0,00</p>
+                    </div>
+                {% else %}
+                    {{ form_start(form) }}
+                    {{ form_widget(form) }}
+                    <div class="form-row button-container">
+                        {% include '_components/button/button.html.twig' with { label: 'Solicitar', type: 'submit', style: 'outlined'} only %}
+                    </div>
+                    {{ form_rest(form) }}
+                    {{ form_end(form) }}
+                {% endif %}
+            </div>
+            
+        {% endif %}
+    {% endfor %}
+
+
+
+{% endblock %}

@@ -39,6 +39,18 @@ class Contract
     private $value;
 
     /**
+     * @var string
+     * @ORM\Column(type="decimal", precision=11, scale=2)
+     */
+    private $yield;
+
+    /**
+     * @var string
+     * @ORM\Column(type="decimal", precision=11, scale=2)
+     */
+    private $last;
+
+    /**
      * The date on which the contract was signed
      *
      * @var DateTime
@@ -87,12 +99,16 @@ class Contract
     public function __construct(
         ?StakeholdPlan $plan,
         ?string $value,
+        ?string $yield,
+        ?string $last,
         ?DateTime $executionDate,
         ?DateTime $firstReturnDate,
         ?DateTime $expirationDate
     ) {
         $this->plan = $plan;
         $this->value = $value;
+        $this->yield = $yield;
+        $this->last = $last;
         $this->executionDate = $executionDate;
         $this->firstReturnDate = $firstReturnDate;
         $this->expirationDate = $expirationDate;
@@ -134,6 +150,26 @@ class Contract
     public function setValue(?string $value)
     {
         $this->value = $value;
+    }
+
+    public function getYield(): ?string
+    {
+        return $this->yield;
+    }
+
+    public function setYield(?string $yield)
+    {
+        $this->yield = $yield;
+    }
+
+    public function getLast(): ?string
+    {
+        return $this->last;
+    }
+
+    public function setLast(?string $last)
+    {
+        $this->last = $last;
     }
 
     /**
