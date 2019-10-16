@@ -22,7 +22,8 @@ final class Version20190905164431 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('CREATE TABLE configuration (id INT AUTO_INCREMENT NOT NULL, currency VARCHAR(32) NOT NULL, active TINYINT(1) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE configuration (id INT AUTO_INCREMENT NOT NULL, currency VARCHAR(32) NOT NULL, label VARCHAR(16) NOT NULL, active TINYINT(1) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        $this->addSql('INSERT INTO configuration (id, currency, active, label) VALUES (1,"BRL",0,"R$"), (2,"USN",1,"US$")');
     }
 
     public function down(Schema $schema) : void
