@@ -50,7 +50,21 @@
                                 </td>
                                 <td>{{ person.cpf|format_cpf }}</td>
                                 <td>{{ person.email|default('Not registered'|trans) }}</td>
-                                <td>{{ person.phone|default('Not registered'|trans) }}</td>
+
+                                {% for translate in translates %}
+                                    {% if translate.translate == 'BRL' %}
+                                        {% if person.phone is null %}
+                                            <td> Not registered</td>
+                                        {% else %}
+                                            <td>{{ person.phone|default('Not registered'|trans) }}</td>
+                                        {% endif %}
+
+                                    {% else %}
+                                        <td>{{ person.phone|default('Not registered'|trans) }}</td>
+
+                                    {% endif %}
+                                {% endfor %}
+
                             </tr>
                         {% endfor %}
                         </tbody>

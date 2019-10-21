@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -107,6 +108,22 @@ class StakeholdPlan
     private $rewards;
 
     /**
+     *
+     * @var DateTime
+     * @ORM\Column(type="datetime")
+     */
+    private $monthlyRate;
+
+    /**
+     * @ORM\Column(type="decimal", precision=4, scale=2)
+     * @Assert\NotBlank()
+     * @Assert\Type(type="numeric")
+     * @Assert\Length(max="11", maxMessage="Utilize até 2 inteiros e 2 decimais")
+     * @Assert\Range(min="-99.99", max="99,99")
+     */
+    private $monthlyPercenteRate;
+
+    /**
      * StakeholdingPlan constructor.
      * @param string $administrativeName
      * @param string $commercialName
@@ -117,6 +134,8 @@ class StakeholdPlan
      * @param int $bestAcquisitionDay
      * @param string $monthlyCommission
      * @param string $monthlyAdministrativeFee
+     * @param string $monthlyPercenteRate
+     * @param DateTime $monthlyRate
      * @throws Exception
      */
     public function __construct(
@@ -128,7 +147,9 @@ class StakeholdPlan
         ?int $gracePeriod,
         ?int $bestAcquisitionDay,
         ?string $monthlyCommission,
-        ?string $monthlyAdministrativeFee
+        ?string $monthlyAdministrativeFee,
+        ?DateTime $monthlyRate,
+        ?string $monthlyPercenteRate
     ) {
         $this->administrativeName = $administrativeName;
         $this->commercialName = $commercialName;
@@ -139,6 +160,8 @@ class StakeholdPlan
         $this->bestAcquisitionDay = $bestAcquisitionDay;
         $this->monthlyCommission = $monthlyCommission;
         $this->monthlyAdministrativeFee = $monthlyAdministrativeFee;
+        $this->monthlyPercenteRate = $monthlyPercenteRate;
+        $this->monthlyRate = $monthlyRate;
 
         $this->contracts = new ArrayCollection();
         $this->rewards = new ArrayCollection();
@@ -285,4 +308,37 @@ class StakeholdPlan
     {
         return $this->rewards;
     }
+
+
+    /**
+     * @return DateTime
+     * @throws Exception
+     */
+    public function getMonthlyRate(): DateTime
+    {
+        return $this->monthlyRate;
+    }
+
+    /**
+     * @param DateTime $monthlyRate
+     */
+    public function setMonthlyRate(DateTime $monthlyRate): void
+    {
+        $this->monthlyRate = $monthlyRate;
+    }
+
+    public function getMonthlyPercenteRate()
+    {
+        return $this->monthlyPercenteRate;
+    }
+
+    public function setMonthlyPercenteRate($monthlyPercenteRate): self
+    {
+        $this->monthlyPercenteRate = $monthlyPercenteRate;
+
+        return $this;
+    }
+
+
+
 }
