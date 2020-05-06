@@ -69,7 +69,7 @@ class EmailHelper
     public function createTemplatedEmail($to, string $subject, string $template, array $context = [])
     {
         $email = new TemplatedEmail();
-        $email->from('adm@orng.com.br');
+        $email->from($this->from);
 
         if ($this->replyTo) {
             $email->replyTo($this->replyTo);
@@ -87,7 +87,7 @@ class EmailHelper
     public function createEmail($to, string $subject, string $content)
     {
         $email = new Email();
-        $email->from('adm@orng.com.br');
+        $email->from($this->from);
 
         if ($this->replyTo) {
             $email->replyTo($this->replyTo);
