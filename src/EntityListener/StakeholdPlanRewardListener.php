@@ -28,7 +28,7 @@ class StakeholdPlanRewardListener
      * @param StakeholdPlan $plan
      * @throws \Exception
      */
-    public function prePersist(StakeholdPlanReward $reward, LifecycleEventArgs $args, StakeholdPlan $plan)
+    public function prePersist(StakeholdPlanReward $reward, LifecycleEventArgs $args, StakeholdPlan $plan = null)
     {
         $plan = $reward->getPlan();
         $contracts = $plan->getContracts();
