@@ -79,6 +79,7 @@ class DashboardHelper
      */
     public function getTotalInvestment()
     {
+        // Valor Total de Investimento
         if (!$this->totalInvestment) {
 
             $currentProfile = $this->profileSwitcher->getCurrentProfile();
@@ -117,6 +118,7 @@ class DashboardHelper
      */
     public function getTotalCoParticipation()
     {
+        // Rendimentos Acomulados
         if (!$this->totalCoParticipation) {
             $currentProfile = $this->profileSwitcher->getCurrentProfile();
 
@@ -150,6 +152,7 @@ class DashboardHelper
      */
     public function getReturnRate()
     {
+        // Retorno
         if (!$this->getTotalInvestment()) {
             return 0;
         }
@@ -165,6 +168,7 @@ class DashboardHelper
      */
     public function getDataSetOfTotalReturnByDate()
     {
+        // Rendimentos Totais Acumulados
         $currentProfile = $this->profileSwitcher->getCurrentProfile();
 
         switch ($currentProfile['id']) {
@@ -189,13 +193,13 @@ class DashboardHelper
                 foreach ($coParticipations as $coParticipation) {
 
                     if ($firstMonth === null) {
-                        $firstMonth = clone $coParticipation->getReward()->getPaymentDueDate();
+                        $firstMonth = clone $coParticipation->getReward()->getDisclosureDate();
                     }
 
                     $runningSum = bcadd($runningSum, $coParticipation->getValue());
 
                     $dataSet[] = [
-                        $coParticipation->getReward()->getPaymentDueDate()->format('Y-m-d'),
+                        $coParticipation->getReward()->getDisclosureDate()->format('Y-m-d'),
                         (float) $runningSum,
                     ];
                 }
@@ -224,6 +228,7 @@ class DashboardHelper
      */
     public function getDataSetOfReturnByDate()
     {
+        // Rendimentos por Data
         $currentProfile = $this->profileSwitcher->getCurrentProfile();
 
         switch ($currentProfile['id']) {
@@ -247,11 +252,11 @@ class DashboardHelper
                 foreach ($coParticipations as $coParticipation) {
 
                     if ($firstMonth === null) {
-                        $firstMonth = clone $coParticipation->getReward()->getPaymentDueDate();
+                        $firstMonth = clone $coParticipation->getReward()->getDisclosureDate();
                     }
 
                     $dataSet[] = [
-                        $coParticipation->getReward()->getPaymentDueDate()->format('Y-m-d'),
+                        $coParticipation->getReward()->getDisclosureDate()->format('Y-m-d'),
                         (float) $coParticipation->getValue(),
                     ];
                 }
