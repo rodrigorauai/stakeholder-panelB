@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% set title = 'Conta de Patrocínio de ' ~ account.owner.name %}
+{% set title = 'Conta de Investimento de ' ~ account.owner.name %}
 {% set drawer_active_route = 'person__index' %}
 
 {% for translate in translates %}
     {% if translate.translate == 'BRL' %}
         {% set title = 'Investment account of ' ~ account.owner.name %}
     {% else %}
-        {% set title = 'Conta de Patrocínio de ' ~ account.owner.name %}
+        {% set title = 'Conta de Investimento de ' ~ account.owner.name %}
     {% endif %}
 {% endfor %}
 
@@ -47,7 +47,7 @@
             <p>Saldo da conta: {{ currency }} {{ account.balance|number_format(2, ',', '.') }}</p>
         </div>
         <div class="m-4">
-            <h2>Contratos de Patrocínio</h2>
+            <h2>Contratos de Investimento</h2>
 
             {% if account.contracts.count == 0 %}
                 <p>Nenhum contrato encontrado.</p>

@@ -19,12 +19,12 @@ class ContractType extends AbstractType
     {
         $builder
             ->add('plan', EntityType::class, [
-                'label' => 'Plano de Patrocínio',
+                'label' => 'Plano de Investimento',
                 'class' => StakeholdPlan::class,
                 'choice_label' => 'administrativeName',
             ])
             ->add('value', NumberType::class, [
-                'label' => 'Valor do Patrocínio',
+                'label' => 'Valor do Investimento',
                 'scale' => 2,
                 'html5' => true,
             ])

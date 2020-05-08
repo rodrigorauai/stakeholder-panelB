@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% set title = person.name|default(person.cpf|format_cpf) ~ ' - Contas de Patrocínio' %}
+{% set title = person.name|default(person.cpf|format_cpf) ~ ' - Contas de Investimento' %}
 {% set drawer_active_route = 'person__index' %}
 
 {% for translate in translates %}
     {% if translate.translate == 'BRL' %}
         {% set title = person.name|default(person.cpf|format_cpf) ~ ' - Investment account' %}
     {% else %}
-        {% set title = person.name|default(person.cpf|format_cpf) ~ ' - Contas de Patrocínio' %}
+        {% set title = person.name|default(person.cpf|format_cpf) ~ ' - Contas de Investimento' %}
     {% endif %}
 {% endfor %}
 
@@ -16,7 +16,7 @@
         {% if translate.translate == 'BRL' %}
             Investment account of {{ person.name }}
         {% else %}
-            Contas de patrocínio de {{ person.name }}
+            Contas de investimento de {{ person.name }}
         {% endif %}
     {% endfor %}
 {% endblock %}
