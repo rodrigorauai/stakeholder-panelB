@@ -159,7 +159,7 @@ class DashboardHelper
 
         $fraction = bcdiv($this->totalCoParticipation, $this->totalInvestment, 5);
 
-        return bcmul($fraction, 100, 2);
+        return bcmul($fraction, 100, 3);
     }
 
     /**
