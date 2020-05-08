@@ -157,6 +157,38 @@ class PaymentRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param array $accounts
+     * @return Payment[]
+     * @throws Exception
+     */
+    public function findCoParticipationsByAccountToCharts(array $accounts)
+    {
+        $qb = $this->createQueryBuilder('payment');
+        $qb
+            ->select('payment')
+            ->leftJoin('payment.reward', 'reward')
+            ->orderBy('reward.disclosureDate')
+            ->where($qb->expr()->andX(
+                $qb->expr()->eq('payment.provenance', ':provenance'),
+                $qb->expr()->lte('reward.disclosureDate', ':now')
+            ))
+            ->setParameter('provenance', Payment::PROVENANCE_CO_PARTICIPATION)
+            ->setParameter('now', new DateTime())
+        ;
+
+        if (count($accounts) > 0) {
+            $qb
+                ->andWhere(
+                    $qb->expr()->in('payment.account', ':accounts')
+                )
+                ->setParameter('accounts', $accounts)
+            ;
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
      * @param Account[] $accounts
      * @param bool $aggregatePaymentsOnTheSameDay
      * @return array

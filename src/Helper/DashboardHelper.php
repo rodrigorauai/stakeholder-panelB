@@ -118,7 +118,7 @@ class DashboardHelper
      */
     public function getTotalCoParticipation()
     {
-        // Rendimentos Acomulados
+        // Rendimentos Acumulados
         if (!$this->totalCoParticipation) {
             $currentProfile = $this->profileSwitcher->getCurrentProfile();
 
@@ -184,7 +184,7 @@ class DashboardHelper
                     $accounts[] = $company->getAccount();
                 }
 
-                $coParticipations = $this->paymentRepository->findCoParticipationsByAccount($accounts);
+                $coParticipations = $this->paymentRepository->findCoParticipationsByAccountToCharts($accounts);
 
                 $dataSet = [];
                 $firstMonth = null;
@@ -244,7 +244,7 @@ class DashboardHelper
                     $accounts[] = $company->getAccount();
                 }
 
-                $coParticipations = $this->paymentRepository->findCoParticipationsByAccount($accounts);
+                $coParticipations = $this->paymentRepository->findCoParticipationsByAccountToCharts($accounts);
 
                 $dataSet = [];
                 $firstMonth = null;
