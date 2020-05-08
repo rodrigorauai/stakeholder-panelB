@@ -32,7 +32,7 @@ class StakeholdPlanController extends AbstractController
      * @param ConfigurationRepository $crepository
      * @param TranslateRepository $transrepository
      * @return Response
-     * @Route("/planos-de-patrocinio", name="stakehold_plan__index")
+     * @Route("/planos-de-investimento", name="stakehold_plan__index")
      * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT", "ROLE_STAKEHOLDER"})
      */
     public function index(ProfileHelper $profileSwitcher, Request $request, StakeholdPlanRepository $repository, ConfigurationRepository $crepository, TranslateRepository $transrepository)
@@ -78,7 +78,7 @@ class StakeholdPlanController extends AbstractController
      * @param EntityManagerInterface $entityManager
      * @return RedirectResponse|Response
      * @throws Exception
-     * @Route("/planos-de-patrocinio/adicionar", name="stakehold_plan__create")
+     * @Route("/planos-de-investimento/adicionar", name="stakehold_plan__create")
      * @IsGranted({"ROLE_ADMINISTRATOR"})
      */
     public function create(Request $request,
@@ -131,7 +131,7 @@ class StakeholdPlanController extends AbstractController
      * @param Request $request
      * @param EntityManagerInterface $entityManager
      * @return RedirectResponse|Response
-     * @Route("planos-de-patrocinio/{id}/dados-do-plano", name="stakehold_plan__edit")
+     * @Route("planos-de-investimento/{id}/dados-do-plano", name="stakehold_plan__edit")
      * @IsGranted({"ROLE_ADMINISTRATOR"})
      */
     public function edit(StakeholdPlan $plan, Request $request, EntityManagerInterface $entityManager,
@@ -182,7 +182,7 @@ class StakeholdPlanController extends AbstractController
     /**
      * @param StakeholdPlan $plan
      * @return Response
-     * @Route("planos-de-patrocinio/{id}/rendimentos", name="stakehold_plan__reward__index")
+     * @Route("planos-de-investimento/{id}/rendimentos", name="stakehold_plan__reward__index")
      * @IsGranted({"ROLE_ADMINISTRATOR"})
      */
     public function rewardIndex(StakeholdPlan $plan, TranslateRepository $transrepository)
@@ -203,7 +203,7 @@ class StakeholdPlanController extends AbstractController
      * @param Request $request
      * @param EntityManagerInterface $entityManager
      * @return Response
-     * @Route("/planos-de-patrocinio/{id}/rendimentos/novo", name="stakehold_plan__reward__create")
+     * @Route("/planos-de-investimento/{id}/rendimentos/novo", name="stakehold_plan__reward__create")
      * @IsGranted({"ROLE_ADMINISTRATOR"})
      */
     public function createReward(StakeholdPlan $plan, Request $request, EntityManagerInterface $entityManager,
@@ -258,7 +258,7 @@ class StakeholdPlanController extends AbstractController
      * @param EntityManagerInterface $entityManager
      * @return RedirectResponse|Response
      * @throws Exception
-     * @Route("/planos-de-patrocinio/rendimentos/{id}", name="stakehold_plan__reward__edit")
+     * @Route("/planos-de-investimento/rendimentos/{id}", name="stakehold_plan__reward__edit")
      * @IsGranted({"ROLE_ADMINISTRATOR"})
      */
     public function editReward(StakeholdPlanReward $reward, Request $request, EntityManagerInterface $entityManager,

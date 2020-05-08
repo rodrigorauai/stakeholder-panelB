@@ -83,7 +83,7 @@ class ContractController extends AbstractController
      * @param EntityManagerInterface $entityManager
      * @param UploadHelper $helper
      * @return RedirectResponse|Response
-     * @Route("/contratos-de-patrocinio/{id}", name="contract__edit")
+     * @Route("/contratos-de-investimento/{id}", name="contract__edit")
      * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
     public function edit(Contract $contract, Request $request, EntityManagerInterface $entityManager, UploadHelper $helper,
@@ -130,7 +130,7 @@ class ContractController extends AbstractController
     /**
      * @param Contract $contract
      * @return BinaryFileResponse
-     * @Route("/contratos-de-patrocinio/{id}/contrato-digitalizado", name="contract__digitized_contract__download")
+     * @Route("/contratos-de-investimento/{id}/contrato-digitalizado", name="contract__digitized_contract__download")
      */
     public function downloadDigitizedContract(Contract $contract)
     {

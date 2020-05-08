@@ -228,7 +228,7 @@ class CompanyController extends AbstractController
     /**
      * @param Company $company
      * @return Response
-     * @Route("/company/{id}/contas-de-patrocinio", name="company_account__index")
+     * @Route("/company/{id}/contas-de-investimento", name="company_account__index")
      * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
     public function showAccounts(Company $company, ConfigurationRepository $repository, TranslateRepository $transrepository)

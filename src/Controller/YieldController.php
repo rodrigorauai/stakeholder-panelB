@@ -22,7 +22,7 @@ class YieldController extends AbstractController
     /**
      * @param Contract $contract
      * @return BinaryFileResponse
-     * @Route("/contratos-de-patrocinio/{id}/yield-withdraw", name="request__yield__withdraw")
+     * @Route("/contratos-de-investimento/{id}/yield-withdraw", name="request__yield__withdraw")
      */
     public function registerYieldWithdraw(
         Contract $contract,
