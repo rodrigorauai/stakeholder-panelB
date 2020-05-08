@@ -101,15 +101,23 @@ class PaymentRepository extends ServiceEntityRepository
     public function calculateTotalCoParticipation(array $accounts)
     {
         $qb = $this->createQueryBuilder('payment');
+        // $qb
+        //     ->select('SUM(payment.value)')
+        //     ->leftJoin('payment.reward', 'reward')
+        //     ->where($qb->expr()->andX(
+        //         $qb->expr()->eq('payment.provenance', ':provenance'),
+        //         $qb->expr()->lte('reward.disclosureDate', ':now')
+        //     ))
+        //     ->setParameter('provenance', Payment::PROVENANCE_CO_PARTICIPATION)
+        //     ->setParameter('now', new DateTime())
+        // ;
+
         $qb
             ->select('SUM(payment.value)')
-            ->leftJoin('payment.reward', 'reward')
             ->where($qb->expr()->andX(
-                $qb->expr()->eq('payment.provenance', ':provenance'),
-                $qb->expr()->lte('reward.disclosureDate', ':now')
+                $qb->expr()->eq('payment.provenance', ':provenance')
             ))
             ->setParameter('provenance', Payment::PROVENANCE_CO_PARTICIPATION)
-            ->setParameter('now', new DateTime())
         ;
 
         if (count($accounts) > 0) {
