@@ -313,7 +313,7 @@ class PersonController extends AbstractController
      * @param ConfigurationRepository $repository
      * @param TranslateRepository $transrepository
      * @return Response
-     * @Route("/pessoas/{id}/contas-de-patrocinio", name="person_account__index")
+     * @Route("/pessoas/{id}/contas-de-investimento", name="person_account__index")
      * @IsGranted({"ROLE_ADMINISTRATIVE_ASSISTANT"})
      */
     public function showAccounts(Person $person, ConfigurationRepository $repository, TranslateRepository $transrepository)

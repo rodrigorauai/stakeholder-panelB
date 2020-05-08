@@ -36,7 +36,7 @@ class AccountController extends AbstractController
     /**
      * @param Account $account
      * @return Response
-     * @Route("/contas-de-patrocinio/{id}", name="account__show")
+     * @Route("/contas-de-investimento/{id}", name="account__show")
      * @IsGranted({"ROLE_ADMINISTRATOR"})
      */
     public function show(Account $account, ConfigurationRepository $repository, TranslateRepository $transRepository)
@@ -61,7 +61,7 @@ class AccountController extends AbstractController
      * @param UploadHelper $helper
      * @return RedirectResponse|Response
      * @throws Exception
-     * @Route("/contas-de-patrocinio/{id}/contratos/novo", name="account__contract__create")
+     * @Route("/contas-de-investimento/{id}/contratos/novo", name="account__contract__create")
      * @IsGranted({"ROLE_ADMINISTRATOR"})
      */
     public function createContract(Account $account, Request $request,
