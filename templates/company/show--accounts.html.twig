@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% set title = company.name ~ ' - Contas de Patrocínio' %}
+{% set title = company.name ~ ' - Contas de Investimento' %}
 {% set drawer_active_route = 'company__index' %}
 
 {% for translate in translates %}
     {% if translate.translate == 'BRL' %}
         {% set title = company.name ~ ' - Investment accounts' %}
     {% else %}
-        {% set title = company.name ~ ' - Contas de Patrocínio' %}
+        {% set title = company.name ~ ' - Contas de Investimento' %}
     {% endif %}
 {% endfor %}
 
@@ -17,7 +17,7 @@
         {% if translate.translate == 'BRL' %}
             Investment account of {{ company.name }}
         {% else %}
-            Conta de patrocínio de {{ company.name }}
+            Conta de investimento de {{ company.name }}
         {% endif %}
     {% endfor %}
 
